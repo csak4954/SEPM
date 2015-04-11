@@ -1,0 +1,11 @@
+language: java
+script: "./src/los/run_tests.sh"
+jdk:
+	-oraclejdk7
+	-openjdk7
+	
+branches:
+	only:
+		- master
+		- develop
+
