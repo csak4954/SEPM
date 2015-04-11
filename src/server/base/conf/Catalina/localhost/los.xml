@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="C:\SEPM\src\server\base\wtpwebapps\los" path="/los" reloadable="true" source="org.eclipse.jst.jee.server:los"/>
