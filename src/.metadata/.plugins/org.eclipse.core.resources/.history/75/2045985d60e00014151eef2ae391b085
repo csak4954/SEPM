@@ -1,0 +1,10 @@
+package model;
+
+public interface IDataManipulation
+{
+	void addLecture(ILecture lecture);
+	void removeLecture(ILecture lecture);
+	Iterable<ILecture> getLectures();
+	void addQuiz(IQuiz quiz);
+	void removeQuiz(IQuiz quiz);
+}

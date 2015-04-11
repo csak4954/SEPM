@@ -1,0 +1,47 @@
+package los;
+
+import static org.junit.Assert.*;
+import model.ILoginProvider;
+import model.IModel;
+import model.LoginProviderMock;
+import model.Model;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.junit.runner.RunWith;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = LosApplication.class)
+@WebAppConfiguration
+public class ModelTest
+{
+
+	private static IModel model;
+	private static ILoginProvider provider;
+	
+	@Before
+	public void setUp() throws Exception
+	{
+		provider = new LoginProviderMock();
+		model = new Model(provider);
+	}
+
+	@Test
+	public void testLogin()
+	{
+		if(model.loginUser()) 
+		{
+			assertNotNull(provider.getUser());
+			model.logoffUser();
+			assertNull(provider.getUser());
+		}
+		else 
+		{
+			assertNull(provider.getUser());
+		}
+	}
+}
