@@ -1,0 +1,7 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.ILecture;
+
+public class LectureMock extends ILecture {
+
+}

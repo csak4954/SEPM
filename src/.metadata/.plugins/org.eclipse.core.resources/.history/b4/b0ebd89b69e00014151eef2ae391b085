@@ -1,0 +1,153 @@
+package at.uibk.los.model;
+
+import at.uibk.los.model.mocks.DataStorageMock;
+
+public class Model implements IModel
+{
+	private ILoginProvider loginProvider;
+	private IDataStorage dataStorage;
+	private IDataManipulation dataManipulation;
+	private IDataEvaluation dataEvaluation;
+	
+	public Model(ILoginProvider provider)
+	{
+		if(loginProvider == null) 
+		{
+			throw new IllegalArgumentException("login provider must not be null");
+		}
+		
+		loginProvider = provider;
+		
+		dataStorage = new DataStorageMock();
+		
+		dataManipulation = null;
+		dataEvaluation = null;
+	}
+	
+	@Override
+	public boolean loginUser()
+	{
+		return loginProvider.login();		
+	}
+
+	@Override
+	public void logoffUser()
+	{
+		loginProvider.logout();	
+	}
+
+	@Override
+	public Iterable<ILecture> getLectures() throws LOSAccessDeniedException
+	{
+		return dataStorage.getLectures();
+	}
+
+	@Override
+	public void addLecture(String title, String description)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void removeLecture(int id) throws LOSAccessDeniedException
+	{
+		dataStorage.removeLecture(id);
+	}
+
+	@Override
+	public void startAttendanceVerification(ILecture lecture) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void endAttendanceVerification(ILecture lecture) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public String renewVerificationKey(ILecture lecture) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void startQuiz(IQuiz quiz) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void endQuiz(IQuiz quiz) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IStatistics getStatistics(ILecture lecture)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+	
+	@Override
+	public IResults getStudentResults(ILecture lecture)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IFeedBack getFeedBack(ILecture lecture)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void confirmAttendance(String key) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IQuiz getQuiz() throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void submitAnswer(IQuiz quiz, int[] answers)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public ISolutions getSolutions(IQuiz quiz) throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IPerformance getPerformance(ILecture lecture)
+			throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public IQuizBuilder getQuizBuilder() throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public ILectureBuilder getLectureBuilder() throws LOSAccessDeniedException
+	{
+		throw new NotImplementedException();
+	}
+
+}

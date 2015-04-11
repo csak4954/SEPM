@@ -1,5 +1,7 @@
 package at.uibk.los.model;
 
+import at.uibk.los.model.mocks.DataStorageMock;
+
 public class Model implements IModel
 {
 	private ILoginProvider loginProvider;
@@ -9,13 +11,15 @@ public class Model implements IModel
 	
 	public Model(ILoginProvider provider)
 	{
-		if(loginProvider == null) 
+		if(provider == null) 
 		{
 			throw new IllegalArgumentException("login provider must not be null");
 		}
 		
 		loginProvider = provider;
-		dataStorage = null;
+		
+		dataStorage = new DataStorageMock();
+		
 		dataManipulation = null;
 		dataEvaluation = null;
 	}
@@ -27,19 +31,22 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void logoffUser()
+	public void logoutUser()
 	{
+		if(getUser() == null) 
+			throw new IllegalStateException();
+		
 		loginProvider.logout();	
 	}
 
 	@Override
-	public Iterable<ILecture> getLectures() throws LOSAccessDeniedException
+	public Iterable<ILecture> getAssociatedLectures() throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		return dataStorage.getLectures();
 	}
 
 	@Override
-	public void addLecture(String title, String description)
+	public void addLecture(int lectureId, String title, String description)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
@@ -48,23 +55,23 @@ public class Model implements IModel
 	@Override
 	public void removeLecture(int id) throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		dataStorage.removeLecture(id);
 	}
 
 	@Override
-	public void startAttendanceVerification(ILecture lecture) throws LOSAccessDeniedException
+	public void startAttendanceVerification(int lectureId) throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public void endAttendanceVerification(ILecture lecture) throws LOSAccessDeniedException
+	public void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public String renewVerificationKey(ILecture lecture) throws LOSAccessDeniedException
+	public String renewVerificationKey(int lectureId) throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
@@ -76,27 +83,27 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void endQuiz(IQuiz quiz) throws LOSAccessDeniedException
+	public void endQuiz(int quizId) throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public IStatistics getStatistics(ILecture lecture)
+	public IStatistics getStatistics(int lectureId)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 	
 	@Override
-	public IResults getStudentResults(ILecture lecture)
+	public IResults getStudentResults(int lectureId)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public IFeedBack getFeedBack(ILecture lecture)
+	public IFeedBack getFeedBack(int lectureId)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
@@ -115,35 +122,39 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void submitAnswer(IQuiz quiz, int[] answers)
+	public void submitAnswer(int quizId, int[] answers)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public ISolutions getSolutions(IQuiz quiz) throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public IPerformance getPerformance(ILecture lecture)
+	public IPerformance getPerformance(int quizId)
 			throws LOSAccessDeniedException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public IQuizBuilder getQuizBuilder() throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
+	public void addLectureAdmin(int lectureId) throws LOSAccessDeniedException {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ILectureBuilder getLectureBuilder() throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
+	public IQuiz createQuiz() throws LOSAccessDeniedException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
+	public ILecture createLecture() throws LOSAccessDeniedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IUser getUser() {
+		return loginProvider.getUser();
+	}
 }

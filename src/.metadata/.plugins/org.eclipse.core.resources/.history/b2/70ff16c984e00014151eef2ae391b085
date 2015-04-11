@@ -1,0 +1,13 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.IQuiz;
+
+public class QuizMock implements IQuiz {
+
+	@Override
+	public Integer getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,5 @@
+package at.uibk.los.model;
+
+public class DataStorage {
+
+}

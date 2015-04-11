@@ -1,0 +1,25 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.IAnswer;
+
+public class AnswerMock implements IAnswer {
+
+	@Override
+	public int getId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSolution() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

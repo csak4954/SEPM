@@ -1,0 +1,30 @@
+package los;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import at.uibk.los.model.ILoginProvider;
+import at.uibk.los.model.IModel;
+import at.uibk.los.model.LOSAccessDeniedException;
+import at.uibk.los.model.Model;
+import at.uibk.los.model.mocks.StudentLoginProviderMock;
+import at.uibk.los.model.mocks.StaffLoginProviderMock;
+
+public class ModelTest
+{
+	@Test
+	public void testLogin()
+	{
+		IModel model = new Model(new StudentLoginProviderMock());
+		
+		assertNull(model.getUser());
+		model.loginUser();
+		assertNotNull(model.getUser());
+		model.logoffUser();
+		assertNull(model.getUser());
+	}
+}

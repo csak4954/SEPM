@@ -1,0 +1,40 @@
+package los;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import at.uibk.los.model.ILoginProvider;
+import at.uibk.los.model.IModel;
+import at.uibk.los.model.Model;
+import at.uibk.los.model.mocks.LoginProviderMock;
+
+public class ModelTest
+{
+	private static IModel model;
+	private static ILoginProvider provider;
+	
+	@Before
+	public void setUp() throws Exception
+	{
+		provider = new LoginProviderMock();
+		model = new Model(provider);
+	}
+
+	@Test
+	public void testLogin()
+	{
+		assertNull(provider.getUser());
+		model.loginUser();
+		assertNotNull(provider.getUser());
+		model.logoffUser();
+		assertNull(provider.getUser());
+	}
+	
+	@Test 
+	public void testModelAddLecture() {
+		model.
+	}
+}

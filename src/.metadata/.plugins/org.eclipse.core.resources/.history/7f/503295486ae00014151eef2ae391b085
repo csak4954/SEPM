@@ -1,0 +1,20 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.ILecture;
+
+public class LectureMock implements ILecture {
+
+	private int id;
+	private String title;
+	private String description;
+	
+	
+	
+	
+	@Override
+	public int getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+
+}

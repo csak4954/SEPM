@@ -1,0 +1,17 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.ILecture;
+import at.uibk.los.model.ILectureBuilder;
+
+public class LectureBuilderMock implements ILectureBuilder 
+{
+	public LectureBuilderMock() 
+	{
+		
+	}
+	
+	public LectureBuilderMock(ILecture lecture) 
+	{
+		
+	}
+}

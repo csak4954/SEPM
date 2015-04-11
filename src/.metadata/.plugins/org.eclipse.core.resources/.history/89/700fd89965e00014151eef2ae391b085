@@ -1,0 +1,63 @@
+package at.uibk.los.model;
+
+import java.util.Map;
+
+public class DataStorageMock implements IDataStorage
+{
+	private Map<Integer, ILecture> lectures;
+	private Map<Integer, IQuiz> quiz;
+	
+	
+	@Override
+	public void addLecture(ILecture lecture) {
+		lectures.put(lecture.getId(), lecture)
+	}
+
+	@Override
+	public void removeLecture(ILecture lecture) {
+			
+	}
+
+	@Override
+	public Iterable<ILecture> getLectures() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addQuiz(IQuiz quiz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeQuiz(IQuiz quiz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterable<IQuiz> getQuiz() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IQuizBuilder getQuizBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILectureBuilder getLectureBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILectureBuilder getLectureBuilder(ILecture lecture) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

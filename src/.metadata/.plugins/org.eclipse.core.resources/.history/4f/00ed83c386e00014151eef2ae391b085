@@ -1,0 +1,51 @@
+package at.uibk.los.model.mocks;
+
+import at.uibk.los.model.ILecture;
+import at.uibk.los.model.ILectureBuilder;
+
+public class LectureBuilderMock implements ILectureBuilder 
+{
+	private LectureMock lecture;
+	
+	public LectureBuilderMock() 
+	{
+		lecture = new LectureMock();
+	}
+	
+	public LectureBuilderMock(ILecture lecture) 
+	{
+		lecture = new LectureMock();
+		
+		setId(lecture.getId());
+		setTitle(lecture.getTitle());
+		setDescription(lecture.getDescription());
+		setVerificationKey(lecture.getVerificationKey());
+	}
+
+	@Override
+	public ILecture getLecture() {
+		return lecture;
+	}
+
+	@Override
+	public void setTitle(String title) {
+		lecture.setTitle(lecture.getTitle());
+	}
+
+	@Override
+	public void setDescription(String description) {
+		lecture.setDescription(lecture.getDescription());
+	}
+
+	@Override
+	public void setId(int id) {
+		lecture.setId(lecture.getId());
+		
+	}
+
+	@Override
+	public void setVerificationKey(String key) {
+		// TODO Auto-generated method stub
+		
+	}
+}
