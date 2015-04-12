@@ -21,3 +21,5 @@ add/remove lectures participation
 view campus map with my current location  
 
 For now, feel free to have a look on /doc folder for more details. 
+
+CI status available here: https://travis-ci.org/csak4954/SEPM
