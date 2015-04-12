@@ -20,14 +20,14 @@
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="608.957697029638" width="1027.151162790698" x="57.56465752180111" y="119.22459128006025"/>
+              <y:Geometry height="608.9576970296381" width="1027.151162790698" x="57.56465752180111" y="119.22459128006025"/>
               <y:Fill color="#F5F5F5" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
               <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="22.37646484375" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="1027.151162790698" x="0.0" y="0.0">DataStorage</y:NodeLabel>
               <y:Shape type="roundrectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="16" bottomF="16.25" left="34" leftF="33.7500000000002" right="4" rightF="3.796772801599218" top="38" topF="38.06249999999994"/>
+              <y:BorderInsets bottom="10" bottomF="10.000000000000114" left="34" leftF="33.7500000000002" right="4" rightF="3.796772801599218" top="38" topF="38.06249999999994"/>
             </y:GroupNode>
             <y:GroupNode>
               <y:Geometry height="50.0" width="50.0" x="120.53633720930202" y="-135.35611600654056"/>
@@ -83,7 +83,7 @@
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="146.4999999999999" width="246.25" x="476.3043525163507" y="550.4322883096984"/>
+              <y:Geometry height="158.9999999999999" width="246.25" x="476.3043525163507" y="544.1822883096984"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="35.7763671875" x="105.23681640625" y="26.701171875">IQuiz<y:LabelModel>
@@ -100,7 +100,7 @@
 +setTitle(String)
 +getQuestions() : IQuestion[]
 +addQuestion(String text) : IQuestion
-
++addApproach(int QuestionId, int[] answers)
 
 
 </y:MethodLabel>

@@ -1,3 +1,0 @@
-#Tomcat publish data
-#Sun Apr 12 00:26:03 CEST 2015
-org.eclipse.jst.jee.server\:los=C\:\\Users\\Florian\\Documents\\sts-bundle\\pivotal-tc-server-developer-3.1.0.RELEASE\\base-instance\\wtpwebapps\\los

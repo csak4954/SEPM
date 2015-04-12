@@ -1,8 +1,0 @@
-package at.uibk.los.model;
-
-public interface ILecture
-{
-	int getId();
-	String getTitle();
-	String getDescription();
-}

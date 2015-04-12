@@ -12,9 +12,7 @@ public interface ILecture
 	void setDescription(String description);
 	
 	String getVerificationKey();
-	void startAttendanceVerification();
-	void endAttendanceVerification();
-	boolean isAttendanceVerificationActive();
+	void setVerificationKey(String key);
 	
 	void addAttendee(int userId);
 	void removeAttendee(int userId);
@@ -26,5 +24,6 @@ public interface ILecture
 	
 	void addQuiz(IQuiz quiz);
 	void removeQuiz(int quizId);
+	IQuiz getQuiz(int quizId);
 	Iterable<IQuiz> getQuiz();
 }

@@ -1,7 +1,0 @@
-package at.uibk.los.model.mocks;
-
-import at.uibk.los.model.IQuizBuilder;
-
-public class QuizBuilderMock implements IQuizBuilder {
-
-}

@@ -1,5 +1,7 @@
 package at.uibk.los.model;
 
+import java.util.Random;
+
 public class DataManipulation implements IDataManipulation 
 {
 	private IDataStorage dataStorage;
@@ -22,46 +24,44 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void addQuiz(IQuiz quiz) 
-	{
-		dataStorage.addQuiz(quiz);
-	}
-
-	@Override
-	public void removeQuiz(IQuiz quiz) 
-	{
-		dataStorage.removeQuiz(quiz.getId());
-	}
-
-	@Override
-	public void startAttendanceVerification(int lectureId) 
+	public void addQuiz(int lectureId, IQuiz quiz) throws EntityNotFoundException
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new IllegalArgumentException("Invalid lecture id");
+			throw new EntityNotFoundException("lecture not found");
 		
-		lec.startAttendanceVerification();
+		lec.addQuiz(quiz);
 	}
 
 	@Override
-	public void endAttendanceVerification(int lectureId) 
+	public void removeQuiz(int lectureId, int quizId) throws EntityNotFoundException
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new IllegalArgumentException("Invalid lecture id");
+			throw new EntityNotFoundException("lecture not found");
 		
-		lec.endAttendanceVerification();
+		lec.removeQuiz(quizId);
+	}
+
+	@Override
+	public void endAttendanceVerification(int lectureId)  throws EntityNotFoundException
+	{
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new EntityNotFoundException("lecture not found");
+
+		lec.setVerificationKey(null);
 	}
 
 
 	@Override
-	public void confirmAttendance(int userId, int lectureId, String key) throws LOSAccessDeniedException, IllegalArgumentException
+	public void confirmAttendance(int userId, int lectureId, String key) throws EntityNotFoundException
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new IllegalArgumentException("Invalid lecture id");
+			throw new EntityNotFoundException("lecture not found");
 
-		if(lec.isAttendanceVerificationActive())
+		if(lec.getVerificationKey().isEmpty())
 			throw new IllegalArgumentException("Verification is not active");
 		
 		if(!lec.getVerificationKey().equals(key))
@@ -71,13 +71,39 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void submitAnswer(int userId, int quizId, int[] answers) throws LOSAccessDeniedException, IllegalArgumentException
+	public void submitAnswer(int userId, int lectureId, int quizId, int questionId,  int[] answers)  throws EntityNotFoundException
 	{
-		IQuiz quiz = dataStorage.getQuiz(quizId);
+		ILecture lecture = dataStorage.getLecture(lectureId);
+		if(lecture == null)
+			throw new EntityNotFoundException("lecture not found");
+		
+		IQuiz quiz = lecture.getQuiz(quizId);
 		if(quiz == null)
-			throw new IllegalArgumentException("Invalid quiz id");
+			throw new EntityNotFoundException("quiz not found");
 			
-			
-		quiz.submitAnswer(userId, answers);
+		quiz.addApproach(userId, questionId, answers);
+	}
+
+	private String generateVerificationKey()
+	{
+		Random r = new Random();
+		String key = "";
+		while (key.length() < 4) {
+			key += r.nextInt(9);
+		}
+		
+		return key;
+	}
+	
+	@Override
+	public String renewAttendanceVerification(int lectureId)  throws EntityNotFoundException
+	{
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new IllegalArgumentException("Invalid lecture id");
+		
+		lec.setVerificationKey(generateVerificationKey());
+		
+		return lec.getVerificationKey();
 	}
 }

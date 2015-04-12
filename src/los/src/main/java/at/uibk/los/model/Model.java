@@ -49,7 +49,11 @@ public class Model implements IModel
 	public void addLecture(int lectureId, String title, String description)
 			throws LOSAccessDeniedException
 	{
-		dataManipulation.addLecture(null);
+		ILecture lecture = dataStorage.createLecture();
+		lecture.setId(lectureId);
+		lecture.setTitle(title);
+		lecture.setDescription(description);
+		dataManipulation.addLecture(lecture);
 	}
 
 	@Override
@@ -59,25 +63,25 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void startAttendanceVerification(int lectureId) throws LOSAccessDeniedException
+	public String renewAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		dataManipulation.startAttendanceVerification(lectureId);
+		return dataManipulation.renewAttendanceVerification(lectureId);
 	}
-
+	
 	@Override
-	public void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException
+	public void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
 		dataManipulation.endAttendanceVerification(lectureId);
 	}
 
 	@Override
-	public void startQuiz(IQuiz quiz) throws LOSAccessDeniedException
+	public void startQuiz(int lectureId, IQuiz quiz) throws LOSAccessDeniedException, EntityNotFoundException
 	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public void endQuiz(int quizId) throws LOSAccessDeniedException
+	public void endQuiz(int lectureId, int quizId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
 		throw new NotImplementedException();
 	}
@@ -103,18 +107,10 @@ public class Model implements IModel
 		throw new NotImplementedException();
 	}
 
-
-
 	@Override
-	public IQuiz getQuiz(int quizId) throws LOSAccessDeniedException
+	public void submitAnswer(int lectureId, int quizId, int questionId, int[] answers) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		return dataStorage.getQuiz(quizId);
-	}
-
-	@Override
-	public void submitAnswer(int userId, int quizId, int[] answers) throws LOSAccessDeniedException
-	{
-		dataManipulation.submitAnswer(userId, quizId, answers);
+		dataManipulation.submitAnswer(loginProvider.getUser().getId(), lectureId, quizId, questionId, answers);
 	}
 
 	@Override
@@ -147,8 +143,10 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void confirmAttendance(int userId, int lectureId, String key) throws IllegalArgumentException, LOSAccessDeniedException
+	public void confirmAttendance(int userId, int lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException
 	{
 		dataManipulation.confirmAttendance(userId, lectureId, key);
 	}
+
+
 }
