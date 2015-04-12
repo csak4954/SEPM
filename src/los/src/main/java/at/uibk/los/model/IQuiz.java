@@ -7,4 +7,5 @@ public interface IQuiz
 	String getTitle();
 	Iterable<IQuestion> getQuestions();
 	IQuestion addQuestion(String text); 
+	void submitAnswer(int userId, int[] answers);
 }

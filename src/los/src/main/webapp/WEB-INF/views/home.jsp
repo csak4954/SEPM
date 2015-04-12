@@ -49,11 +49,8 @@
 				  </div>
 				  
 				  <div>
-				 	 <md-button class="md-raised md-primary" ng-click="navStudent()">Connect</md-button>
+				 	 <md-button class="md-raised md-primary" ng-click="navProfessor()">Connect</md-button>
 				  </div>	
-				 <div>
-				 	 <md-button class="md-raised md-primary" ng-click="navProfessor()">Connect-Professor</md-button>
-				  </div>
 				</div>
 					
 		  	</md-whiteframe>

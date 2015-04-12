@@ -12,7 +12,9 @@ public interface ILecture
 	void setDescription(String description);
 	
 	String getVerificationKey();
-	void setVerificationKey(String key);
+	void startAttendanceVerification();
+	void endAttendanceVerification();
+	boolean isAttendanceVerificationActive();
 	
 	void addAttendee(int userId);
 	void removeAttendee(int userId);

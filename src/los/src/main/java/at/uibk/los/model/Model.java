@@ -20,7 +20,7 @@ public class Model implements IModel
 		
 		dataStorage = new DataStorageMock();
 		
-		dataManipulation = null;
+		dataManipulation = new DataManipulation(dataStorage);
 		dataEvaluation = null;
 	}
 	
@@ -109,11 +109,7 @@ public class Model implements IModel
 		throw new NotImplementedException();
 	}
 
-	@Override
-	public void confirmAttendance(String key) throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
-	}
+
 
 	@Override
 	public IQuiz getQuiz() throws LOSAccessDeniedException
@@ -122,10 +118,9 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void submitAnswer(int quizId, int[] answers)
-			throws LOSAccessDeniedException
+	public void submitAnswer(int userId, int quizId, int[] answers) throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		dataManipulation.submitAnswer(userId, quizId, answers);
 	}
 
 	@Override
@@ -156,5 +151,11 @@ public class Model implements IModel
 	@Override
 	public IUser getUser() {
 		return loginProvider.getUser();
+	}
+
+	@Override
+	public void confirmAttendance(int userId, int lectureId, String key) throws IllegalArgumentException, LOSAccessDeniedException
+	{
+		dataManipulation.confirmAttendance(userId, lectureId, key);
 	}
 }

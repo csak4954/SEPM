@@ -1,8 +1,10 @@
 package at.uibk.los.model.mocks;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import at.uibk.los.model.ILecture;
@@ -14,6 +16,9 @@ public class LectureMock implements ILecture {
 	private String title;
 	private String description;
 	private String verificationKey;
+	private Date    verificationKeyDate;
+	private boolean isVerificationActive;
+	private long    verificationKeyTime;
 	
 	private Map<Integer, IQuiz> quiz;
 	private Set<Integer> attendees;
@@ -23,6 +28,7 @@ public class LectureMock implements ILecture {
 		quiz = new HashMap<Integer, IQuiz>();
 		attendees = new HashSet<Integer>();
 		admins = new HashSet<Integer>();
+		isVerificationActive = false;
 	}
 	
 	@Override
@@ -56,12 +62,19 @@ public class LectureMock implements ILecture {
 	}
 	
 	@Override
-	public String getVerificationKey() {
+	public String getVerificationKey() 
+	{
+		if(new Date().getTime() - verificationKeyDate.getTime() > verificationKeyTime)
+			verificationKey = generateVerificationKey();
+		
 		return verificationKey;
 	}
 	@Override
-	public void setVerificationKey(String key) {
-		this.verificationKey = key;
+	public void startAttendanceVerification() 
+	{
+		this.verificationKey = generateVerificationKey();
+		this.isVerificationActive = true;
+		this.verificationKeyDate = new Date();
 	}
 	
 	@Override
@@ -108,5 +121,28 @@ public class LectureMock implements ILecture {
 	@Override
 	public Iterable<IQuiz> getQuiz() {
 		return this.quiz.values();
+	}
+	
+	private String generateVerificationKey()
+	{
+		Random r = new Random();
+		String key = "";
+		while (key.length() < 4) {
+			key += r.nextInt(9);
+		}
+		
+		return key;
+	}
+
+	@Override
+	public void endAttendanceVerification() 
+	{
+		isVerificationActive = false;
+	}
+
+	@Override
+	public boolean isAttendanceVerificationActive() 
+	{
+		return isVerificationActive;
 	}
 }

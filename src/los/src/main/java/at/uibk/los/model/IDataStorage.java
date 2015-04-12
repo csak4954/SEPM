@@ -8,5 +8,8 @@ public interface IDataStorage
 	ILecture getLecture(int id);
 	Iterable<ILecture> getLecturesForUser(int userId);
 	IQuiz createQuiz();
+	void addQuiz(IQuiz quiz);
+	void removeQuiz(int quizId);
+	IQuiz getQuiz(int quizId);
 	ILecture createLecture();
 }

@@ -17,9 +17,9 @@ public interface IModel
 	IStatistics getStatistics(int lectureId) throws LOSAccessDeniedException;
 	IResults getStudentResults(int lectureId) throws LOSAccessDeniedException;
 	IFeedBack getFeedBack(int lectureId) throws LOSAccessDeniedException;
-	void confirmAttendance(String key) throws LOSAccessDeniedException;
+	void confirmAttendance(int userId, int lectureId, String key) throws LOSAccessDeniedException;
 	IQuiz getQuiz() throws LOSAccessDeniedException;
-	void submitAnswer(int quizId, int[] answers) throws LOSAccessDeniedException;
+	void submitAnswer(int userId, int quizId, int[] answers) throws LOSAccessDeniedException;
 	IPerformance getPerformance(int lectureId) throws LOSAccessDeniedException;
 	IQuiz createQuiz() throws LOSAccessDeniedException;
 	ILecture createLecture() throws LOSAccessDeniedException;
