@@ -22,7 +22,6 @@ public class DataStorageMock implements IDataStorage
 			lecture.setTitle("Introduction to LOS");
 			lecture.setDescription("A very interesting lecture");
 			lecture.setId(i);
-			lecture.setVerificationKey("");
 			
 			addLecture(lecture);
 		}
@@ -62,5 +61,23 @@ public class DataStorageMock implements IDataStorage
 	@Override
 	public ILecture createLecture() {
 		return new LectureMock();
+	}
+
+	@Override
+	public void addQuiz(IQuiz quiz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeQuiz(int quizId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public IQuiz getQuiz(int quizId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

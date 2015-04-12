@@ -1,7 +1,5 @@
 package at.uibk.los.model;
 
-import java.util.Random;
-
 public class DataManipulation implements IDataManipulation 
 {
 	private IDataStorage dataStorage;
@@ -18,9 +16,9 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void removeLecture(ILecture lecture) 
+	public void removeLecture(int lectureId) 
 	{
-		dataStorage.removeLecture(lecture.getId());
+		dataStorage.removeLecture(lectureId);
 	}
 
 	@Override
@@ -36,15 +34,23 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void startAttendanceVerification(ILecture lecture) 
+	public void startAttendanceVerification(int lectureId) 
 	{
-		lecture.startAttendanceVerification();
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new IllegalArgumentException("Invalid lecture id");
+		
+		lec.startAttendanceVerification();
 	}
 
 	@Override
-	public void endAttendanceVerification(ILecture lecture) 
+	public void endAttendanceVerification(int lectureId) 
 	{
-		lecture.endAttendanceVerification();
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new IllegalArgumentException("Invalid lecture id");
+		
+		lec.endAttendanceVerification();
 	}
 
 

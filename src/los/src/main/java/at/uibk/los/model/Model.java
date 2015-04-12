@@ -49,31 +49,25 @@ public class Model implements IModel
 	public void addLecture(int lectureId, String title, String description)
 			throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		dataManipulation.addLecture(null);
 	}
 
 	@Override
 	public void removeLecture(int id) throws LOSAccessDeniedException
 	{
-		dataStorage.removeLecture(id);
+		dataManipulation.removeLecture(id);
 	}
 
 	@Override
 	public void startAttendanceVerification(int lectureId) throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		dataManipulation.startAttendanceVerification(lectureId);
 	}
 
 	@Override
 	public void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public String renewVerificationKey(int lectureId) throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
+		dataManipulation.endAttendanceVerification(lectureId);
 	}
 
 	@Override
@@ -112,9 +106,9 @@ public class Model implements IModel
 
 
 	@Override
-	public IQuiz getQuiz() throws LOSAccessDeniedException
+	public IQuiz getQuiz(int quizId) throws LOSAccessDeniedException
 	{
-		throw new NotImplementedException();
+		return dataStorage.getQuiz(quizId);
 	}
 
 	@Override
@@ -132,7 +126,6 @@ public class Model implements IModel
 
 	@Override
 	public void addLectureAdmin(int lectureId) throws LOSAccessDeniedException {
-		// TODO Auto-generated method stub
 		
 	}
 

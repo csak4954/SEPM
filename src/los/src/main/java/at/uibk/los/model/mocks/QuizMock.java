@@ -42,4 +42,10 @@ public class QuizMock implements IQuiz {
 		return title;
 	}
 
+	@Override
+	public void submitAnswer(int userId, int[] answers) 
+	{
+
+	}
+
 }
