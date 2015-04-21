@@ -83,10 +83,10 @@
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="158.9999999999999" width="246.25" x="476.3043525163507" y="544.1822883096984"/>
+              <y:Geometry height="158.9999999999999" width="305.0" x="446.9293525163507" y="544.1822883096984"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="35.7763671875" x="105.23681640625" y="26.701171875">IQuiz<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="35.7763671875" x="134.61181640625" y="26.701171875">IQuiz<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -100,7 +100,7 @@
 +setTitle(String)
 +getQuestions() : IQuestion[]
 +addQuestion(String text) : IQuestion
-+addApproach(int QuestionId, int[] answers)
++addApproach(int userId, int QuestionId, int[] answers)
 
 
 </y:MethodLabel>
@@ -190,7 +190,7 @@
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-51.08478983439063" sy="0.0" tx="0.0" ty="0.0">
+          <y:Path sx="-63.27253157152952" sy="0.0" tx="0.0" ty="0.0">
             <y:Point x="253.18965752180125" y="623.6822883096984"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
