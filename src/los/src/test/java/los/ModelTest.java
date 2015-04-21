@@ -1,49 +1,35 @@
 package los;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import at.uibk.los.model.ILoginProvider;
 import at.uibk.los.model.IModel;
+import at.uibk.los.model.IUser;
 import at.uibk.los.model.LOSAccessDeniedException;
 import at.uibk.los.model.Model;
-import at.uibk.los.model.mocks.StaffLoginProviderMock;
-import at.uibk.los.model.mocks.StudentLoginProviderMock;
+import static org.mockito.Mockito.*;
 
 public class ModelTest
 {
 	@Test
-	public void testLogin()
-	{
-		IModel model = new Model(new StudentLoginProviderMock());
-		
-		assertNull(model.getUser());
-		
-		model.loginUser();
-		
-		assertNotNull(model.getUser());
-		
-		model.logoutUser();
-		
-		assertNull(model.getUser());
-	}
-	
-	@Test(expected = IllegalStateException.class)
-	public void testLogout() 
-	{
-		
-		IModel model = new Model(new StudentLoginProviderMock());
-		model.logoutUser();
-	}
-	
-	@Test
 	public void testAddLecture() 
 	{
+		IUser user = mock(IUser.class);
+		when(user.getName()).thenReturn("florian");
+		when(user.getSurname()).thenReturn("tischler");
+		when(user.getEmail()).thenReturn("florian.tischler@outlook.com");
+		when(user.getId()).thenReturn(123456789);
+		when(user.getAffilation()).thenReturn("student");
+		when(user.getGroupPolicy()).thenReturn(0);
 		
-		IModel model = new Model(new StaffLoginProviderMock());
+		ILoginProvider provider = mock(ILoginProvider.class);
+		when(provider.login()).thenReturn(true);
+		when(provider.getUser()).thenReturn(user);
 		
+		IModel model = new Model(provider);
+
 		model.loginUser();
 		
 		final int lectureId = 1;
@@ -57,6 +43,5 @@ public class ModelTest
 		catch (LOSAccessDeniedException e) {
 			Assert.fail();
 		}
-		
 	}
 }
