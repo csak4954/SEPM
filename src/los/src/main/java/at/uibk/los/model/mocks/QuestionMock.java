@@ -3,8 +3,8 @@ package at.uibk.los.model.mocks;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.uibk.los.model.IAnswer;
-import at.uibk.los.model.IQuestion;
+import at.uibk.los.model.interfaces.IAnswer;
+import at.uibk.los.model.interfaces.IQuestion;
 
 public class QuestionMock implements IQuestion {
 

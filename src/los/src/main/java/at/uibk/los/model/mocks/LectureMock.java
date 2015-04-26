@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import at.uibk.los.model.ILecture;
-import at.uibk.los.model.IQuiz;
+import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IQuiz;
 
 public class LectureMock implements ILecture {
 	

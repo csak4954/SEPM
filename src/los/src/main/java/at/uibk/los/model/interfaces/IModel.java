@@ -1,4 +1,7 @@
-package at.uibk.los.model;
+package at.uibk.los.model.interfaces;
+
+import at.uibk.los.model.EntityNotFoundException;
+import at.uibk.los.model.LOSAccessDeniedException;
 
 public interface IModel
 {

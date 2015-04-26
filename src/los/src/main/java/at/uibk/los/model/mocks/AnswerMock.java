@@ -1,6 +1,6 @@
 package at.uibk.los.model.mocks;
 
-import at.uibk.los.model.IAnswer;
+import at.uibk.los.model.interfaces.IAnswer;
 
 public class AnswerMock implements IAnswer {
 
