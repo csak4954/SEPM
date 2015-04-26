@@ -2,6 +2,11 @@ package at.uibk.los.model;
 
 import java.util.Random;
 
+import at.uibk.los.model.interfaces.IDataManipulation;
+import at.uibk.los.model.interfaces.IDataStorage;
+import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IQuiz;
+
 public class DataManipulation implements IDataManipulation 
 {
 	private IDataStorage dataStorage;

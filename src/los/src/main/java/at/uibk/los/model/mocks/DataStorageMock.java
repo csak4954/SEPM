@@ -3,10 +3,10 @@ package at.uibk.los.model.mocks;
 import java.util.HashMap;
 import java.util.Map;
 
-import at.uibk.los.model.IDataStorage;
-import at.uibk.los.model.ILecture;
-import at.uibk.los.model.IQuiz;
 import at.uibk.los.model.NotImplementedException;
+import at.uibk.los.model.interfaces.IDataStorage;
+import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IQuiz;
 
 public class DataStorageMock implements IDataStorage
 {

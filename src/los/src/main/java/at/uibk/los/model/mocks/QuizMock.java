@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import at.uibk.los.model.IQuestion;
-import at.uibk.los.model.IQuiz;
+import at.uibk.los.model.interfaces.IQuestion;
+import at.uibk.los.model.interfaces.IQuiz;
 
 public class QuizMock implements IQuiz {
 
