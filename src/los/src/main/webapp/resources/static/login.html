@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="../css/login.css">
+
+
+<div class="card bgc-indigo-500 md-whiteframe-z2">
+    <div class="toolbar">
+        <span class="toolbar__label fs-title tc-white-1 ml">{{pageData.header()}}</span>
+
+        <div class="toolbar__right" ng-hide="pageData.hideToolbarRight()">
+            <lx-search-filter model="searchFilter.third" position="right" filter-width="400px" theme="dark" closed placeholder="Lecture"></lx-search-filter>
+
+            <button class="btn btn--l btn--white btn--icon" lx-ripple>
+                <i class="mdi mdi-apps"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div style="width: 100%">
+
+<div  style="position: absolute; left:50%; margin-top: 100px;">
+    <div style="position: relative; left: -50%;" >
+
+        <md-whiteframe class="md-whiteframe-z4 center-div" layout layout-align="center center" style="width: 350px; height: 400px">
+            <div layout="column">
+
+                <div>
+                    <span style="font-size:26px">Connect now</span>
+                </div>
+
+                <div style="margin-top:10px">
+                    <lx-text-field label="Username">
+                        <input type="text" ng-model="username">
+                    </lx-text-field>
+                </div>
+
+                <div style="margin-top:10px">
+                    <lx-text-field label="Password">
+                        <input type="password" ng-model="password">
+                    </lx-text-field>
+                </div>
+
+                <div  layout="column"  style="margin-top:40px">
+                    <md-button class="md-raised md-primary" ng-click="onConnect(username, password)">Connect</md-button>
+                </div>
+            </div>
+        </md-whiteframe>
+
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,12 @@
+md-toolbar md-icon.md-default-theme {
+    color: white; }
+
+.face {
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    width: 48px;
+    margin: 16px; }
+
+.ellipsis {
+    word-wrap: break-word;
+}

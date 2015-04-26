@@ -1,0 +1,66 @@
+<style>
+    textarea
+    {
+        width: 600px;
+        height: 100px;
+        vertical-align: middle;
+
+        max-width: 900px;
+        max-height: 300px;
+
+        margin-left: 15px;
+    }
+
+    .editable-wrap .editable-controls>input, .editable-wrap .editable-controls>select, .editable-wrap .editable-controls>textarea
+    {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<div ng-controller="professorQuizController">
+    <md-subheader class="md-primary">Question</md-subheader>
+    <textarea ng-model="question" ng-change="questionChanged(question)"></textarea>
+    <button class="btn btn--s btn--blue btn--fab" lx-ripple ng-disabled="addQuestionDisabled" ng-click="addQuesition(question)"><i class="mdi mdi-plus"></i></button>
+    <md-divider ng-if="!$last" style="margin-top: 15px"></md-divider>
+    <md-list>
+        <md-subheader class="md-primary">Questions</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="(qIndex, item) in questions">
+            <div class="md-list-item-text" style="margin-left: 30px">
+
+                <div layout="row">
+                    <button class="btn btn--xs btn--red btn--fab" lx-ripple style="margin-top: 10px; margin-left: 10px" ng-click="removeQuestion(qIndex)"><i class="mdi mdi-minus"></i></button>
+                    <div style="margin-top: 8px; margin-left: 3px">
+                        <a href="#" editable-textarea="item.question" e-rows="7" e-cols="42">
+                            <pre style="margin-top: -26px; margin-left: 10px"><h2>{{$qIndex + 1}}) {{ item.question }}</h2></pre>
+                        </a>
+                    </div>
+                </div>
+
+
+                <md-list-item class="md-3-line" ng-repeat="(aIndex, answer) in item.answers">
+                    <div class="md-list-item-text" layout="row" style="margin-left: 20px; margin-top: 10px">
+                        <button class="btn btn--xs btn--red btn--fab" lx-ripple style="margin-top: -6px; margin-left: 10px" ng-click="removeAnswer(qIndex, aIndex)"><i class="mdi mdi-minus"></i></button>
+
+                        <div>
+                            <a href="#" editable-textarea="answer" e-rows="7" e-cols="40">
+                                <pre style="margin-top: -25px; margin-left: 10px"><h3>{{ answer }}</h3></pre>
+                            </a>
+                        </div>
+                    </div>
+                </md-list-item>
+
+                <div style="margin-top: -10px">
+                    <md-subheader class="md-primary">Answer</md-subheader>
+                    <textarea class="txtAnswer" ng-model="questionsAnswerText[qIndex]" ng-change="answerChanged(qIndex)"></textarea>
+                    <button class="btn btn--s btn--blue btn--fab" lx-ripple ng-disabled="!questionsAnswerTextEnable[qIndex]" ng-click="addAnswer(qIndex,  answer)"><i class="mdi mdi-plus"></i></button>
+                </div>
+
+            </div>
+
+            <md-divider ng-if="!$last" style="margin-top: 15px"></md-divider>
+
+        </md-list-item>
+        <md-divider ng-if="!$last" style="margin-top: 15px"></md-divider>
+    </md-list>
+</div>
