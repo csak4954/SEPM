@@ -1,14 +1,17 @@
 package los;
 
 import java.util.ArrayList;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
+
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.mview.LectureModelView;
 import static org.junit.Assert.assertTrue;
 
 public class RESTLectureTest{
-	
+	@Ignore
 	@Test
 	public void testLectureById(){
 		RestTemplate restTemplate = new RestTemplate();
@@ -20,6 +23,7 @@ public class RESTLectureTest{
 		assertTrue(lecture.getVerificationKey().equals("LecturesVeryKey246"));
 	}
 	
+	@Ignore
 	@Test
 	public void testLectureAll(){
 		RestTemplate restTemplate = new RestTemplate();
