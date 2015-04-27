@@ -1,5 +1,8 @@
 package at.uibk.los.model;
 
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.Permission;
+import at.uibk.los.model.authorization.PolicyManager;
 import at.uibk.los.model.interfaces.IDataEvaluation;
 import at.uibk.los.model.interfaces.IDataManipulation;
 import at.uibk.los.model.interfaces.IDataStorage;
@@ -14,6 +17,7 @@ import at.uibk.los.model.interfaces.IResults;
 import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
 import at.uibk.los.model.mocks.DataStorageMock;
+import at.uibk.los.model.storage.DataStorage;
 
 public class Model implements IModel
 {
@@ -32,7 +36,7 @@ public class Model implements IModel
 		
 		loginProvider = provider;
 		
-		dataStorage = new DataStorageMock();
+		dataStorage = new DataStorage();
 		dataManipulation = new DataManipulation(dataStorage);
 		dataEvaluation = null;
 		

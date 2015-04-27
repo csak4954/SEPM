@@ -1,8 +1,9 @@
-package at.uibk.los.model;
+package at.uibk.los.model.authorization;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import at.uibk.los.model.ModifyLectureCollectionPermission;
 import at.uibk.los.model.interfaces.IGroupPolicy;
 import at.uibk.los.model.interfaces.IObject;
 import at.uibk.los.model.interfaces.IPermission;

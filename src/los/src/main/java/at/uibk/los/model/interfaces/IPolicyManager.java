@@ -1,6 +1,6 @@
 package at.uibk.los.model.interfaces;
 
-import at.uibk.los.model.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
 
 public interface IPolicyManager
 {

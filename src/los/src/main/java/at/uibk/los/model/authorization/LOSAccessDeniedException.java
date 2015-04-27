@@ -1,4 +1,4 @@
-package at.uibk.los.model;
+package at.uibk.los.model.authorization;
 
 import at.uibk.los.model.interfaces.IPermission;
 
