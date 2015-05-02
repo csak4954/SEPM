@@ -1,43 +1,43 @@
 package at.uibk.los;
 
-
 import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import at.uibk.los.model.interfaces.ILecture;
-import at.uibk.los.model.mview.LectureModelView;
+import at.uibk.los.viewmodel.LectureViewModel;
+import static org.mockito.Mockito.*;
 
 /**
- * Responds with a Model as JSON.
+ * Responds with a ViewModel as JSON.
  */
 @Controller
 @RequestMapping("/lecture")
 public class LectureController
 {
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody ArrayList<ILecture> returnLectureAll() {
-		ArrayList<ILecture> lectures = new ArrayList<ILecture>();
+	public @ResponseBody ArrayList<LectureViewModel> returnLectureAll() {
+		ArrayList<LectureViewModel> lectures = new ArrayList<LectureViewModel>();
 		for(int i = 0; i <= 19; i++){
-			ILecture lecture = new LectureModelView();
-			lecture.setId(i);
-			lecture.setTitle("LectureTitle - version "+i);
-			lecture.setDescription("This is the description of this lecture - version"+i);
-			lecture.setVerificationKey("LecturesVeryKey"+i);
-			lectures.add(lecture);
+			ILecture lecture = mock(ILecture.class);
+			when(lecture.getId()).thenReturn(i);
+	        when(lecture.getTitle()).thenReturn("LectureTitle - version "+i);
+	        when(lecture.getDescription()).thenReturn("This is the description of this lecture - version "+i);
+			LectureViewModel lvm = new LectureViewModel(lecture);
+			lectures.add(lvm);
 		}
 		return lectures;
 	}
-	
+
 	@RequestMapping(value="{id}", method = RequestMethod.GET)
-	public @ResponseBody ILecture returnLectureById(@PathVariable int id) {
-		ILecture lecture = new LectureModelView();
-		lecture.setId(id);
-		lecture.setTitle("LectureTitle - version "+id);
-		lecture.setDescription("This is the description of this lecture - version "+id);
-		lecture.setVerificationKey("LecturesVeryKey"+id);
-		return lecture;
+	public @ResponseBody LectureViewModel returnLectureById(@PathVariable int id){
+		ILecture lecture = mock(ILecture.class);
+		when(lecture.getId()).thenReturn(id);
+        when(lecture.getTitle()).thenReturn("LectureTitle - version "+id);
+        when(lecture.getDescription()).thenReturn("This is the description of this lecture - version "+id);
+		return new LectureViewModel(lecture);
 	}
 }
