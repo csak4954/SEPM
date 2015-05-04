@@ -3,6 +3,7 @@ package los;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import at.uibk.los.model.Model;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
@@ -14,8 +15,13 @@ import at.uibk.los.model.interfaces.IModel;
 import at.uibk.los.model.interfaces.IUser;
 import static org.mockito.Mockito.*;
 
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { UnitTestAppConfig.class })
 public class ModelTest
-{
+{	
 	private ILoginProvider getStudentLoginProvider() {
 		
 		IUser user = mock(IUser.class);
