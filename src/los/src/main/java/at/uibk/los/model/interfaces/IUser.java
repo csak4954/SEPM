@@ -6,5 +6,5 @@ public interface IUser extends IObject
 	String getSurname();
 	String getEmail();
 	int getId();
-	String getAffilation();	
+	String getAffiliation();	
 }
