@@ -23,7 +23,7 @@ public class ModelTest
 		when(user.getSurname()).thenReturn("tischler");
 		when(user.getEmail()).thenReturn("florian.tischler@outlook.com");
 		when(user.getId()).thenReturn(123456789);
-		when(user.getAffilation()).thenReturn("student");
+		when(user.getAffiliation()).thenReturn("student");
 		when(user.getGroupPolicy()).thenReturn(StudentGroupPolicy.id);
 		
 		ILoginProvider provider = mock(ILoginProvider.class);
@@ -49,7 +49,7 @@ public class ModelTest
 		when(user.getSurname()).thenReturn("tischler");
 		when(user.getEmail()).thenReturn("florian.tischler@outlook.com");
 		when(user.getId()).thenReturn(123456789);
-		when(user.getAffilation()).thenReturn("staff");
+		when(user.getAffiliation()).thenReturn("staff");
 		when(user.getGroupPolicy()).thenReturn(StaffGroupPolicy.id);
 		
 		ILoginProvider provider = mock(ILoginProvider.class);

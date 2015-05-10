@@ -16,6 +16,10 @@ public class HomeController
 
 	/**
 	 * Simply selects the home view to render by returning its name.
+	 * 
+	 * if u want to deliver data to view: 
+	 * model.addAttribute("accessName", theData );
+	 * and access data with ${accessName} in view
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) 
