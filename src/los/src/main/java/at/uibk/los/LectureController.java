@@ -25,7 +25,6 @@ public class LectureController
 			ILecture lecture = mock(ILecture.class);
 			when(lecture.getId()).thenReturn(i);
 	        when(lecture.getTitle()).thenReturn("LectureTitle - version "+i);
-	        when(lecture.getDescription()).thenReturn("This is the description of this lecture - version "+i);
 			LectureViewModel lvm = new LectureViewModel(lecture);
 			lectures.add(lvm);
 		}
