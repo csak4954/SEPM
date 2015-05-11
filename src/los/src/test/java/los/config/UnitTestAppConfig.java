@@ -1,30 +1,37 @@
-package los;
+package los.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.foursquare.fongo.Fongo;
+import com.github.fakemongo.Fongo;
 import com.mongodb.Mongo;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "at.uibk.los" })
+@ComponentScan(basePackages = { "at.uibk.los.controller", "at.uibk.los.model.storage",  "at.uibk.los.model"})
 @EnableMongoRepositories("at.uibk.los.model.storage")
 public class UnitTestAppConfig extends WebMvcConfigurerAdapter 
 {
     @Autowired
     private Environment env;
-
+    
+    private Fongo fongo = new Fongo("mongo server");
+    
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+    
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         return new MongoTemplate(mongo(), "los");
@@ -32,7 +39,7 @@ public class UnitTestAppConfig extends WebMvcConfigurerAdapter
 
     @Bean
     public Mongo mongo() throws Exception {
-        return new Fongo("los").getMongo();
+        return fongo.getMongo();
     }
     
     @Bean
@@ -47,6 +54,4 @@ public class UnitTestAppConfig extends WebMvcConfigurerAdapter
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
- 
-    
-}
+ }

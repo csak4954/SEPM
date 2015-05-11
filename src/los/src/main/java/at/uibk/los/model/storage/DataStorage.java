@@ -1,11 +1,14 @@
 package at.uibk.los.model.storage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.IQuiz;
 
+@Component
 public class DataStorage implements IDataStorage {
 
 	public DataStorage() {
@@ -52,4 +55,8 @@ public class DataStorage implements IDataStorage {
 
 	@Autowired
 	private LectureRepository lectures;
+	
+	public static DataStorage loadFromContext(ApplicationContext ctx) {
+		return ctx.getBean(DataStorage.class);
+	}
 }

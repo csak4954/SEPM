@@ -1,7 +1,9 @@
 package los;
 
 import junit.framework.Assert;
+import los.config.UnitTestAppConfig;
 
+import org.aspectj.lang.annotation.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,15 +15,23 @@ import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.ILoginProvider;
 import at.uibk.los.model.interfaces.IModel;
 import at.uibk.los.model.interfaces.IUser;
+import at.uibk.los.model.storage.LectureRepository;
 import static org.mockito.Mockito.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { UnitTestAppConfig.class })
+@ContextConfiguration(classes = UnitTestAppConfig.class)
+@org.springframework.test.context.web.WebAppConfiguration
 public class ModelTest
 {	
+	
+    @Autowired
+    private LectureRepository repo;
+    
 	private ILoginProvider getStudentLoginProvider() {
 		
 		IUser user = mock(IUser.class);
@@ -97,9 +107,9 @@ public class ModelTest
 
 		model.loginUser();
 		
-		final int lectureId = 1;
-		final String title = "title";
-		final String description = "description";
+		final int lectureId = 2;
+		final String title = "title 2";
+		final String description = "description 2";
 		
 		try
 		{
@@ -107,7 +117,7 @@ public class ModelTest
 			Iterable<ILecture> lectures = model.getAssociatedLectures();
 
 			for(ILecture lecture : lectures) {
-				System.out.println(lecture.toString());
+				System.out.println(lecture.getTitle());
 			}
 		}
 		catch (LOSAccessDeniedException e) {

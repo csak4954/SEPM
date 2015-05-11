@@ -1,5 +1,10 @@
 package at.uibk.los.model;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.Permission;
 import at.uibk.los.model.authorization.PolicyManager;
@@ -19,8 +24,30 @@ import at.uibk.los.model.interfaces.IUser;
 import at.uibk.los.model.mocks.DataStorageMock;
 import at.uibk.los.model.storage.DataStorage;
 
-public class Model implements IModel
+@Component
+class ApplicationContextProvider implements ApplicationContextAware
 {
+	private ApplicationContext ctx;
+	private static ApplicationContextProvider instance = null;
+	
+	public ApplicationContextProvider() {
+		ctx = null;
+		instance = this;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext arg0)
+			throws BeansException { 
+		ctx = arg0;
+	}
+	
+	public static ApplicationContext getContext() {
+		return instance.ctx;
+	}
+}
+
+public class Model implements IModel
+{	
 	private ILoginProvider loginProvider;
 	private IDataStorage dataStorage;
 	private IDataManipulation dataManipulation;
@@ -36,7 +63,7 @@ public class Model implements IModel
 		
 		loginProvider = provider;
 		
-		dataStorage = new DataStorage();
+		dataStorage = DataStorage.loadFromContext(ApplicationContextProvider.getContext());
 		dataManipulation = new DataManipulation(dataStorage);
 		dataEvaluation = null;
 		
@@ -179,6 +206,4 @@ public class Model implements IModel
 		policyManager.verify(getUser(), Permission.instance);
 		dataManipulation.confirmAttendance(userId, lectureId, key);
 	}
-
-
 }
