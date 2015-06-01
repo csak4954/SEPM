@@ -1,48 +1,43 @@
 package at.uibk.los.model;
 
+import java.util.List;
+
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.Permission;
 import at.uibk.los.model.interfaces.IDataEvaluation;
 import at.uibk.los.model.interfaces.IDataManipulation;
 import at.uibk.los.model.interfaces.IDataStorage;
-import at.uibk.los.model.interfaces.IFeedBack;
-import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IFeedback;
+import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.ILoginProvider;
 import at.uibk.los.model.interfaces.IModel;
 import at.uibk.los.model.interfaces.IPerformance;
 import at.uibk.los.model.interfaces.IPolicyManager;
 import at.uibk.los.model.interfaces.IQuiz;
-import at.uibk.los.model.interfaces.IResults;
+import at.uibk.los.model.interfaces.IQuizView;
+import at.uibk.los.model.interfaces.IScore;
+import at.uibk.los.model.interfaces.IServiceProvider;
 import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
-import at.uibk.los.model.mocks.DataStorageMock;
 
 public class Model implements IModel
-{
-	private ILoginProvider loginProvider;
-	private IDataStorage dataStorage;
-	private IDataManipulation dataManipulation;
-	private IDataEvaluation dataEvaluation;
-	private IPolicyManager policyManager;
+{	
+	private IServiceProvider provider;
 	
-	public Model(ILoginProvider provider)
+	public Model(IServiceProvider provider)
 	{
 		if(provider == null) 
 		{
 			throw new IllegalArgumentException("login provider must not be null");
 		}
 		
-		loginProvider = provider;
-		
-		dataStorage = new DataStorageMock();
-		dataManipulation = new DataManipulation(dataStorage);
-		dataEvaluation = null;
-		
-		policyManager = new PolicyManager();
+		this.provider = provider;
 	}
 	
 	@Override
-	public boolean loginUser()
+	public void loginUser()
 	{
-		return loginProvider.login();		
+		provider.getLoginProvider().login();
 	}
 
 	@Override
@@ -51,130 +46,184 @@ public class Model implements IModel
 		if(getUser() == null) 
 			throw new IllegalStateException();
 		
-		loginProvider.logout();	
+		provider.getLoginProvider().logout();	
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Iterable<ILecture> getAssociatedLectures() throws LOSAccessDeniedException
+	public List<ILectureView> getAssociatedLectures() throws LOSAccessDeniedException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		return dataStorage.getLectures();
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return (List<ILectureView>)(List<?>)provider.getStorage().getLecturesForUser(getUser().getId());
 	}
 
 	@Override
-	public void addLecture(int lectureId, String title, String description)
+	public ILectureView addLecture(String title, String description)
 			throws LOSAccessDeniedException
 	{
-		policyManager.verify(getUser(), ModifyLectureCollectionPermission.instance);
-		
-		ILecture lecture = dataStorage.createLecture();
-		lecture.setId(lectureId);
-		lecture.setTitle(title);
-		lecture.setDescription(description);
-		dataManipulation.addLecture(lecture);
+		provider.getPolicyManager().verify(getUser(), ModifyLectureCollectionPermission.instance);
+		return provider.getManipulation().addLecture(title, description);
 	}
 
 	@Override
-	public void removeLecture(int id) throws LOSAccessDeniedException
+	public void removeLecture(String id) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), ModifyLectureCollectionPermission.instance);
-		dataManipulation.removeLecture(id);
+		provider.getPolicyManager().verify(getUser(), ModifyLectureCollectionPermission.instance);
+		checkIsAdmin(id);
+		provider.getManipulation().removeLecture(id);
 	}
 
 	@Override
-	public String renewAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException
+	public String renewAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		return dataManipulation.renewAttendanceVerification(lectureId);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
+		return provider.getManipulation().renewAttendanceVerification(lectureId);
 	}
 	
 	@Override
-	public void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException
+	public void endAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		dataManipulation.endAttendanceVerification(lectureId);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		provider.getManipulation().endAttendanceVerification(lectureId);
 	}
 
 	@Override
-	public void startQuiz(int lectureId, IQuiz quiz) throws LOSAccessDeniedException, EntityNotFoundException
+	public void startQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		throw new NotImplementedException();
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
+		provider.getManipulation().startQuiz(quizId);
 	}
 
 	@Override
-	public void endQuiz(int lectureId, int quizId) throws LOSAccessDeniedException, EntityNotFoundException
+	public void endQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		throw new NotImplementedException();
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
+		provider.getManipulation().endQuiz(quizId);
 	}
 
 	@Override
-	public IStatistics getStatistics(int lectureId)
-			throws LOSAccessDeniedException
+	public IStatistics getStatistics(String lectureId)
+			throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
 		throw new NotImplementedException();
 	}
 	
 	@Override
-	public IResults getStudentResults(int lectureId)
-			throws LOSAccessDeniedException
+	public IScore getStudentResults(String lectureId)
+			throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public IFeedBack getFeedBack(int lectureId)
-			throws LOSAccessDeniedException
+	public List<IFeedback> getFeedback(String lectureId)
+			throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
+		return provider.getEvaluation().getFeedback(lectureId);
+	}
+
+	@Override
+	public void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException
+	{
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsVerified(lectureId);
+		provider.getManipulation().submitAnswer(getUser().getId(), lectureId, quizId, questionId, answers);
+	}
+
+	@Override
+	public IPerformance getPerformance(String quizId) throws LOSAccessDeniedException
+	{
 		throw new NotImplementedException();
 	}
 
 	@Override
-	public void submitAnswer(int lectureId, int quizId, int questionId, int[] answers) throws LOSAccessDeniedException, EntityNotFoundException
-	{
-		policyManager.verify(getUser(), Permission.instance);
-		dataManipulation.submitAnswer(loginProvider.getUser().getId(), lectureId, quizId, questionId, answers);
-	}
-
-	@Override
-	public IPerformance getPerformance(int quizId)
-			throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public void addLectureAdmin(int lectureId) throws LOSAccessDeniedException {
-		policyManager.verify(getUser(), Permission.instance);
-	}
-
-	@Override
-	public IQuiz createQuiz() throws LOSAccessDeniedException {
-		policyManager.verify(getUser(), Permission.instance);
-		return null;
-	}
-
-	@Override
-	public ILecture createLecture() throws LOSAccessDeniedException {
-		policyManager.verify(getUser(), Permission.instance);
-		return null;
+	public void addAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		provider.getManipulation().addAdmin(lectureId, getUser().getId());
 	}
 
 	@Override
 	public IUser getUser() {
-		return loginProvider.getUser();
+		
+		if(provider.getLoginProvider().isNew()) {
+			provider.getStorage().saveUser(provider.getLoginProvider().getUser());
+		}
+		
+		return provider.getLoginProvider().getUser();
 	}
 
 	@Override
-	public void confirmAttendance(int userId, int lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException
+	public void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException
 	{
-		policyManager.verify(getUser(), Permission.instance);
-		dataManipulation.confirmAttendance(userId, lectureId, key);
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		provider.getManipulation().confirmAttendance(getUser().getId(), lectureId, key);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ILectureView> getAvailableLectures() throws LOSAccessDeniedException
+	{
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return (List<ILectureView>)(List<?>)provider.getStorage().getLectures();
+	}
 
+	@Override
+	public IQuiz createQuiz(String lectureId) throws EntityNotFoundException, LOSAccessDeniedException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		checkIsAdmin(lectureId);
+		return provider.getManipulation().addQuiz(lectureId);
+	}
+
+	
+	@Override
+	public void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException {
+		provider.getManipulation().submitFeedback(lectureId, rating, text);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IQuizView> getActiveQuiz() {
+		return (List<IQuizView>)(List<?>)provider.getManipulation().getActiveQuiz(getUser().getId());
+	}
+
+	@Override
+	public List<IScore> getScores() throws LOSAccessDeniedException{
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().getScores(getUser().getId());
+	}
+	
+	@Override
+	public boolean isUserVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().isUserVerified(getUser().getId(), lectureId);
+	}
+	
+
+	@Override
+	public boolean isUserAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().isUserAdmin(getUser().getId(), lectureId);
+	}
+	
+	private void checkIsAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
+		if(!isUserAdmin(lectureId)) {
+			throw new LOSAccessDeniedException();
+		}
+	}
+	
+	private void checkIsVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
+		if(!isUserVerified(lectureId)) {
+			throw new LOSAccessDeniedException();
+		}
+	}
 }

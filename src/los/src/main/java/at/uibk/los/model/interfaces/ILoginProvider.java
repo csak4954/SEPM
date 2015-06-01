@@ -2,7 +2,8 @@ package at.uibk.los.model.interfaces;
 
 public interface ILoginProvider
 {
-	boolean login();
+	void login();
 	void logout();
 	IUser getUser();
+	boolean isNew();
 }

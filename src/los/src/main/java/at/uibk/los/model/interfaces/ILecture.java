@@ -1,29 +1,29 @@
 package at.uibk.los.model.interfaces;
 
-public interface ILecture
+import java.util.List;
+
+public interface ILecture extends ILectureView
 {
-	int getId();
-	void setId(int id);
-	
-	String getTitle();
 	void setTitle(String title);
 	
-	String getDescription();
 	void setDescription(String description);
 	
-	String getVerificationKey();
 	void setVerificationKey(String key);
 	
-	void addAttendee(int userId);
-	void removeAttendee(int userId);
-	Iterable<Integer> getAttendees();
+	void registerUser(String userId);
 	
-	void addAdmin(int userId);
-	void removeAdmin(int userId);
-	Iterable<Integer> getAdmins();
+	void addAttendance(String userId);
+	void removeAttendance(String userId);
 	
-	void addQuiz(IQuiz quiz);
-	void removeQuiz(int quizId);
-	IQuiz getQuiz(int quizId);
-	Iterable<IQuiz> getQuiz();
+	void addAdmin(String userId);
+	void removeAdmin(String userId);
+	
+	IQuiz addQuiz();
+	void removeQuiz(String quizId);
+	
+	IQuiz getQuiz(String quizId);
+	List<IQuiz> getQuiz();
+	
+	void submitFeedback(int rating, String text);
+	List<IFeedback> getFeedback();
 }

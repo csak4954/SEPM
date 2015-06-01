@@ -1,27 +1,68 @@
 package at.uibk.los.model.interfaces;
 
+import java.util.List;
+
 import at.uibk.los.model.EntityNotFoundException;
-import at.uibk.los.model.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.Permission;
 
 public interface IModel
 {
-	boolean loginUser();
+	// user-specific
+	void loginUser();
+	
 	void logoutUser();
+	
 	IUser getUser();
-	Iterable<ILecture> getAssociatedLectures() throws LOSAccessDeniedException;
-	void addLecture(int lectureId, String title, String description) throws LOSAccessDeniedException;
-	void removeLecture(int id) throws LOSAccessDeniedException;
-	void addLectureAdmin(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	String renewAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	void endAttendanceVerification(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	void startQuiz(int lectureId, IQuiz quiz) throws LOSAccessDeniedException, EntityNotFoundException;
-	void endQuiz(int lectureId, int quizId) throws LOSAccessDeniedException, EntityNotFoundException;
-	IStatistics getStatistics(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	IResults getStudentResults(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	IFeedBack getFeedBack(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	void confirmAttendance(int userId, int lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException;
-	void submitAnswer(int userId, int quizId, int questionId, int[] answers) throws LOSAccessDeniedException, EntityNotFoundException;
-	IPerformance getPerformance(int lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	IQuiz createQuiz() throws LOSAccessDeniedException;
-	ILecture createLecture() throws LOSAccessDeniedException;
+	
+	boolean isUserVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	boolean isUserAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	// lecture
+	List<ILectureView> getAssociatedLectures() throws LOSAccessDeniedException;
+	
+	List<ILectureView> getAvailableLectures() throws LOSAccessDeniedException;
+	
+	ILectureView addLecture(String title, String description) throws LOSAccessDeniedException;
+	
+	void removeLecture(String id) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void addAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	
+	// attendance
+	String renewAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void endAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException;
+		
+	
+	// quiz
+	IQuiz createQuiz(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void startQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void endQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException;
+
+	void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException;
+
+	List<IQuizView> getActiveQuiz();
+	
+	
+	// feed back
+	void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException;
+	
+	List<IFeedback> getFeedback(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	
+	// statistics
+	IStatistics getStatistics(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	IScore getStudentResults(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	IPerformance getPerformance(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+
+	public abstract List<IScore> getScores() throws LOSAccessDeniedException;
 }

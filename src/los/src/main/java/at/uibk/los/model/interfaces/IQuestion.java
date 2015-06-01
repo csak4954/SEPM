@@ -1,12 +1,16 @@
 package at.uibk.los.model.interfaces;
 
-public interface IQuestion {
+import java.util.List;
 
-	int getId();
-	
+public interface IQuestion extends IQuestionView {
+
 	void setText(String text);
-	String getText();
 	
-	Iterable<IAnswer> getAnswers();
+	List<IAnswer> getAnswers();
+	
+	void removeAnswer(String answerId);
+	
 	IQuestion addAnswer(String text, boolean solution);
+	
+	void addApproach(String userId, List<String> answers);
 }

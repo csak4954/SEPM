@@ -21,8 +21,27 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="at.uibk.los" />
+	<context:component-scan base-package="at.uibk.los.controller" />
 	
-	
+	<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+  <mongo:mongo id="mongo" host="localhost" port="27017"/>
+  
+  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    <constructor-arg ref="mongo" />
+    <constructor-arg value="los"/>
+  </bean>
+
+  <mongo:repositories base-package="at.uibk.los.model.storage" />
+  
+</beans>
 	
 </beans:beans>
+
+
