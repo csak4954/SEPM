@@ -1,21 +1,21 @@
 package at.uibk.los.viewmodel;
 
-import at.uibk.los.model.interfaces.IFeedBack;
+import at.uibk.los.model.interfaces.IFeedback;
 
 public class FeedbackViewModel
 {
-	private int id;
+	private String id;
 	private String title;
 	private String date;
 	private String from;
 	private String message; 
 	private int rating;
 	
-	public FeedbackViewModel(IFeedBack feedback){
+	public FeedbackViewModel(IFeedback feedback){
         this.id = feedback.getId();
-        this.title = feedback.getTitle();
+        /*this.title = feedback.getTitle();
         this.date = feedback.getDate();
-        this.from = feedback.getFrom();
+        this.from = feedback.getFrom();*/
         this.message = feedback.getMessage();
         this.rating = feedback.getRating();
 	}
@@ -24,7 +24,7 @@ public class FeedbackViewModel
 	
 	// getter needed by jackson to build json representation
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public String getTitle() {

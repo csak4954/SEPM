@@ -1,4 +1,4 @@
-package at.uibk.los;
+package at.uibk.los.controller;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +33,7 @@ public class QuizController{
         when(ianswers.hasNext()).thenReturn(true); 
         when(ianswers.next()).thenReturn(answer); 
         when(ianswers.hasNext()).thenReturn(false);
-		when(answer.getId()).thenReturn(1);
+		when(answer.getId()).thenReturn("1");
 		when(answer.getText()).thenReturn("answerText1");
 		when(answer.isSolution()).thenReturn(true);	
 		IQuestion question = mock(IQuestion.class);
@@ -45,11 +45,11 @@ public class QuizController{
         when(iquestions.hasNext()).thenReturn(true); 
         when(iquestions.next()).thenReturn(question); 
         when(iquestions.hasNext()).thenReturn(false);
-		when(question.getId()).thenReturn(10);
+		when(question.getId()).thenReturn("10");
 		when(question.getText()).thenReturn("questionText");
 		when(question.getAnswers()).thenReturn(answers);		
 		IQuiz quiz = mock(IQuiz.class);
-		when(quiz.getId()).thenReturn(2345);
+		when(quiz.getId()).thenReturn("2345");
 		when(quiz.getQuestions()).thenReturn(questions);
 		return new QuizViewModel(quiz);
 	}

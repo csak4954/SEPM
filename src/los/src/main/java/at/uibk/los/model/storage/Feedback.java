@@ -50,4 +50,9 @@ class Feedback implements IFeedback {
 
 
 	static FeedbackRepository Repo;
+
+	@Override
+	public String getId() {
+		return id.toString();
+	}
 }

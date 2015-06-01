@@ -1,4 +1,4 @@
-package at.uibk.los;
+package at.uibk.los.controller;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class LectureController
 		ArrayList<LectureViewModel> lectures = new ArrayList<LectureViewModel>();
 		for(int i = 0; i <= 19; i++){
 			ILecture lecture = mock(ILecture.class);
-			when(lecture.getId()).thenReturn(i);
+			when(lecture.getId()).thenReturn(i + "");
 	        when(lecture.getTitle()).thenReturn("LectureTitle - version "+i);
 			LectureViewModel lvm = new LectureViewModel(lecture);
 			lectures.add(lvm);
@@ -34,7 +34,7 @@ public class LectureController
 	@RequestMapping(value="{id}", method = RequestMethod.GET)
 	public @ResponseBody LectureViewModel returnLectureById(@PathVariable int id){
 		ILecture lecture = mock(ILecture.class);
-		when(lecture.getId()).thenReturn(id);
+		when(lecture.getId()).thenReturn(id + "");
         when(lecture.getTitle()).thenReturn("LectureTitle - version "+id);
         when(lecture.getDescription()).thenReturn("This is the description of this lecture - version "+id);
 		return new LectureViewModel(lecture);

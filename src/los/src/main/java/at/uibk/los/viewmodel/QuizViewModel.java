@@ -7,7 +7,7 @@ import at.uibk.los.model.interfaces.IQuestion;
 
 public class QuizViewModel
 {
-	private int id;
+	private String id;
 	private Iterable<IQuestion> questions ;
 	
 	public QuizViewModel(IQuiz quiz){
@@ -19,7 +19,7 @@ public class QuizViewModel
 	
 	// getter needed by jackson to build json representation
 
-	public int getQuizId() {
+	public String getQuizId() {
 		return this.id;
 	}
 	public Iterable<IQuestion> getQuestions(){

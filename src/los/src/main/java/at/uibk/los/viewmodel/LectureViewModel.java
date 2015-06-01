@@ -4,7 +4,7 @@ import at.uibk.los.model.interfaces.ILecture;
 
 public class LectureViewModel
 {
-	private int id;
+	private String id;
 	private String title;
 	private String description;
 	
@@ -18,7 +18,7 @@ public class LectureViewModel
 	
 	// getter needed by jackson to build json representation
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public String getTitle() {

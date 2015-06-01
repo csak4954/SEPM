@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
@@ -39,8 +40,7 @@ import at.uibk.los.model.interfaces.IUser;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = UnitTestAppConfig.class)
-@org.springframework.test.context.web.WebAppConfiguration
-
+@WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTest
 {	

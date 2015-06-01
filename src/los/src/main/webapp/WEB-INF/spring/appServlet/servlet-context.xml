@@ -39,7 +39,7 @@
   </bean>
 
   <mongo:repositories base-package="at.uibk.los.model.storage" />
-
+  
 </beans>
 	
 </beans:beans>
