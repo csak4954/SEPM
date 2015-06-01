@@ -23,3 +23,5 @@ view campus map with my current location
 For now, feel free to have a look on /doc folder for more details. 
 
 CI status available here: https://travis-ci.org/csak4954/SEPM
+
+Burn-Down-Chart: http://radekstepan.com/burnchart/#csak4954/SEPM/

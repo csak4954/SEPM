@@ -1,0 +1,24 @@
+<div ng-controller="professorGeneralController">
+
+    <md-subheader class="md-primary">Verification</md-subheader>
+    <md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-bottom: 15px;" ng-click="startVerification()">Start verification</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+
+    <lx-dialog class="dialog dialog--l" id="verificationDialog">
+
+        <div class="dialog__header">
+            <div class="toolbar bgc-indigo-500 pl++">
+                <span class="toolbar__label tc-white fs-title">Verification code</span>
+            </div>
+        </div>
+
+        <div class="dialog__content" style="text-align: center; margin-top: 50px">
+            <span style="font-size: 120pt">1234</span>
+        </div>
+
+        <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+        </div>
+    </lx-dialog>
+
+</div>

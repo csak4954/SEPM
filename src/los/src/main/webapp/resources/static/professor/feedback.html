@@ -1,0 +1,36 @@
+<div ng-controller="professorFeedbackController">
+
+
+    <ul class="list mt++">
+        <md-list-item class="md-3-line" ng-repeat="(fIndex, item) in feedback">
+
+            <li class="list-row" style="margin-top: 20px">
+                <div class="list-row__primary">
+                    <i class="icon icon--l icon--indigo lighten-1 icon--circled"></i>
+                </div>
+
+                <div>
+                    <div style="margin-left: 15px; margin-right: 15px">
+                        <div layout="row">
+                            <div style="margin-top: 4px">
+                                <div layout="row">
+                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(item.stars) track by $index">
+                                        <i class="icon icon--xs icon--yellow accent-2 icon--flat mdi mdi-star"></i>
+                                    </md-list-item>
+                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(5-item.stars) track by $index">
+                                        <i class="icon icon--xs icon--grey icon--flat mdi mdi-star-outline"></i>
+                                    </md-list-item>
+                                </div>
+                            </div>
+                            <span style="font-size: 20px; margin-left: 5px">{{item.title}}</span>
+                        </div>
+                        <pre style="font-size: 14px;">By {{item.user}} on {{item.date}}</pre>
+                        <pre style="font-size: 24px;">{{item.message}}</pre>
+                    </div>
+                </div>
+            </li>
+            <md-divider></md-divider>
+        </md-list-item>
+    </ul>
+
+</div>
