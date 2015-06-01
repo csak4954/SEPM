@@ -1,6 +1,6 @@
 package at.uibk.los.viewmodel;
 
-import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.ILectureView;
 
 public class LectureViewModel
 {
@@ -8,7 +8,7 @@ public class LectureViewModel
 	private String title;
 	private String description;
 	
-	public LectureViewModel(ILecture lecture){
+	public LectureViewModel(ILectureView lecture){
         this.id = lecture.getId();
         this.title = lecture.getTitle();
         this.description = lecture.getDescription();

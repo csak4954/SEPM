@@ -17,16 +17,18 @@ public class ExternalUser implements IUser {
 	private String matId;
 	private String email;
 	private String affilation;
+	private String password;
 	
 	public final String studentAffiliation = "student";
 	public final String staffAffiliation = "staff";
 	
-	public ExternalUser(String name, String surname, String matId, String email, String affilation) {
+	public ExternalUser(String name, String surname, String matId, String password, String email, String affilation) {
 		this.name = name;
 		this.surname = surname;
 		this.matId = matId;
 		this.email = email;
 		this.affilation = affilation;
+		this.password = password;
 	}
 	
 	public ExternalUser() {
@@ -35,6 +37,7 @@ public class ExternalUser implements IUser {
 		this.matId = "";
 		this.email = "";
 		this.affilation = "";
+		this.password = "";
 	}
 	
 	@Override

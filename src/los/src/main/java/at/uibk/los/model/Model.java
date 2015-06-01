@@ -33,21 +33,6 @@ public class Model implements IModel
 		
 		this.provider = provider;
 	}
-	
-	@Override
-	public void loginUser()
-	{
-		provider.getLoginProvider().login();
-	}
-
-	@Override
-	public void logoutUser()
-	{
-		if(getUser() == null) 
-			throw new IllegalStateException();
-		
-		provider.getLoginProvider().logout();	
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -225,5 +210,11 @@ public class Model implements IModel
 		if(!isUserVerified(lectureId)) {
 			throw new LOSAccessDeniedException();
 		}
+	}
+
+	@Override
+	public List<IScore> getScores(String userId) throws LOSAccessDeniedException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().getScores(userId);
 	}
 }

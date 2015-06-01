@@ -13,43 +13,18 @@ import at.uibk.los.model.interfaces.IServiceProvider;
 import at.uibk.los.model.login.LoginProvider;
 import at.uibk.los.model.storage.DataStorage;
 
-class ServiceProvider implements IServiceProvider
-{
-	public IDataManipulation manipulation = new DataManipulation(DataStorage.loadFromContext(ApplicationContextProvider.getContext()));
-	public IDataEvaluation evaluation = new DataEvaluation(DataStorage.loadFromContext(ApplicationContextProvider.getContext()));
-	public IPolicyManager policyManager = new PolicyManager();
-	
-	@Override
-	public IDataEvaluation getEvaluation() {
-		return evaluation;
-	}
-
-	@Override
-	public IDataManipulation getManipulation() {
-		return manipulation;
-	}
-
-	@Override
-	public IDataStorage getStorage() {
-		return DataStorage.loadFromContext(ApplicationContextProvider.getContext());
-	}
-
-	@Override
-	public ILoginProvider getLoginProvider() {
-		return LoginProvider.LoadFromContext(ApplicationContextProvider.getContext());
-	}
-
-	@Override
-	public IPolicyManager getPolicyManager() {
-		return policyManager;
-	}
-}
-
 public class AppDomain extends Model
 {	
+	private static ServiceProvider tmp = null;
 	private AppDomain()
 	{
-		super(new ServiceProvider());
+		super(tmp = new ServiceProvider());
+		provider = tmp;
+	}
+	
+	private ServiceProvider provider;
+	public ServiceProvider getServiceProvider() {
+		return provider;
 	}
 	
 	private static AppDomain instance = null;

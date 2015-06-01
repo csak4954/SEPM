@@ -8,11 +8,7 @@ import at.uibk.los.model.authorization.Permission;
 
 public interface IModel
 {
-	// user-specific
-	void loginUser();
-	
-	void logoutUser();
-	
+	// user-specific	
 	IUser getUser();
 	
 	boolean isUserVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
@@ -64,5 +60,7 @@ public interface IModel
 	
 	IPerformance getPerformance(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 
-	public abstract List<IScore> getScores() throws LOSAccessDeniedException;
+	List<IScore> getScores() throws LOSAccessDeniedException;
+	
+	List<IScore> getScores(String userId) throws LOSAccessDeniedException;
 }

@@ -170,25 +170,9 @@ public class ModelTest
 			Assert.assertEquals(lecture.getTitle(), title);
 			Assert.assertEquals(lecture.getDescription(), description);
 			
-			// reset
-			model.logoutUser();
-			model.loginUser();			
-			
-			// verify again
-			lectures = model.getAvailableLectures();
-			Assert.assertEquals(1, lectures.size());	
-			
-			lecture = lectures.get(0);
-			
-			Assert.assertEquals(lecture.getId(), lectureId);
-			Assert.assertEquals(lecture.getTitle(), title);
-			Assert.assertEquals(lecture.getDescription(), description);
-			
 			// delete lecture
 			model.removeLecture(lectureId);
 			Assert.assertTrue(model.getAvailableLectures().isEmpty());
-			
-			model.logoutUser();
 		}
 	}
 	
@@ -220,11 +204,7 @@ public class ModelTest
 		quiz.addQuestion(questionText)
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);
-				
-		// reset 
-		model.logoutUser();
-		model.loginUser();	
-		
+						
 		List<ILectureView> lectures = model.getAssociatedLectures();
 		Assert.assertEquals(1, lectures.size());
 
@@ -262,8 +242,6 @@ public class ModelTest
 		model.removeLecture(lecture.getId());
 		
 		Assert.assertTrue(model.getAvailableLectures().isEmpty());
-		
-		model.logoutUser();
 	}
 	
 	@Test
@@ -297,38 +275,32 @@ public class ModelTest
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);
 						
-		model.logoutUser();
-		model = testAsStudent();
+		testAsStudent();
 		
 		model.confirmAttendance(lecture.getId(), key);
 		
 		List<IQuizView> quizList = model.getActiveQuiz();
 		Assert.assertTrue(quizList.isEmpty());
 		
-		model.logoutUser();
-		model = testAsStaff();
+		testAsStaff();
 				
 		model.startQuiz(lecture.getId(), quiz.getId());
 		
-		model.logoutUser();
 		model = testAsStudent();
 		
 		quizList = model.getActiveQuiz();
 		Assert.assertEquals(1, quizList.size());
 		
-		model.logoutUser();
-		model = testAsStaff();
+		testAsStaff();
 		
 		model.endQuiz(lecture.getId(), quiz.getId());
 		
-		model.logoutUser();
-		model = testAsStudent();
+		testAsStudent();
 		
 		quizList = model.getActiveQuiz();
 		Assert.assertTrue(quizList.isEmpty());
 		
-		model.logoutUser();
-		model = testAsStaff();
+		testAsStaff();
 		
 		model.removeLecture(lecture.getId());
 	}
@@ -350,8 +322,7 @@ public class ModelTest
 				
 		final String key = model.renewAttendanceVerification(lecture.getId());
 		
-		model.logoutUser();
-		model = testAsStudent();
+		testAsStudent();
 			
 		List<ILectureView> lectures = model.getAvailableLectures();
 		Assert.assertEquals(lectures.size(), 1);
@@ -371,8 +342,7 @@ public class ModelTest
 		
 		final String lectureId = lecture.getId();
 		
-		model.logoutUser();
-		model = testAsStaff();
+		testAsStaff();
 		
 		// verify
 		model.addAdmin(lectureId);
@@ -420,8 +390,7 @@ public class ModelTest
 						
 		model.startQuiz(lecture.getId(), quiz.getId());
 	
-		model.logoutUser();
-		model = testAsStudent();
+		testAsStudent();
 				
 		model.confirmAttendance(lecture.getId(), key);
 		
@@ -438,13 +407,11 @@ public class ModelTest
 		
 		model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
 		
-		model.logoutUser();
-		model = testAsStaff();
+		testAsStaff();
 		
 		model.endQuiz(lecture.getId(), quiz.getId());
-		
-		model.logoutUser();
-		model = testAsStudent();
+
+		testAsStudent();
 		
 		answers.add(answersView.get(1).getId());
 		
@@ -464,8 +431,15 @@ public class ModelTest
 		IScore score = scores.get(0);
 		Assert.assertEquals(100, score.getScore());
 		
-		model.logoutUser();
-		model = testAsStaff();
+		IUser user = model.getUser();
+		
+		testAsStaff();
+		
+		scores = model.getScores(user.getId());
+		Assert.assertFalse(scores.isEmpty());
+		
+		score = scores.get(0);
+		Assert.assertEquals(100, score.getScore());
 		
 		model.removeLecture(lecture.getId());
 	}

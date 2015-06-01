@@ -174,7 +174,7 @@ public class DataStorage implements IDataStorage {
 	@Autowired
 	private AttendanceRepository attendances;
 	
-	public static IDataStorage loadFromContext(ApplicationContext ctx) {
+	public static DataStorage loadFromContext(ApplicationContext ctx) {
 		
 		DataStorage instance = ctx.getBean(DataStorage.class);
 		

@@ -2,17 +2,17 @@ package at.uibk.los.viewmodel;
 
 //import java.util.List;
 
-import at.uibk.los.model.interfaces.IQuiz;
-import at.uibk.los.model.interfaces.IQuestion;
+import at.uibk.los.model.interfaces.IQuestionView;
+import at.uibk.los.model.interfaces.IQuizView;
 
 public class QuizViewModel
 {
 	private String id;
-	private Iterable<IQuestion> questions ;
+	private Iterable<IQuestionView> questions ;
 	
-	public QuizViewModel(IQuiz quiz){
+	public QuizViewModel(IQuizView quiz){
         this.id = quiz.getId();
-        this.questions = quiz.getQuestions();
+        this.questions = quiz.getQuestionView();
 	}
 	
 	public QuizViewModel(){}  // needed by jackson to rebuild from json
@@ -22,7 +22,7 @@ public class QuizViewModel
 	public String getQuizId() {
 		return this.id;
 	}
-	public Iterable<IQuestion> getQuestions(){
+	public Iterable<IQuestionView> getQuestions(){
 		return this.questions;
 	}
 	

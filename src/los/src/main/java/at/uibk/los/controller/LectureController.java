@@ -1,14 +1,20 @@
 package at.uibk.los.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import at.uibk.los.AppDomain;
 import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.viewmodel.LectureViewModel;
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import static org.mockito.Mockito.*;
 
 /**
@@ -19,16 +25,22 @@ import static org.mockito.Mockito.*;
 public class LectureController
 {
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody ArrayList<LectureViewModel> returnLectureAll() {
-		ArrayList<LectureViewModel> lectures = new ArrayList<LectureViewModel>();
-		for(int i = 0; i <= 19; i++){
-			ILecture lecture = mock(ILecture.class);
-			when(lecture.getId()).thenReturn(i + "");
-	        when(lecture.getTitle()).thenReturn("LectureTitle - version "+i);
-			LectureViewModel lvm = new LectureViewModel(lecture);
-			lectures.add(lvm);
+	public @ResponseBody ArrayList<LectureViewModel> returnLectureAll() 
+	{
+		try
+		{
+			List<ILectureView> lectures = AppDomain.get().getAvailableLectures();	
+			ArrayList<LectureViewModel> lecturesVM = new ArrayList<LectureViewModel>();
+		
+			for(ILectureView lecture : lectures) {
+				lecturesVM.add(new LectureViewModel(lecture));
+			}
+			
+			return lecturesVM;
 		}
-		return lectures;
+		catch (LOSAccessDeniedException e) { }
+		
+		return null;
 	}
 
 	@RequestMapping(value="{id}", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package at.uibk.los.controller;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -9,11 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.interfaces.IAnswer;
+import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IQuiz;
 import at.uibk.los.model.interfaces.IQuestion;
+import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.viewmodel.QuizViewModel;
 import static org.mockito.Mockito.*;
+import at.uibk.los.AppDomain;
 
 /**
  * Responds with a ViewModel as JSON.
@@ -23,8 +28,38 @@ import static org.mockito.Mockito.*;
 public class QuizController{
 	
 	@RequestMapping(value="/{lectureId}", method = RequestMethod.GET)
-	public @ResponseBody QuizViewModel returnQuizByLectureId(@PathVariable int lectureId){
-		IAnswer answer = mock(IAnswer.class);
+	public @ResponseBody List<QuizViewModel> returnQuizByLectureId(@PathVariable String lectureId){
+		
+		List<QuizViewModel> quiz = new LinkedList<QuizViewModel>(); 
+		
+		try 
+		{
+			List<ILectureView> lectures = AppDomain.get().getAssociatedLectures();
+			
+			for(ILectureView lecture : lectures)
+			{
+				if(lecture.getId().equals(lectureId))
+				{
+					
+					List<IQuizView> quizViews = lecture.getQuizView();
+					
+					if(quiz != null) {
+						
+						for(IQuizView quizView : quizViews) {
+							quiz.add(new QuizViewModel(quizView));
+						}
+					}
+				}
+			}
+			
+		} catch (LOSAccessDeniedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return quiz;
+		
+		/*IAnswer answer = mock(IAnswer.class);
 		@SuppressWarnings("unchecked")
 		List<IAnswer> answers = mock(List.class);
 		@SuppressWarnings("unchecked")
@@ -51,6 +86,6 @@ public class QuizController{
 		IQuiz quiz = mock(IQuiz.class);
 		when(quiz.getId()).thenReturn("2345");
 		when(quiz.getQuestions()).thenReturn(questions);
-		return new QuizViewModel(quiz);
+		return new QuizViewModel(quiz);*/
 	}
 }
