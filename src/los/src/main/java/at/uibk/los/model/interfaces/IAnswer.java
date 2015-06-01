@@ -1,8 +1,14 @@
 package at.uibk.los.model.interfaces;
 
-public interface IAnswer
+public interface IAnswer extends IAnswerView
 {
-	int getId();
-	String getText();
+	void setText(String text);
+	
+	void setIsSolution(boolean solution);
+	
 	boolean isSolution();
+	
+	void setRightPointCount(int count);
+	
+	void setWrongPointCount(int count);
 }

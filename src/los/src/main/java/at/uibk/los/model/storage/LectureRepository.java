@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import at.uibk.los.model.interfaces.ILecture;
 
-public interface LectureRepository extends MongoRepository<Lecture, Integer> {
+interface LectureRepository extends MongoRepository<Lecture, String> {
     public ILecture findByTitle(String title);
-    public List<Lecture> findById(Integer id);
+    public List<Lecture> findById(String id);
     public List<Lecture> findAll();
 }

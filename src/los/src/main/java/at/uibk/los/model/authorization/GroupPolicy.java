@@ -11,7 +11,7 @@ public abstract class GroupPolicy implements IGroupPolicy {
 	public GroupPolicy() {
 		permissions = new HashMap<Integer, IPermission>();
 	}
-	
+		
 	@Override
 	public void grantPermission(IPermission permission) {
 		permissions.put(permission.getId(), permission);

@@ -1,6 +1,6 @@
 package at.uibk.los.model.interfaces;
 
-public interface IResults
+public interface IScore extends IScoreView
 {
 
 }

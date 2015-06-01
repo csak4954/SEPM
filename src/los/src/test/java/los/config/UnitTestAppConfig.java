@@ -18,7 +18,7 @@ import com.mongodb.Mongo;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "at.uibk.los.controller", "at.uibk.los.model.storage",  "at.uibk.los.model"})
+@ComponentScan(basePackages = { "at.uibk.los.controller", "at.uibk.los.model.storage",  "at.uibk.los.model", "at.uibk.los"})
 @EnableMongoRepositories("at.uibk.los.model.storage")
 public class UnitTestAppConfig extends WebMvcConfigurerAdapter 
 {

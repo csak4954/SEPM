@@ -1,11 +1,16 @@
 package at.uibk.los.model.interfaces;
 
-public interface IQuiz
+import java.util.List;
+
+public interface IQuiz extends IQuizView
 {
-	int getId();
 	void setTitle(String title);
-	String getTitle();
-	Iterable<IQuestion> getQuestions();
+	
+	void start();
+	void stop();
+	
+	List<IQuestion> getQuestions();
+	void RemoveQuestion(String questionId);
+	IQuestion getQuestion(String questionId);
 	IQuestion addQuestion(String text); 
-	void addApproach(int userId, int questionId, int[] answers);
 }

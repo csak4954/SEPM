@@ -9,7 +9,12 @@ public class LOSAccessDeniedException extends Exception
 	
 	public LOSAccessDeniedException(IPermission cause)
 	{
-		// TODO Auto-generated constructor stub
+		this.permission = cause;
+	}
+	
+	public LOSAccessDeniedException()
+	{
+		this.permission = null;
 	}
 	
 	public IPermission getPermission() {
