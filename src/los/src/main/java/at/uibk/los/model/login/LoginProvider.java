@@ -24,7 +24,7 @@ public class LoginProvider implements ILoginProvider {
 		if(createUsers) {
 			
 			instance.users.save(new ExternalUser("Florian", "Tischler", "123456", "secret", "example@test.com", "student"));
-			instance.users.save(new ExternalUser("Mathias", "Hölzl", "234567", "secret", "example@test.com", "student"));
+			instance.users.save(new ExternalUser("Mathias", "Hoelzl", "234567", "secret", "example@test.com", "student"));
 			instance.users.save(new ExternalUser("Felix", "Putz", "345678", "234567", "example@test.com", "student"));
 			
 			instance.users.save(new ExternalUser("Mr", "Prof", "456789", "secret", "example@test.com", "staff"));
