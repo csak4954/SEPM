@@ -1,4 +1,4 @@
-package at.uibk.los.model.login;
+package at.uibk.los.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import at.uibk.los.model.interfaces.ILoginProvider;
 import at.uibk.los.model.interfaces.IUser;
 
-@Service
+@Component
 @Scope("session")
 public class LoginProvider implements ILoginProvider {
 	

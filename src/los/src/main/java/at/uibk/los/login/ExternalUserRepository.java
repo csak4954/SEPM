@@ -1,4 +1,4 @@
-package at.uibk.los.model.login;
+package at.uibk.los.login;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.uibk.los.AppDomain;
-import at.uibk.los.model.login.LoginProvider;
+import at.uibk.los.login.LoginProvider;
 import at.uibk.los.viewmodel.AuthenticationViewModel;
 
 /**

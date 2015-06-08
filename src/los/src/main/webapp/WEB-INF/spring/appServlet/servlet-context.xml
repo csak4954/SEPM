@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="at.uibk.los.controller" />
+	<context:component-scan base-package="at.uibk.los.controller, at.uibk.los, at.uibk.los.login" />
 	
 	<beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,7 +38,7 @@
     <constructor-arg value="los"/>
   </bean>
 
-  <mongo:repositories base-package="at.uibk.los.model.storage" />
+  <mongo:repositories base-package="at.uibk.los.model.storage, at.uibk.los.login" />
   
 </beans>
 	
