@@ -3,7 +3,9 @@
  */
 
 
-app.controller('loginController', function($scope, pageData) {
+
+
+app.controller('loginController', function($scope, pageData, $http, LxNotificationService) {
     $scope.pageClass = 'login';
     pageData.setTitle('Login');
     pageData.setheader('Login');
@@ -11,16 +13,21 @@ app.controller('loginController', function($scope, pageData) {
 
     $scope.username = "";
     $scope.password = "";
+    $scope.showError = false;
 
     $scope.onConnect = function(user, password)
     {
-        if(user == "a")
-        {
-            $scope.changeView('student');
-        }
-        else
-        {
-            $scope.changeView('professor');
-        }
+    	$http.get('/los/authentication/'+user+'/'+password).
+    	  success(function(data, status, headers, config) 
+    	  {
+    		  if(data.affiliation != null)
+    			  $scope.changeView(data.affiliation);
+    		  else
+    			  LxNotificationService.error('Login failed'); 
+    	  }).
+    	  error(function(data, status, headers, config) 
+          {
+    		  LxNotificationService.error('Login failed'); 
+    	  });
     }
 });

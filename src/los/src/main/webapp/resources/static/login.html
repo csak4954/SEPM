@@ -39,6 +39,10 @@
                     </lx-text-field>
                 </div>
 
+				<div style="color:#8A0808">
+                    <span style="font-size:26px" ng-hide="!showError" >Invalid login</span>
+                </div>
+
                 <div  layout="column"  style="margin-top:40px">
                     <md-button class="md-raised md-primary" ng-click="onConnect(username, password)">Connect</md-button>
                 </div>

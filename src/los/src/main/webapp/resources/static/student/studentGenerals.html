@@ -1,0 +1,18 @@
+<div ng-controller="studentGeneralController">
+
+    <md-subheader class="md-primary">Verifications</md-subheader>
+   
+    <div style="margin-left: 15px; margin-top: -10px;" layout="row">
+        <div>
+        <lx-text-field label="Verification code">
+            <input type="number" ng-model="code" style="width: 300px" >
+        </lx-text-field>
+        </div>
+        <div>
+        	<md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-top:28px; margin-bottom: 15px;" ng-click="verify()">Attent</md-button>   
+        </div>        
+    </div>
+    
+    <md-divider ng-if="!$last"></md-divider>
+
+</div>

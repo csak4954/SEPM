@@ -1,0 +1,45 @@
+<style>
+    textarea
+    {
+        width: 600px;
+        height: 100px;
+        vertical-align: middle;
+
+        max-width: 900px;
+        max-height: 300px;
+
+        margin-left: 15px;
+    }
+
+    .editable-wrap .editable-controls>input, .editable-wrap .editable-controls>select, .editable-wrap .editable-controls>textarea
+    {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<div ng-controller="studentQuizController">
+    <div ng-hide="hasQuiz">
+    	<md-subheader class="md-primary">No quiz available</md-subheader>
+    </div>
+    <div ng-hide="!hasQuiz">
+		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in questions">
+
+			<md-radio-group class="md-primary" ng-model="answers[qIndex]">
+			<h3 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;">{{qIndex+1}}.) {{item.question}}</h3>
+			
+			<div style="margin-top: -10px; margin-left: 30px">
+			<md-radio-button ng-repeat="it in item.answers"
+	                       ng-value="it">
+	                       {{it}}
+	        </md-radio-button>
+			
+			</div>
+
+			<md-radio-group>
+			
+		</md-list-item>
+		 
+		 <md-button class="md-raised md-primary" style="width:150px; margin: 5px; margin-left: 100px; margin-top:28px; margin-bottom: 15px;" ng-click="submit()">Submit</md-button>   
+	</div>
+</div>

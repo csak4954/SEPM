@@ -14,17 +14,17 @@
                         <div layout="row">
                             <div style="margin-top: 4px">
                                 <div layout="row">
-                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(item.stars) track by $index">
+                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(item.rating) track by $index">
                                         <i class="icon icon--xs icon--yellow accent-2 icon--flat mdi mdi-star"></i>
                                     </md-list-item>
-                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(5-item.stars) track by $index">
+                                    <md-list-item class="md-3-line" ng-repeat="i in getEmptyArray(5-item.rating) track by $index">
                                         <i class="icon icon--xs icon--grey icon--flat mdi mdi-star-outline"></i>
                                     </md-list-item>
                                 </div>
                             </div>
                             <span style="font-size: 20px; margin-left: 5px">{{item.title}}</span>
                         </div>
-                        <pre style="font-size: 14px;">By {{item.user}} on {{item.date}}</pre>
+                        <pre style="font-size: 14px;">By {{item.from}} on {{item.date}}</pre>
                         <pre style="font-size: 24px;">{{item.message}}</pre>
                     </div>
                 </div>

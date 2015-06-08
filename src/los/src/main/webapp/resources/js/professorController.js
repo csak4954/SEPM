@@ -2,45 +2,75 @@
  * Created by Mathias Hölzl on 21.04.2015.
  */
 // contact page controller
-app.controller('professorController', function($scope, pageData )
+app.controller('professorController', function($scope, pageData, $http)
 {
     $scope.pageClass = 'professor';
     $scope.showContent = true;
+
 
     pageData.setTitle('Professor');
     pageData.setheader('Professor');
     pageData.sethideToolbarRight(false);
 
-    $scope.people = [
-        { name: 'Adam',      email: 'adam@email.com',      age: 10 },
-        { name: 'Amalie',    email: 'amalie@email.com',    age: 12 },
-        { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30 },
-        { name: 'Samantha',  email: 'samantha@email.com',  age: 31 },
-        { name: 'Estefanía', email: 'estefanía@email.com', age: 16 },
-        { name: 'Natasha',   email: 'natasha@email.com',   age: 54 },
-        { name: 'Nicole',    email: 'nicole@email.com',    age: 43 },
-        { name: 'Adrian',    email: 'adrian@email.com',    age: 21 }
-    ];
+    pageData.currentLecture = null;
+    pageData.validLecture = false;
+    
+    $scope.lectures = [];
+    $scope.selected = { data:""}
 
-    $scope.selectSections = {
-        'Sub header 1': [
-            { uid: '1', name: 'Adam' },
-            { uid: '2', name: 'Amalie' },
-            { uid: '3', name: 'Wladimir' },
-            { uid: '4', name: 'Samantha' }
-        ],
-        '<i class="mdi mdi-android"></i> Sub header 2': [
-            { uid: '5', name: 'Estefanía' },
-            { uid: '6', name: 'Natasha' },
-            { uid: '7', name: 'Nicole' }
-        ]
-    };
+
+    $http.get('/los/lecture').
+	  success(function(data, status, headers, config) 
+	  {
+		  $scope.lectures = data;
+	  }).
+	  error(function(data, status, headers, config) 
+	  {  
+	  });
+    
+    $scope.$watchCollection('selected.data', function()
+    { 
+    	$scope.lectures.map( function(item) 
+    	{
+    	     if(item.id == $scope.selected.data.id)
+    	    	 {
+    	    	 	pageData.validLecture = true;
+    	    	 	pageData.currentLecture = $scope.selected.data.id;
+    	    	 }
+    	})
+    });
 });
 
-app.controller('professorGeneralController', function($scope, LxDialogService )
+app.controller('professorGeneralController', function($scope, pageData, LxDialogService, $http, $timeout )
 {
+    $scope.verificationCode = "0000";
+	$scope.verify = false;
+    
+	
+	$scope.cancleVerification = function()
+	{
+		$scope.verify = false;
+	}
+	
+    function updateVerificationCode() 
+    {
+    	$http.get('/los/verification/' + pageData.currentLecture).
+	  	  success(function(data, status, headers, config) 
+	  	  {
+	  		  $scope.verificationCode = data.verificationCode;
+	  	  }).
+	  	  error(function(data, status, headers, config) 
+	  	  {  
+	  	  });
+
+    	if($scope.verify)
+    		$timeout(updateVerificationCode, 5000);
+    }
+    
     $scope.startVerification = function()
     {
+    	$scope.verify = true;
+    	updateVerificationCode();
         LxDialogService.open('verificationDialog');
     }
 });
@@ -116,7 +146,7 @@ app.controller('professorQuizController', function($scope )
     }
 });
 
-app.controller('professorFeedbackController', function($scope, LxDialogService )
+app.controller('professorFeedbackController', function($scope, LxDialogService, pageData, $http, $timeout )
 {
     $scope.feedback =
     [
@@ -178,12 +208,31 @@ app.controller('professorFeedbackController', function($scope, LxDialogService )
         }
     ];
 
-
-
     $scope.getEmptyArray = function(size)
     {
         return new Array(size);
     }
+    
+    
+    function updateFeedback() 
+    {
+    	if(pageData.validLecture)
+    	{	
+        	$http.get('/los/feedback/' + pageData.currentLecture).
+    	  	  success(function(data, status, headers, config) 
+    	  	  {
+    	  		$scope.feedback = data;
+    	  		console.log(data);
+    	  	  }).
+    	  	  error(function(data, status, headers, config) 
+    	  	  {  
+    	  	  });    		
+    	}
+    	
+    	$timeout(updateFeedback, 5000);
+    }
+    
+    updateFeedback();
 });
 
 app.controller('professorStatisticController', function($scope )
