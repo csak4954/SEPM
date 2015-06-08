@@ -9,4 +9,6 @@ public interface IQuestionView {
 	String getText();
 	
 	List<IAnswerView> getAnswerView();
+	
+	IQuizView getQuizView();
 }

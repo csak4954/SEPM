@@ -14,6 +14,7 @@ import at.uibk.los.model.interfaces.IModel;
 import at.uibk.los.model.interfaces.IPerformance;
 import at.uibk.los.model.interfaces.IPolicyManager;
 import at.uibk.los.model.interfaces.IQuiz;
+import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.model.interfaces.IScore;
 import at.uibk.los.model.interfaces.IServiceProvider;
@@ -98,14 +99,6 @@ public class Model implements IModel
 		throw new NotImplementedException();
 	}
 	
-	@Override
-	public IScore getStudentResults(String lectureId)
-			throws LOSAccessDeniedException, EntityNotFoundException
-	{
-		provider.getPolicyManager().verify(getUser(), Permission.instance);
-		checkIsAdmin(lectureId);
-		throw new NotImplementedException();
-	}
 
 	@Override
 	public List<IFeedback> getFeedback(String lectureId)
@@ -122,12 +115,6 @@ public class Model implements IModel
 		provider.getPolicyManager().verify(getUser(), Permission.instance);
 		checkIsVerified(lectureId);
 		provider.getManipulation().submitAnswer(getUser().getId(), lectureId, quizId, questionId, answers);
-	}
-
-	@Override
-	public IPerformance getPerformance(String quizId) throws LOSAccessDeniedException
-	{
-		throw new NotImplementedException();
 	}
 
 	@Override
@@ -200,6 +187,25 @@ public class Model implements IModel
 		return provider.getEvaluation().isUserAdmin(getUser().getId(), lectureId);
 	}
 	
+	@Override
+	public List<IScore> getScores(String userId) throws LOSAccessDeniedException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().getScores(userId);
+	}
+
+	@Override
+	public List<IQuizResult> getQuizResults() throws LOSAccessDeniedException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().getQuizResults(getUser().getId());
+	}
+
+	@Override
+	public List<IQuizResult> getQuizResults(String userId)
+			throws LOSAccessDeniedException {
+		provider.getPolicyManager().verify(getUser(), Permission.instance);
+		return provider.getEvaluation().getQuizResults(userId);
+	}
+	
 	private void checkIsAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
 		if(!isUserAdmin(lectureId)) {
 			throw new LOSAccessDeniedException();
@@ -210,11 +216,5 @@ public class Model implements IModel
 		if(!isUserVerified(lectureId)) {
 			throw new LOSAccessDeniedException();
 		}
-	}
-
-	@Override
-	public List<IScore> getScores(String userId) throws LOSAccessDeniedException {
-		provider.getPolicyManager().verify(getUser(), Permission.instance);
-		return provider.getEvaluation().getScores(userId);
 	}
 }

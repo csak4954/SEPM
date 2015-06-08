@@ -2,8 +2,10 @@ package at.uibk.los.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IAttendance;
@@ -11,6 +13,7 @@ import at.uibk.los.model.interfaces.IDataEvaluation;
 import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IScore;
 import at.uibk.los.model.interfaces.IUser;
 
@@ -100,9 +103,31 @@ public class DataEvaluation implements IDataEvaluation {
 		List<IScore> score = new LinkedList<IScore>();
 		for(IApproach approach : approaches)
 		{
-			score.add(approach.getScore());
+			if(!approach.getQuestion().getQuizView().isActive())
+				score.add(approach.getScore());
 		}
 	
 		return score;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IQuizResult> getQuizResults(String id) {
+		
+		List<IScore> scores = getScores(id);
+		
+		Map<String, QuizResult> results = new HashMap<String, QuizResult>();
+		for(IScore score : scores)
+		{
+			String quizId = score.getApproach().getQuestion().getQuizView().getId();
+			if(!results.containsKey(quizId)) {
+				results.put(quizId, new QuizResult());
+			}
+			
+			results.get(quizId).addScore(score);
+		}
+		
+		return (List<IQuizResult>)(List<?>)results.values();
+		
 	}
 }

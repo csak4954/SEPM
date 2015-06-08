@@ -18,5 +18,7 @@ public interface ILectureView {
 	
 	List<IQuizView> getQuizView();
 	
+	List<IUser> getRegisteredUsers();
+	
 	IQuizView getQuizView(String quizId);
 }

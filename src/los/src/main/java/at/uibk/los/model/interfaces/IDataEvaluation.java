@@ -14,4 +14,6 @@ public interface IDataEvaluation
 	boolean isUserAdmin(String userId, String lectureId) throws EntityNotFoundException;
 
 	public abstract List<IScore> getScores(String userId);
+
+	List<IQuizResult> getQuizResults(String id);
 }

@@ -52,15 +52,15 @@ public interface IModel
 	
 	List<IFeedback> getFeedback(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
-	
+
 	// statistics
 	IStatistics getStatistics(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	
-	IScore getStudentResults(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	
-	IPerformance getPerformance(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-
+		
 	List<IScore> getScores() throws LOSAccessDeniedException;
 	
 	List<IScore> getScores(String userId) throws LOSAccessDeniedException;
+	
+	List<IQuizResult> getQuizResults() throws LOSAccessDeniedException;
+	
+	List<IQuizResult> getQuizResults(String userId) throws LOSAccessDeniedException;
 }

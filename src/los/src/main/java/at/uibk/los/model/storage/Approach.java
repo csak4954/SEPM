@@ -56,6 +56,6 @@ class Approach implements IApproach {
 
 	@Override
 	public IScore getScore() {
-		return new Score(this);
+		return new at.uibk.los.model.storage.Score(this);
 	}
 }

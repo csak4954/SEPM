@@ -192,11 +192,26 @@ class Lecture implements ILecture {
 	public IQuizView getQuizView(String quizId) {
 		return getQuiz(quizId);
 	}
-
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IFeedback> getFeedback() {
 		return (List<IFeedback>)(List<?>)Feedback.Repo.findByLecture(this);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IUser> getRegisteredUsers() {
+			
+		List<Registration> registrations = Registration.Repo.findByLecture(this);
+		
+		List<IUser> users = new LinkedList<IUser>();
+		
+		for(Registration registration : registrations) {
+			users.add(registration.getUser());
+		}
+		
+		return users;
 	}
 }

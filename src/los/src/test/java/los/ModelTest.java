@@ -429,7 +429,7 @@ public class ModelTest
 		Assert.assertFalse(scores.isEmpty());
 		
 		IScore score = scores.get(0);
-		Assert.assertEquals(100, score.getScore());
+		Assert.assertEquals(100, score.getScore(), 0.001);
 		
 		IUser user = model.getUser();
 		
@@ -439,7 +439,7 @@ public class ModelTest
 		Assert.assertFalse(scores.isEmpty());
 		
 		score = scores.get(0);
-		Assert.assertEquals(100, score.getScore());
+		Assert.assertEquals(100, score.getScore(), 0.001);
 		
 		model.removeLecture(lecture.getId());
 	}

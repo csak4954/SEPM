@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IQuestion;
+import at.uibk.los.model.interfaces.IQuizView;
 
 class Question implements IQuestion {
 
@@ -76,5 +77,10 @@ class Question implements IQuestion {
 	@Override
 	public List<IAnswerView> getAnswerView() {
 		return (List<IAnswerView>)(List<?>)getAnswers();
+	}
+
+	@Override
+	public IQuizView getQuizView() {
+		return this.quiz;
 	}
 }

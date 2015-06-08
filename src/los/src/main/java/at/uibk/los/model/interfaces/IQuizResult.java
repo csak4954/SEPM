@@ -1,8 +1,8 @@
 package at.uibk.los.model.interfaces;
 
-public interface IScoreView {
+public interface IQuizResult {
 
-	IApproach getApproach();
-	
 	double getScore();
+	
+	IQuizView getQuizView();
 }
