@@ -48,7 +48,7 @@ public class LoginProvider implements ILoginProvider {
 	public boolean login(String username, String password)
 	{
 		user = users.findByMatIdAndPassword(username, password);
-		return user != null;
+		return (isNew = user != null);
 	}
 	
 	@Override
