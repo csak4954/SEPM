@@ -1,17 +1,21 @@
-package at.uibk.los.model;
+package at.uibk.los.model.evaluation;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IAttendance;
 import at.uibk.los.model.interfaces.IDataEvaluation;
 import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IScore;
+import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
 
 public class DataEvaluation implements IDataEvaluation {
@@ -70,7 +74,8 @@ public class DataEvaluation implements IDataEvaluation {
 	}
 
 	@Override
-	public boolean isUserAdmin(String userId, String lectureId) throws EntityNotFoundException {
+	public boolean isUserAdmin(String userId, String lectureId) throws EntityNotFoundException 
+	{
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null) {
 			throw new EntityNotFoundException("lecture not found");
@@ -80,13 +85,15 @@ public class DataEvaluation implements IDataEvaluation {
 		
 		boolean isAdmin = false;
 		
-		for(IUser admin : admins) {
-		
-			if(admin.getId().equals(userId))
-			{
-				isAdmin = true;
-				break;
-			}				
+		if(admins != null) {
+			for(IUser admin : admins) {
+			
+				if(admin.getId().equals(userId))
+				{
+					isAdmin = true;
+					break;
+				}				
+		}
 		}
 		
 		return isAdmin;		
@@ -100,9 +107,43 @@ public class DataEvaluation implements IDataEvaluation {
 		List<IScore> score = new LinkedList<IScore>();
 		for(IApproach approach : approaches)
 		{
-			score.add(approach.getScore());
+			if(!approach.getQuestion().getQuizView().isActive())
+				score.add(new Score(approach));
 		}
 	
 		return score;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IQuizResult> getQuizResults(String userId) {
+		
+		List<IScore> scores = getScores(userId);
+		
+		Map<String, QuizResult> results = new HashMap<String, QuizResult>();
+		for(IScore score : scores)
+		{
+			String quizId = score.getApproach().getQuestion().getQuizView().getId();
+			if(!results.containsKey(quizId)) {
+				results.put(quizId, new QuizResult());
+			}
+			
+			results.get(quizId).addScore(score);
+		}
+		
+		return (List<IQuizResult>)(List<?>)new LinkedList<QuizResult>(results.values());
+	}
+
+	@Override
+	public IStatistics getStatistics(String lectureId)
+			throws EntityNotFoundException {
+
+		ILecture lecture = dataStorage.getLecture(lectureId);
+		if(lecture == null) {
+			throw new EntityNotFoundException("lecture not found");
+		}
+		
+		return new Statistics(lecture, this);
+	}	
+	
 }

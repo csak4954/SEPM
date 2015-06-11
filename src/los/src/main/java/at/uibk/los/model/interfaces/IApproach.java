@@ -7,6 +7,4 @@ public interface IApproach {
 	public abstract IQuestion getQuestion();
 
 	public abstract List<IAnswer> getAnswers();
-
-	public abstract IScore getScore();
 }

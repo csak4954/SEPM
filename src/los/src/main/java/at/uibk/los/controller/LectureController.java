@@ -1,7 +1,9 @@
 package at.uibk.los.controller;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,11 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.uibk.los.AppDomain;
+import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.viewmodel.LectureViewModel;
-import at.uibk.los.model.authorization.LOSAccessDeniedException;
-import static org.mockito.Mockito.*;
 
 /**
  * Responds with a ViewModel as JSON.

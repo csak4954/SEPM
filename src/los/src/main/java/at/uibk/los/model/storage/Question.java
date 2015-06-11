@@ -1,6 +1,5 @@
 package at.uibk.los.model.storage;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -10,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IQuestion;
+import at.uibk.los.model.interfaces.IQuizView;
 
 class Question implements IQuestion {
 
@@ -58,15 +58,10 @@ class Question implements IQuestion {
 	public void addApproach(String userId, List<String> answerIds) {
 		
 		User user = User.Repo.findByMatId(userId);
-		List<Answer> answers = new LinkedList<Answer>();
-						
 		Approach approach = new Approach(user, quiz, this, answerIds);
 		Approach.Repo.save(approach);
 	}
 	
-	
-	static QuestionRepository Repo;
-
 	@Override
 	public void removeAnswer(String answerId) {
 		Answer.Repo.delete(answerId);
@@ -77,4 +72,29 @@ class Question implements IQuestion {
 	public List<IAnswerView> getAnswerView() {
 		return (List<IAnswerView>)(List<?>)getAnswers();
 	}
+
+	@Override
+	public IQuizView getQuizView() {
+		return this.quiz;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Question other = (Question)o;
+		
+		return this.id.equals(other.id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
+	static QuestionRepository Repo;
+
+
 }

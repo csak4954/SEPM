@@ -11,6 +11,7 @@ public interface ILecture extends ILectureView
 	void setVerificationKey(String key);
 	
 	void registerUser(String userId);
+	void unregisterUser(String userId);
 	
 	void addAttendance(String userId);
 	void removeAttendance(String userId);

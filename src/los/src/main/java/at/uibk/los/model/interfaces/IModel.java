@@ -4,12 +4,11 @@ import java.util.List;
 
 import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
-import at.uibk.los.model.authorization.Permission;
 
 public interface IModel
 {
 	// user-specific	
-	IUser getUser();
+	IUser getUser() throws LOSAccessDeniedException;
 	
 	boolean isUserVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
@@ -26,6 +25,7 @@ public interface IModel
 	
 	void addAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
+	void removeAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
 	// attendance
 	String renewAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
@@ -34,9 +34,13 @@ public interface IModel
 	
 	void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException;
 		
+	void unregisterFromLecture(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException; 
+	
 	
 	// quiz
 	IQuiz createQuiz(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	
+	void removeQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException; 
 	
 	void startQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
@@ -44,23 +48,23 @@ public interface IModel
 
 	void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException;
 
-	List<IQuizView> getActiveQuiz();
+	List<IQuizView> getActiveQuiz() throws LOSAccessDeniedException;
 	
 	
 	// feed back
-	void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException;
+	void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException, LOSAccessDeniedException;
 	
 	List<IFeedback> getFeedback(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
-	
+
 	// statistics
 	IStatistics getStatistics(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	
-	IScore getStudentResults(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-	
-	IPerformance getPerformance(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
-
+		
 	List<IScore> getScores() throws LOSAccessDeniedException;
 	
 	List<IScore> getScores(String userId) throws LOSAccessDeniedException;
+	
+	List<IQuizResult> getQuizResults() throws LOSAccessDeniedException;
+	
+	List<IQuizResult> getQuizResults(String userId) throws LOSAccessDeniedException;
 }

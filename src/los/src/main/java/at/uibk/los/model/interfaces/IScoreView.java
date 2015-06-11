@@ -4,5 +4,5 @@ public interface IScoreView {
 
 	IApproach getApproach();
 	
-	int getScore();
+	double getScore();
 }

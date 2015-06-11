@@ -1,6 +1,5 @@
 package at.uibk.los.model.interfaces;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import at.uibk.los.model.EntityNotFoundException;
@@ -14,4 +13,8 @@ public interface IDataEvaluation
 	boolean isUserAdmin(String userId, String lectureId) throws EntityNotFoundException;
 
 	public abstract List<IScore> getScores(String userId);
+
+	List<IQuizResult> getQuizResults(String c);
+
+	IStatistics getStatistics(String lectureId) throws EntityNotFoundException;
 }

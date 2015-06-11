@@ -1,17 +1,13 @@
 package los;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import los.config.UnitTestAppConfig;
+import los.config.TestAppConfig;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -19,129 +15,140 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
 import at.uibk.los.model.interfaces.IAnswerView;
-import at.uibk.los.model.interfaces.IDataEvaluation;
-import at.uibk.los.model.interfaces.IDataManipulation;
-import at.uibk.los.model.interfaces.IDataStorage;
+import at.uibk.los.model.interfaces.IDay;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILectureView;
-import at.uibk.los.model.interfaces.ILoginProvider;
 import at.uibk.los.model.interfaces.IModel;
-import at.uibk.los.model.interfaces.IPolicyManager;
 import at.uibk.los.model.interfaces.IQuestionView;
 import at.uibk.los.model.interfaces.IQuiz;
+import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IQuizView;
-import at.uibk.los.model.interfaces.IScore;
-import at.uibk.los.model.interfaces.IServiceProvider;
+import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = UnitTestAppConfig.class)
+@ContextConfiguration(classes = TestAppConfig.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTest
 {	
-	private static ILoginProvider loginProvider;
-	
-	@BeforeClass
-	public static void initialize() {
-		
-		loginProvider = mock(ILoginProvider.class);
-		when(loginProvider.isNew()).thenReturn(true);
-		when(loginProvider.getUser()).thenReturn(null);
-		
-		TestAppDomain.provider = new IServiceProvider()
-		{
-			IServiceProvider provider = null;
-
-			private void ensureProviderState() {
-				if(provider == null) provider = new ServiceProvider();
-			}
-			
-			@Override
-			public IDataEvaluation getEvaluation() {
-				ensureProviderState();
-				return provider.getEvaluation();
-			}
-
-			@Override
-			public IDataManipulation getManipulation() {
-				ensureProviderState();
-				return provider.getManipulation();
-			}
-
-			@Override
-			public IDataStorage getStorage() {
-				ensureProviderState();
-				return provider.getStorage();
-			}
-
-			@Override
-			public ILoginProvider getLoginProvider() {
-				ensureProviderState();
-				return loginProvider;
-			}
-
-			@Override
-			public IPolicyManager getPolicyManager() {
-				ensureProviderState();
-				return provider.getPolicyManager();
-			}
-		};	
-	}
-	
 	private static IModel testAsStudent() throws Exception 
 	{	
-		TestAppDomain.get();
+		final String username = "csaq5126";
+		final String password = "secret";	
 		
-		IUser user = mock(IUser.class);
-		when(user.getName()).thenReturn("florian");
-		when(user.getSurname()).thenReturn("tischler");
-		when(user.getEmail()).thenReturn("florian.tischler@outlook.com");
-		when(user.getId()).thenReturn("123456788");
-		when(user.getAffilation()).thenReturn("student");
-		when(user.getGroupPolicy()).thenReturn(StudentGroupPolicy.id);
+		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
+
+		return AppDomain.get();
+	}
+	
+	private static IModel testAsAnotherStudent() throws Exception
+	{
+		final String username = "csaq5244";
+		final String password = "secret";	
 		
-		when(loginProvider.getUser()).thenReturn(user);
-		
-		return TestAppDomain.get();
+		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
+
+		return AppDomain.get();
 	}
 	
 	private static IModel testAsStaff() throws Exception 
 	{		
-		TestAppDomain.get();
+		final String username = "12345";
+		final String password = "secret";	
 		
-		IUser user = mock(IUser.class);
-		when(user.getName()).thenReturn("florian");
-		when(user.getSurname()).thenReturn("tischler");
-		when(user.getEmail()).thenReturn("florian.tischler@outlook.com");
-		when(user.getId()).thenReturn("123456789");
-		when(user.getAffilation()).thenReturn("staff");
-		when(user.getGroupPolicy()).thenReturn(StaffGroupPolicy.id);
-		
-		when(loginProvider.getUser()).thenReturn(user);
-				
-		return TestAppDomain.get();
-	}
+		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
-	@Test(expected = LOSAccessDeniedException.class)
-	public void t1_addLectureStudent() throws Exception 
-	{
+		return AppDomain.get();
+	}
+	
+	@Test
+	public void t1_permissions() throws Exception 
+	{		
+		final String title = "";
+		final String description = "";
+		final String lectureId = "";
+		final String quizId = "";
+		final String userId = "";
+		
 		IModel model = testAsStudent();
 		
 		Assert.assertEquals(model.getUser().getGroupPolicy(), StudentGroupPolicy.id);
 		
-		final String title = "LV 1105-1";
-		final String description = "description";
+		try 
+		{
+			model.addLecture(title, description);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
 		
-		model.addLecture(title, description);
+		try 
+		{
+			model.addAdmin(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.createQuiz(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+	
+		try 
+		{
+			model.startQuiz(lectureId, quizId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.endQuiz(lectureId, quizId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.renewAttendanceVerification(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) { 	}
+		
+		try 
+		{
+			model.endAttendanceVerification(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.getFeedback(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.getQuizResults(userId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.getScores(userId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
+		
+		try 
+		{
+			model.getStatistics(lectureId);
+			Assert.fail();
+		} catch(LOSAccessDeniedException e) {	}
 	}
 	
 	@Test
-	public void t2_addLectureStaff() throws Exception 
+	public void t2_lectureAdd() throws Exception 
 	{
 		for(int i = 0; i < 1; i++) 
 		{
@@ -177,7 +184,7 @@ public class ModelTest
 	}
 	
 	@Test
-	public void t3_addQuiz() throws Exception
+	public void t3_quizAdd() throws Exception
 	{
 		IModel model = testAsStaff();
 		
@@ -245,7 +252,7 @@ public class ModelTest
 	}
 	
 	@Test
-	public void t4_testActiveQuiz() throws Exception
+	public void t4_quizActivation() throws Exception
 	{
 		IModel model = testAsStaff();
 		
@@ -286,7 +293,7 @@ public class ModelTest
 				
 		model.startQuiz(lecture.getId(), quiz.getId());
 		
-		model = testAsStudent();
+		testAsStudent();
 		
 		quizList = model.getActiveQuiz();
 		Assert.assertEquals(1, quizList.size());
@@ -306,7 +313,101 @@ public class ModelTest
 	}
 	
 	@Test
-	public void t5_addFeedback() throws Exception
+	public void t5_quizAttempt() throws Exception {
+		
+		IModel model = testAsStaff();
+		
+		final String title = "LV 1105-2";
+		final String description = "description";
+		
+		Assert.assertTrue(model.getAvailableLectures().isEmpty());
+		
+		// add lecture
+		ILectureView lecture = model.addLecture(title, description);	
+		
+		model.addAdmin(lecture.getId());
+		
+		final String key = model.renewAttendanceVerification(lecture.getId());
+		
+		// create quiz
+		final String quizTitle = "example quiz";
+		final String questionText = "what is the best source of fun?";
+		final String answerA = "9gag";
+		final boolean answerASolution = true;
+		final String answerB = "facebook";
+		final boolean answerBSolution = false;
+		
+		IQuiz quiz = model.createQuiz(lecture.getId());
+		quiz.setTitle(quizTitle);
+		quiz.addQuestion(questionText)
+			.addAnswer(answerA, answerASolution)
+			.addAnswer(answerB, answerBSolution);
+						
+		model.startQuiz(lecture.getId(), quiz.getId());
+	
+		testAsStudent();
+				
+		model.confirmAttendance(lecture.getId(), key);
+		
+		List<IQuizView> quizList = model.getActiveQuiz();
+		Assert.assertEquals(1, quizList.size());
+		
+		IQuizView quizView = quizList.get(0);
+		IQuestionView questionView = quizView.getQuestionView().get(0);
+		
+		List<String> answers = new LinkedList<String>();
+		List<IAnswerView> answersView = questionView.getAnswerView();
+		
+		answers.add(answersView.get(0).getId());
+		
+		model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
+		
+		List<IQuizResult> scores = model.getQuizResults();
+		Assert.assertTrue(scores.isEmpty());
+		
+		testAsStaff();
+		
+		model.endQuiz(lecture.getId(), quiz.getId());
+
+		testAsStudent();
+		
+		answers.add(answersView.get(1).getId());
+		
+		try
+		{
+			model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
+			Assert.fail();
+		}
+		catch(IllegalStateException e)
+		{
+			
+		}
+		
+		scores = model.getQuizResults();
+		
+		Assert.assertFalse(scores.isEmpty());
+		Assert.assertFalse(scores.get(0).getQuestionScores().isEmpty());
+
+		Assert.assertEquals(100, scores.get(0).getScore(), 0.001);
+		Assert.assertEquals(100, scores.get(0).getQuestionScores().get(0).getScore(), 0.001);
+		
+		IUser user = model.getUser();
+		
+		testAsStaff();
+		
+		scores = model.getQuizResults(user.getId());
+		
+		Assert.assertFalse(scores.isEmpty());
+		Assert.assertFalse(scores.get(0).getQuestionScores().isEmpty());
+
+		Assert.assertEquals(100, scores.get(0).getScore(), 0.001);
+		Assert.assertEquals(100, scores.get(0).getQuestionScores().get(0).getScore(), 0.001);
+		
+		model.removeLecture(lecture.getId());
+	}
+
+	@Test
+	public void t6_feedback() throws Exception
 	{
 		IModel model = testAsStaff();
 		
@@ -358,7 +459,7 @@ public class ModelTest
 	}
 	
 	@Test
-	public void t6_submitAnswer() throws Exception {
+	public void t7_statistics() throws Exception {
 		
 		IModel model = testAsStaff();
 		
@@ -390,10 +491,13 @@ public class ModelTest
 						
 		model.startQuiz(lecture.getId(), quiz.getId());
 	
+		// continue as student
 		testAsStudent();
 				
+		// confirm attendance
 		model.confirmAttendance(lecture.getId(), key);
 		
+		// submit answers
 		List<IQuizView> quizList = model.getActiveQuiz();
 		Assert.assertEquals(1, quizList.size());
 		
@@ -407,39 +511,45 @@ public class ModelTest
 		
 		model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
 		
+		// continue as another student
+		testAsAnotherStudent();
+				
+		// confirm attendance
+		model.confirmAttendance(lecture.getId(), key);
+		
+		// submit answers
+		quizList = model.getActiveQuiz();
+		Assert.assertEquals(1, quizList.size());
+		
+		quizView = quizList.get(0);
+		questionView = quizView.getQuestionView().get(0);
+		
+		answers = new LinkedList<String>();
+		answersView = questionView.getAnswerView();
+		
+		answers.add(answersView.get(1).getId());
+		
+		model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
+		
+		// continue as staff
 		testAsStaff();
 		
 		model.endQuiz(lecture.getId(), quiz.getId());
 
-		testAsStudent();
+		// verify statistics
+		IStatistics statistics = model.getStatistics(lecture.getId());
 		
-		answers.add(answersView.get(1).getId());
+		Assert.assertEquals(2, statistics.getNumRegistratrions());
+
+		Map<IDay, Double> attendanceRates = statistics.getAttendancePerDay();
+		Assert.assertFalse(attendanceRates.isEmpty());
+		Double rate = attendanceRates.entrySet().iterator().next().getValue();
+		Assert.assertEquals(100, rate, 0.001);
 		
-		try
-		{
-			model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
-			Assert.fail();
-		}
-		catch(IllegalStateException e)
-		{
-			
-		}
-		
-		List<IScore> scores = model.getScores();
-		Assert.assertFalse(scores.isEmpty());
-		
-		IScore score = scores.get(0);
-		Assert.assertEquals(100, score.getScore());
-		
-		IUser user = model.getUser();
-		
-		testAsStaff();
-		
-		scores = model.getScores(user.getId());
-		Assert.assertFalse(scores.isEmpty());
-		
-		score = scores.get(0);
-		Assert.assertEquals(100, score.getScore());
+		Map<IQuizView, Double> averageQuizScore = statistics.getQuizAverageScore();
+		Assert.assertFalse(averageQuizScore.isEmpty());
+		rate = averageQuizScore.entrySet().iterator().next().getValue();
+		Assert.assertEquals(50, rate, 0.001);
 		
 		model.removeLecture(lecture.getId());
 	}

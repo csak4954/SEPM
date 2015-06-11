@@ -36,6 +36,22 @@ class Attendance implements IAttendance {
 		return user;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Attendance other = (Attendance)o;
+		
+		return this.id.equals(other.id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
 	static AttendanceRepository Repo;
 
 	@Override

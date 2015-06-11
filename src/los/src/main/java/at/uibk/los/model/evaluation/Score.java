@@ -1,4 +1,4 @@
-package at.uibk.los.model.storage;
+package at.uibk.los.model.evaluation;
 
 import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.IApproach;
@@ -7,7 +7,7 @@ import at.uibk.los.model.interfaces.IScore;
 class Score implements IScore {
 	
 	private IApproach approach;
-	private int score;
+	private double score;
 	
 	public Score(IApproach approach)
 	{
@@ -23,6 +23,8 @@ class Score implements IScore {
 			}
 		}
 		
+		if(points < 0) points = 0;
+		
 		int maxPoints = 0;
 		for(IAnswer answer : approach.getQuestion().getAnswers())
 		{
@@ -31,11 +33,11 @@ class Score implements IScore {
 			}
 		}
 		
-		this.score = (int)(((float)points / maxPoints) * 100);
+		this.score = ((double)points / maxPoints) * 100;
 	}
 	
 	@Override
-	public int getScore() {
+	public double getScore() {
 		return score;
 	}
 

@@ -26,13 +26,11 @@ class Feedback implements IFeedback {
 
 	@Override
 	public int getRating() {
-		// TODO Auto-generated method stub
 		return rating;
 	}
 
 	@Override
 	public String getMessage() {
-		// TODO Auto-generated method stub
 		return message;
 	}
 
@@ -49,6 +47,22 @@ class Feedback implements IFeedback {
 	}
 
 
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Feedback other = (Feedback)o;
+		
+		return this.id.equals(other.id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
 	static FeedbackRepository Repo;
 
 	@Override
