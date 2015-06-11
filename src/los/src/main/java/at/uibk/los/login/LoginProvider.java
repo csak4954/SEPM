@@ -15,7 +15,7 @@ public class LoginProvider implements ILoginProvider {
 	@Autowired 
 	private ExternalUserRepository users;
 	
-	private ExternalUser user = new ExternalUser(); 
+	private ExternalUser user = null; 
 	
 	private boolean isNew = false;
 	

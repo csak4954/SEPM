@@ -85,7 +85,7 @@ class Lecture implements ILecture {
 		}
 	}
 	
-	public void unregisterUser(String userId) {
+	public boolean unregisterUser(String userId) {
 		User user = User.Repo.findByMatId(userId);
 		
 		Registration registration = Registration.Repo.findByUserAndLecture(user, this);
@@ -93,6 +93,8 @@ class Lecture implements ILecture {
 		if(registration != null) {
 			Registration.Repo.delete(new Registration(user, this));	
 		}
+		
+		return registration != null;
 	}
 	
 	@Override
@@ -102,10 +104,16 @@ class Lecture implements ILecture {
 	}
 
 	@Override
-	public void removeAttendance(String userId) {
+	public boolean removeAttendance(String userId) {
 		User user = User.Repo.findByMatId(userId);
 		Attendance attendee = Attendance.Repo.findByUserAndLecture(user, this);
 		Attendance.Repo.delete(attendee);
+		
+		if(attendee != null) { 
+			Attendance.Repo.delete(attendee);
+		}
+		
+		return attendee != null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -121,10 +129,15 @@ class Lecture implements ILecture {
 	}
 
 	@Override
-	public void removeAdmin(String userId) {
+	public boolean removeAdmin(String userId) {
 		User user = User.Repo.findByMatId(userId);
 		Administration admin = Administration.Repo.findByUserAndLecture(user, this);
-		Administration.Repo.delete(admin);
+		
+		if(admin != null) { 
+			Administration.Repo.delete(admin);
+		}
+		
+		return admin != null;
 	}
 
 	@Override
@@ -141,16 +154,18 @@ class Lecture implements ILecture {
 	}
 
 	@Override
-	public IQuiz addQuiz() 
+	public IQuiz addQuiz(String title) 
 	{
 		Quiz quiz = new Quiz(this);
+		quiz.setTitle(title);
+		
 		Quiz.Repo.save(quiz);	
 		
 		return quiz;
 	}
 
 	@Override
-	public void removeQuiz(String quizId) {
+	public boolean removeQuiz(String quizId) {
 		
 		Quiz quiz = Quiz.Repo.findOne(quizId);
 		
@@ -171,6 +186,8 @@ class Lecture implements ILecture {
 			
 			Quiz.Repo.delete(quiz);
 		}
+		
+		return quiz != null;
 	}
 
 	@Override

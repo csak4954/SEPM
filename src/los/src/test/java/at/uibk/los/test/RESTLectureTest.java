@@ -1,10 +1,8 @@
-package los;
+package at.uibk.los.test;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-
-import los.config.TestAppConfig;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -15,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import at.uibk.los.test.config.TestAppConfig;
 import at.uibk.los.viewmodel.LectureViewModel;
 
 @RunWith(SpringJUnit4ClassRunner.class)

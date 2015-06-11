@@ -34,16 +34,7 @@ public class ExternalUser implements IUser {
 		this.affilation = affilation;
 		this.password = password;
 	}
-	
-	public ExternalUser() {
-		this.name = "";
-		this.surname = "";
-		this.matId = "";
-		this.email = "";
-		this.affilation = "";
-		this.password = "";
-	}
-	
+
 	@Override
 	public int getGroupPolicy() 
 	{

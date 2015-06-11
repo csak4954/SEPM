@@ -30,7 +30,7 @@ public class DataEvaluation implements IDataEvaluation {
 	public List<IFeedback> getFeedback(String lectureId) throws EntityNotFoundException {
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null) {
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		}
 		
 		return lecture.getFeedback();
@@ -41,7 +41,7 @@ public class DataEvaluation implements IDataEvaluation {
 		
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null) {
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		}
 		
 		List<IAttendance> attendances = lecture.getAttendance();
@@ -78,7 +78,7 @@ public class DataEvaluation implements IDataEvaluation {
 	{
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null) {
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		}
 		
 		List<IUser> admins = lecture.getAdmins();
@@ -140,7 +140,7 @@ public class DataEvaluation implements IDataEvaluation {
 
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null) {
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		}
 		
 		return new Statistics(lecture, this);

@@ -38,7 +38,7 @@ public interface IModel
 	
 	
 	// quiz
-	IQuiz createQuiz(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
+	IQuiz createQuiz(String lectureId, String title) throws LOSAccessDeniedException, EntityNotFoundException;
 	
 	void removeQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException; 
 	

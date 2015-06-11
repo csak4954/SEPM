@@ -9,6 +9,7 @@ public class LOSAccessDeniedException extends Exception
 	
 	public LOSAccessDeniedException(IPermission cause)
 	{
+		super(cause.getDescription());
 		this.permission = cause;
 	}
 	

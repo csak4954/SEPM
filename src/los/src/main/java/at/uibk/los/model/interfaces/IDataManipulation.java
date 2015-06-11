@@ -10,7 +10,7 @@ public interface IDataManipulation
 	
 	void removeLecture(String lectureId) throws EntityNotFoundException;
 	
-	IQuiz addQuiz(String lectureId) throws EntityNotFoundException;
+	IQuiz addQuiz(String lectureId, String title) throws EntityNotFoundException;
 	
 	void removeQuiz(String lectureId, String quizId) throws EntityNotFoundException;
 	

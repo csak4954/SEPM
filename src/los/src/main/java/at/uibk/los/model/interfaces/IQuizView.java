@@ -2,9 +2,7 @@ package at.uibk.los.model.interfaces;
 
 import java.util.List;
 
-public interface IQuizView {
-	
-	String getId();
+public interface IQuizView extends IIdentifiable {
 	
 	String getTitle();
 
@@ -14,4 +12,5 @@ public interface IQuizView {
 	
 	IQuestionView getQuestionView(String questionId);
 
+	ILectureView getLectureView();
 }

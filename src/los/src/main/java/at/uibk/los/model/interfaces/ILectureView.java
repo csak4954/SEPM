@@ -2,23 +2,17 @@ package at.uibk.los.model.interfaces;
 
 import java.util.List;
 
-public interface ILectureView {
-
-	String getId();
+public interface ILectureView extends IIdentifiable {
 	
 	String getTitle();
 	
 	String getDescription();
-	
-	String getVerificationKey();
 	
 	List<IAttendance> getAttendance();
 	
 	List<IUser> getAdmins();
 	
 	List<IQuizView> getQuizView();
-	
-	List<IUser> getRegisteredUsers();
 	
 	IQuizView getQuizView(String quizId);
 }

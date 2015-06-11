@@ -2,11 +2,11 @@ package at.uibk.los.model.authorization.permissions;
 
 import at.uibk.los.model.interfaces.IPermission;
 
-public class DefaultPermission implements IPermission {
+public class AdminPermission implements IPermission {
 	
-	public static final int id = 0;
-	public static final String description = "being logged in";
-	public static final IPermission instance = new DefaultPermission();
+	public static final int id = 8;
+	public static final String description = "admin rights for lecture";
+	public static final IPermission instance = new AdminPermission();
 	
 	@Override
 	public int getId() {

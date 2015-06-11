@@ -2,11 +2,11 @@ package at.uibk.los.model.authorization.permissions;
 
 import at.uibk.los.model.interfaces.IPermission;
 
-public class DefaultPermission implements IPermission {
+public class VerifiedPermission implements IPermission {
 	
-	public static final int id = 0;
-	public static final String description = "being logged in";
-	public static final IPermission instance = new DefaultPermission();
+	public static final int id = 9;
+	public static final String description = "verified for lecture";
+	public static final IPermission instance = new VerifiedPermission();
 	
 	@Override
 	public int getId() {

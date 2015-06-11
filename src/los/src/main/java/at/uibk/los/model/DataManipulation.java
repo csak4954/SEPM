@@ -9,6 +9,7 @@ import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuiz;
+import at.uibk.los.model.interfaces.IQuizView;
 
 public class DataManipulation implements IDataManipulation 
 {
@@ -36,19 +37,19 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		dataStorage.removeLecture(lectureId);
 	}
 
 	@Override
-	public IQuiz addQuiz(String lectureId) throws EntityNotFoundException
+	public IQuiz addQuiz(String lectureId, String title) throws EntityNotFoundException
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
-		return lec.addQuiz();
+		return lec.addQuiz(title);
 	}
 
 	@Override
@@ -56,9 +57,11 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
-		lec.removeQuiz(quizId);
+		if(!lec.removeQuiz(quizId)) {
+			throw new EntityNotFoundException(quizId);
+		}
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 
 		lec.setVerificationKey(null);
 	}
@@ -76,7 +79,7 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 
 		if(lec.getVerificationKey().isEmpty())
 			throw new IllegalArgumentException("Verification is not active");
@@ -93,18 +96,18 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lecture = dataStorage.getLecture(lectureId);
 		if(lecture == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		IQuiz quiz = lecture.getQuiz(quizId);
 		if(quiz == null)
-			throw new EntityNotFoundException("quiz not found");
+			throw new EntityNotFoundException(quizId);
 		
 		if(!quiz.isActive())
-			throw new IllegalStateException("quiz not active");
+			throw new IllegalStateException(quizId);
 			
 		IQuestion question = quiz.getQuestion(questionId);
 		if(question == null)
-			throw new EntityNotFoundException("question not found");
+			throw new EntityNotFoundException(questionId);
 		
 		question.addApproach(userId, answers);
 	}
@@ -125,7 +128,7 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new IllegalArgumentException("Invalid lecture id");
+			throw new EntityNotFoundException(lectureId);
 		
 		lec.setVerificationKey(generateVerificationKey());
 		
@@ -137,7 +140,7 @@ public class DataManipulation implements IDataManipulation
 	public void endQuiz(String quizId) throws EntityNotFoundException {
 		IQuiz quiz = dataStorage.getQuiz(quizId);
 		if(quiz == null)
-			throw new EntityNotFoundException("quiz not found");
+			throw new EntityNotFoundException(quizId);
 		
 		quiz.stop();
 	}
@@ -147,7 +150,7 @@ public class DataManipulation implements IDataManipulation
 	public void startQuiz(String quizId) throws EntityNotFoundException {
 		IQuiz quiz = dataStorage.getQuiz(quizId);
 		if(quiz == null)
-			throw new EntityNotFoundException("quiz not found");
+			throw new EntityNotFoundException(quizId);
 		
 		quiz.start();
 	}
@@ -157,7 +160,7 @@ public class DataManipulation implements IDataManipulation
 	public void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException {
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		lec.submitFeedback(rating, text);
 	}
@@ -191,7 +194,7 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		lec.addAdmin(userId);
 	}
@@ -201,7 +204,7 @@ public class DataManipulation implements IDataManipulation
 	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		lec.removeAdmin(userId);
 	}
@@ -210,7 +213,7 @@ public class DataManipulation implements IDataManipulation
 	public void unregisterFromLecture(String lectureId, String userId) throws EntityNotFoundException {
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
-			throw new EntityNotFoundException("lecture not found");
+			throw new EntityNotFoundException(lectureId);
 		
 		lec.unregisterUser(userId);
 	}
