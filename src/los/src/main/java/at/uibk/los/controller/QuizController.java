@@ -1,6 +1,5 @@
 package at.uibk.los.controller;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,15 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
-import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.ILectureView;
-import at.uibk.los.model.interfaces.IQuiz;
-import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.viewmodel.QuizViewModel;
-import static org.mockito.Mockito.*;
-import at.uibk.los.AppDomain;
 
 /**
  * Responds with a ViewModel as JSON.
@@ -53,7 +48,6 @@ public class QuizController{
 			}
 			
 		} catch (LOSAccessDeniedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

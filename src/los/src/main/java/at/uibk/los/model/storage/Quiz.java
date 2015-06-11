@@ -111,4 +111,20 @@ class Quiz implements IQuiz {
 	public IQuestionView getQuestionView(String questionId) {
 		return getQuestion(questionId);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Quiz other = (Quiz)o;
+		
+		return other.id.equals(id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
 }

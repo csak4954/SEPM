@@ -1,4 +1,4 @@
-package at.uibk.los.model;
+package at.uibk.los.model.evaluation;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,4 +48,9 @@ public class QuizResult implements IQuizResult {
 		return quiz;
 	}
 
+	@Override
+	public List<IScore> getQuestionScores() {
+		return scores;
+	}
+	
 }

@@ -1,10 +1,10 @@
-package at.uibk.los.model.storage;
+package at.uibk.los.model.evaluation;
 
 import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IScore;
 
-public class Score implements IScore {
+class Score implements IScore {
 	
 	private IApproach approach;
 	private double score;
@@ -22,6 +22,8 @@ public class Score implements IScore {
 				points -= answer.getWrongPointCount();
 			}
 		}
+		
+		if(points < 0) points = 0;
 		
 		int maxPoints = 0;
 		for(IAnswer answer : approach.getQuestion().getAnswers())

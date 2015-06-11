@@ -77,7 +77,22 @@ class Lecture implements ILecture {
 	public void registerUser(String userId)
 	{
 		User user = User.Repo.findByMatId(userId);
-		Registration.Repo.save(new Registration(user, this));	
+		
+		Registration registration = Registration.Repo.findByUserAndLecture(user, this);
+		
+		if(registration == null) {
+			Registration.Repo.save(new Registration(user, this));	
+		}
+	}
+	
+	public void unregisterUser(String userId) {
+		User user = User.Repo.findByMatId(userId);
+		
+		Registration registration = Registration.Repo.findByUserAndLecture(user, this);
+		
+		if(registration != null) {
+			Registration.Repo.delete(new Registration(user, this));	
+		}
 	}
 	
 	@Override
@@ -96,8 +111,6 @@ class Lecture implements ILecture {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IAttendance> getAttendance() {
-		
-		List<IUser> users = new LinkedList<IUser>();
 		return (List<IAttendance>)(List<?>)Attendance.Repo.findByLecture(this);
 	}
 
@@ -180,6 +193,22 @@ class Lecture implements ILecture {
 		Repo.save(this);
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Lecture other = (Lecture)o;
+		
+		return this.id.equals(other.id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
 	static LectureRepository Repo;
 
 	@SuppressWarnings("unchecked")
@@ -198,9 +227,7 @@ class Lecture implements ILecture {
 	public List<IFeedback> getFeedback() {
 		return (List<IFeedback>)(List<?>)Feedback.Repo.findByLecture(this);
 	}
-
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<IUser> getRegisteredUsers() {
 			

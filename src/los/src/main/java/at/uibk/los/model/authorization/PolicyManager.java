@@ -3,7 +3,15 @@ package at.uibk.los.model.authorization;
 import java.util.HashMap;
 import java.util.Map;
 
-import at.uibk.los.model.ModifyLectureCollectionPermission;
+import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
+import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
+import at.uibk.los.model.authorization.permissions.ModifyAdminCollectionPermission;
+import at.uibk.los.model.authorization.permissions.ModifyLectureCollectionPermission;
+import at.uibk.los.model.authorization.permissions.DefaultPermission;
+import at.uibk.los.model.authorization.permissions.ModifyQuizCollectionPermission;
+import at.uibk.los.model.authorization.permissions.ViewFeedbackPermission;
+import at.uibk.los.model.authorization.permissions.ViewStatisticsPermission;
+import at.uibk.los.model.authorization.permissions.ViewUserScoresPermission;
 import at.uibk.los.model.interfaces.IGroupPolicy;
 import at.uibk.los.model.interfaces.IObject;
 import at.uibk.los.model.interfaces.IPermission;
@@ -16,13 +24,20 @@ public class PolicyManager implements IPolicyManager {
 		groups = new HashMap<Integer, IGroupPolicy>();
 		
 		IGroupPolicy staff = new StaffGroupPolicy();
-		staff.grantPermission(Permission.instance);
+		staff.grantPermission(DefaultPermission.instance);
 		staff.grantPermission(ModifyLectureCollectionPermission.instance);
+		staff.grantPermission(ModifyQuizCollectionPermission.instance);
+		staff.grantPermission(ModifyAdminCollectionPermission.instance);
+		staff.grantPermission(ControlQuizPermission.instance);
+		staff.grantPermission(AttendanceVerificationPermission.instance);
+		staff.grantPermission(ViewFeedbackPermission.instance);
+		staff.grantPermission(ViewStatisticsPermission.instance);
+		staff.grantPermission(ViewUserScoresPermission.instance);
 		
 		groups.put(staff.getId(), staff);
 		
 		IGroupPolicy students = new StudentGroupPolicy();
-		students.grantPermission(Permission.instance);
+		students.grantPermission(DefaultPermission.instance);
 		
 		groups.put(students.getId(), students);
 	}
@@ -32,7 +47,7 @@ public class PolicyManager implements IPolicyManager {
 			throws LOSAccessDeniedException {
 		
 		if( object == null || permissions == null) {
-			throw new IllegalArgumentException();
+			throw new LOSAccessDeniedException();
 		}
 		
 		IGroupPolicy group = groups.get(object.getGroupPolicy());

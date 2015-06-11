@@ -67,5 +67,21 @@ class User implements IUser {
 		return affilation;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		User other = (User)o;
+		
+		return this.id.equals(other.id);
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
 	static UserRepository Repo;
 }

@@ -9,7 +9,6 @@ import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuiz;
-import at.uibk.los.model.interfaces.IQuizView;
 
 public class DataManipulation implements IDataManipulation 
 {
@@ -188,11 +187,31 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void addAdmin(String lectureId, String userId) throws EntityNotFoundException {
+	public void addAdmin(String lectureId, String userId) throws EntityNotFoundException 
+	{
 		ILecture lec = dataStorage.getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException("lecture not found");
 		
 		lec.addAdmin(userId);
+	}
+
+	@Override
+	public void removeAdmin(String lectureId, String userId) throws EntityNotFoundException 
+	{
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new EntityNotFoundException("lecture not found");
+		
+		lec.removeAdmin(userId);
+	}
+
+	@Override
+	public void unregisterFromLecture(String lectureId, String userId) throws EntityNotFoundException {
+		ILecture lec = dataStorage.getLecture(lectureId);
+		if(lec == null)
+			throw new EntityNotFoundException("lecture not found");
+		
+		lec.unregisterUser(userId);
 	}
 }

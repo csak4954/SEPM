@@ -2,7 +2,6 @@ package at.uibk.los.model.storage;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import at.uibk.los.model.interfaces.IAnswer;
@@ -69,7 +68,6 @@ class Answer implements IAnswer {
 
 	@Override
 	public int getRightPointCount() {
-		// TODO Auto-generated method stub
 		return rightPointCount;
 	}
 
@@ -86,5 +84,21 @@ class Answer implements IAnswer {
 	@Override
 	public void setWrongPointCount(int count) {
 		this.wrongPointCount = count;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Answer other = (Answer)o;
+		
+		return this.id.equals(other.id);
+	}
+
+	public int hashCode() {
+		return id.hashCode();
 	}
 }

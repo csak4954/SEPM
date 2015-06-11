@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.ILecture;
-import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IQuiz;
 import at.uibk.los.model.interfaces.IUser;
 
@@ -62,7 +61,7 @@ public class DataStorage implements IDataStorage {
 		if(feedback != null) {
 			Feedback.Repo.delete(feedback);
 		}
-		
+				
 		lectures.delete(lectureId);
 	}
 	

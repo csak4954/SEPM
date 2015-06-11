@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import at.uibk.los.model.interfaces.IAnswer;
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IQuestion;
-import at.uibk.los.model.interfaces.IScore;
 
 class Approach implements IApproach {
 	
@@ -52,10 +51,21 @@ class Approach implements IApproach {
 		return question;
 	}
 	
-	static ApproachRepository Repo;
-
 	@Override
-	public IScore getScore() {
-		return new at.uibk.los.model.storage.Score(this);
+	public boolean equals(Object o) {
+		
+		if(this == o) return true;
+		
+		if(this.getClass() != o.getClass()) return false;
+		
+		Approach other = (Approach)o;
+		
+		return this.id.equals(other.id);
 	}
+	
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
+	static ApproachRepository Repo;
 }

@@ -17,6 +17,10 @@ public class ExternalUser implements IUser {
 	private String matId;
 	private String email;
 	private String affilation;
+	
+	// only stored in db 
+	// pw check with query
+	@SuppressWarnings("unused")
 	private String password;
 	
 	public final String studentAffiliation = "student";
@@ -56,25 +60,21 @@ public class ExternalUser implements IUser {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
 	@Override
 	public String getSurname() {
-		// TODO Auto-generated method stub
 		return surname;
 	}
 
 	@Override
 	public String getEmail() {
-		// TODO Auto-generated method stub
 		return email;
 	}
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
 		return matId;
 	}
 

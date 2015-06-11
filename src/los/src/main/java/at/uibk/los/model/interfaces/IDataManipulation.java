@@ -14,6 +14,12 @@ public interface IDataManipulation
 	
 	void removeQuiz(String lectureId, String quizId) throws EntityNotFoundException;
 	
+	void endQuiz(String quizId) throws EntityNotFoundException;
+
+	void startQuiz(String quizId) throws EntityNotFoundException;
+	
+	List<IQuiz> getActiveQuiz(String userId);
+	
 	String renewAttendanceVerification(String lectureId) throws EntityNotFoundException;
 	
 	void endAttendanceVerification(String lectureId) throws EntityNotFoundException;
@@ -22,13 +28,11 @@ public interface IDataManipulation
 	
 	void submitAnswer(String userId, String lecture, String quizId,  String questionId, List<String> answers) throws EntityNotFoundException;
 
-	void endQuiz(String quizId) throws EntityNotFoundException;
-
-	void startQuiz(String quizId) throws EntityNotFoundException;;
-
 	void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException;
 
-	List<IQuiz> getActiveQuiz(String userId);
-
 	void addAdmin(String lectureId, String userId) throws EntityNotFoundException;
+
+	void removeAdmin(String lectureId, String userId) throws EntityNotFoundException;
+
+	void unregisterFromLecture(String lectureId, String userId) throws EntityNotFoundException;
 }

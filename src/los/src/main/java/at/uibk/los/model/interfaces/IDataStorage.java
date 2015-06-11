@@ -1,6 +1,5 @@
 package at.uibk.los.model.interfaces;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public interface IDataStorage

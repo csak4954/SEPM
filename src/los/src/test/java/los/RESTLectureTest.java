@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import los.config.UnitTestAppConfig;
+import los.config.TestAppConfig;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import at.uibk.los.viewmodel.LectureViewModel;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = UnitTestAppConfig.class)
+@ContextConfiguration(classes = TestAppConfig.class)
 @WebAppConfiguration
 public class RESTLectureTest
 {
