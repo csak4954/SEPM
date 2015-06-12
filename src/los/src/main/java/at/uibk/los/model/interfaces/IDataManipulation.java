@@ -2,7 +2,10 @@ package at.uibk.los.model.interfaces;
 
 import java.util.List;
 
-import at.uibk.los.model.EntityNotFoundException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.InvalidVerificationKeyException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
+import at.uibk.los.model.exceptions.VerificationInactiveException;
 
 public interface IDataManipulation
 {
@@ -24,9 +27,9 @@ public interface IDataManipulation
 	
 	void endAttendanceVerification(String lectureId) throws EntityNotFoundException;
 	
-	void confirmAttendance(String userId, String lectureId, String key) throws EntityNotFoundException;
+	void confirmAttendance(String userId, String lectureId, String key) throws EntityNotFoundException, VerificationInactiveException, InvalidVerificationKeyException;
 	
-	void submitAnswer(String userId, String lecture, String quizId,  String questionId, List<String> answers) throws EntityNotFoundException;
+	void submitAnswer(String userId, String lecture, String quizId,  String questionId, List<String> answers) throws EntityNotFoundException, QuizInactiveException;
 
 	void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException;
 

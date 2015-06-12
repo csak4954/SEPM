@@ -1,6 +1,5 @@
 package at.uibk.los.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,16 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.uibk.los.AppDomain;
-import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IModel;
-import at.uibk.los.viewmodel.ErrorViewModel;
 import at.uibk.los.viewmodel.LectureViewModel;
+import at.uibk.los.viewmodel.StatusViewModel;
 
-/**
- * Responds with a ViewModel as JSON.
- */
 @Controller
 @RequestMapping("/lecture")
 public class LectureController
@@ -35,18 +31,10 @@ public class LectureController
 		try
 		{
 			List<ILectureView> lectures = model.getAvailableLectures();	
-			List<LectureViewModel> lecturesVM = new LinkedList<LectureViewModel>();
-		
-			for(ILectureView lecture : lectures) {
-				lecturesVM.add(new LectureViewModel(lecture));
-			}
-			
-			return lecturesVM;
+			return StatusViewModel.onSuccess(response, LectureViewModel.convert(lectures));
 		}
-		catch (LOSAccessDeniedException e) 
-		{ 
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+		catch (LOSAccessDeniedException e) { 
+			return StatusViewModel.onException(e, response);
 		}
 	}
 
@@ -58,18 +46,10 @@ public class LectureController
 		try
 		{
 			List<ILectureView> lectures = model.getAssociatedLectures();	
-			List<LectureViewModel> lecturesVM = new LinkedList<LectureViewModel>();
-		
-			for(ILectureView lecture : lectures) {
-				lecturesVM.add(new LectureViewModel(lecture));
-			}
-			
-			return lecturesVM;
+			return StatusViewModel.onSuccess(response, LectureViewModel.convert(lectures));
 		}
-		catch (LOSAccessDeniedException e) 
-		{ 
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+		catch (LOSAccessDeniedException e) { 
+			return StatusViewModel.onException(e, response);
 		}
 	}
 	
@@ -84,43 +64,36 @@ public class LectureController
 		{		
 			ILectureView view = model.addLecture(title, description);
 			model.addAdmin(view.getId());
-			response.setStatus(HttpServletResponse.SC_CREATED);
+			return StatusViewModel.onSuccessCreated(response, new LectureViewModel(view));
 		}
-		catch (LOSAccessDeniedException e) 
-		{ 
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+		catch (LOSAccessDeniedException e) { 
+			return StatusViewModel.onException(e, response);
 		}
-		catch (EntityNotFoundException e)
-		{
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+		catch (EntityNotFoundException e) {
+			return StatusViewModel.onException(e, response);
 		}
-		
-		return null;
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody Object removeLecture(@PathVariable String id, 
+	@RequestMapping(value = "/{lectureId}", method = RequestMethod.DELETE)
+	public @ResponseBody Object removeLecture(@PathVariable String lectureId, 
 									   		  HttpServletResponse response) 
 	{
 		IModel model = AppDomain.get();
 		
 		try
 		{
-			model.removeLecture(id);
+			model.removeLecture(lectureId);
+			return StatusViewModel.onSuccessNoContent(response);
 		}
 		catch (LOSAccessDeniedException e) 
 		{ 
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+			return new StatusViewModel(e);
 		}
 		catch (EntityNotFoundException e)
 		{
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return new StatusViewModel(e);
 		}
-		
-		return null;
 	}
 }

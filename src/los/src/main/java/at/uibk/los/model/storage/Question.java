@@ -57,8 +57,17 @@ class Question implements IQuestion {
 	@Override
 	public void addApproach(String userId, List<String> answerIds) {
 		
-		User user = User.Repo.findByMatId(userId);
-		Approach approach = new Approach(user, quiz, this, answerIds);
+		User user = User.Repo.findById(userId);
+				
+		Approach approach = Approach.Repo.findByUserAndQuestion(user, this);
+		if(approach == null) {
+			approach = new Approach(user, quiz, this, answerIds);
+		} 
+		else
+		{
+			approach.setAnswers(answerIds);
+		}
+	
 		Approach.Repo.save(approach);
 	}
 	

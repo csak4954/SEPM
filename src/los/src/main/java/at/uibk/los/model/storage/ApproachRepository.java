@@ -9,4 +9,5 @@ interface ApproachRepository extends MongoRepository<Approach, String> {
     public List<Approach> findAll();
 	public List<Approach> findByQuiz(Quiz quiz);
 	public List<Approach> findByUser(User user);
+	public Approach findByUserAndQuestion(User user, Question question);
 }

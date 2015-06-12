@@ -6,7 +6,7 @@ import java.util.Map;
 import at.uibk.los.model.interfaces.IGroupPolicy;
 import at.uibk.los.model.interfaces.IPermission;
 
-public abstract class GroupPolicy implements IGroupPolicy {
+abstract class GroupPolicy implements IGroupPolicy {
 
 	public GroupPolicy() {
 		permissions = new HashMap<Integer, IPermission>();

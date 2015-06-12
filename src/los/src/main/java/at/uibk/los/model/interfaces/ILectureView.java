@@ -11,6 +11,8 @@ public interface ILectureView extends IIdentifiable {
 	List<IAttendance> getAttendance();
 	
 	List<IUser> getAdmins();
+
+	List<IUser> getRegisteredUsers();
 	
 	List<IQuizView> getQuizView();
 	

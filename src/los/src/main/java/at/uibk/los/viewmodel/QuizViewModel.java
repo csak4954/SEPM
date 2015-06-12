@@ -2,11 +2,10 @@ package at.uibk.los.viewmodel;
 
 //import java.util.List;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import at.uibk.los.model.interfaces.IQuestionView;
 import at.uibk.los.model.interfaces.IQuizView;
+import at.uibk.los.viewmodel.ViewModelConverter.Instantiator;
 
 public class QuizViewModel
 {
@@ -22,12 +21,7 @@ public class QuizViewModel
         this.lecture = new LectureViewModel(quiz.getLectureView());
         this.active = quiz.isActive();
         this.title = quiz.getTitle();
-        
-        questions = new LinkedList<QuestionViewModel>();
-
-        for(IQuestionView question : quiz.getQuestionView()) {
-        	questions.add(new QuestionViewModel(question));
-        }
+        this.questions = QuestionViewModel.get(quiz.getQuestionView());
 	}
 	
 	public QuizViewModel() { }
@@ -50,5 +44,15 @@ public class QuizViewModel
 	
 	public String getTitle() {
 		return title;
+	}
+	
+	public static List<QuizViewModel> get(List<IQuizView> src) {
+		return ViewModelConverter.<QuizViewModel, IQuizView>convert(src, 
+		new Instantiator<QuizViewModel, IQuizView>() {
+			@Override
+			public QuizViewModel create(IQuizView data) {
+				return new QuizViewModel(data);
+			}
+		});
 	}
 }

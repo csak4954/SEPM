@@ -6,29 +6,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import at.uibk.los.model.EntityNotFoundException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.interfaces.IApproach;
 import at.uibk.los.model.interfaces.IAttendance;
 import at.uibk.los.model.interfaces.IDataEvaluation;
-import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILecture;
+import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IScore;
+import at.uibk.los.model.interfaces.IServiceProvider;
 import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
 
 public class DataEvaluation implements IDataEvaluation {
 
-	private IDataStorage dataStorage;
+	private IServiceProvider provider;
 	
-	public DataEvaluation(IDataStorage dataStorage) {
-		this.dataStorage = dataStorage;
+	public DataEvaluation(IServiceProvider provider) {
+		this.provider = provider;
 	}
 	
 	@Override
 	public List<IFeedback> getFeedback(String lectureId) throws EntityNotFoundException {
-		ILecture lecture = dataStorage.getLecture(lectureId);
+		ILecture lecture = provider.getStorage().getLecture(lectureId);
 		if(lecture == null) {
 			throw new EntityNotFoundException(lectureId);
 		}
@@ -39,7 +40,7 @@ public class DataEvaluation implements IDataEvaluation {
 	@Override
 	public boolean isUserVerified(String userId, String lectureId) throws EntityNotFoundException {
 		
-		ILecture lecture = dataStorage.getLecture(lectureId);
+		ILecture lecture = provider.getStorage().getLecture(lectureId);
 		if(lecture == null) {
 			throw new EntityNotFoundException(lectureId);
 		}
@@ -76,7 +77,7 @@ public class DataEvaluation implements IDataEvaluation {
 	@Override
 	public boolean isUserAdmin(String userId, String lectureId) throws EntityNotFoundException 
 	{
-		ILecture lecture = dataStorage.getLecture(lectureId);
+		ILecture lecture = provider.getStorage().getLecture(lectureId);
 		if(lecture == null) {
 			throw new EntityNotFoundException(lectureId);
 		}
@@ -93,7 +94,7 @@ public class DataEvaluation implements IDataEvaluation {
 					isAdmin = true;
 					break;
 				}				
-		}
+			}
 		}
 		
 		return isAdmin;		
@@ -102,7 +103,7 @@ public class DataEvaluation implements IDataEvaluation {
 	@Override
 	public List<IScore> getScores(String userId) {
 		
-		List<IApproach> approaches = dataStorage.getApproaches(userId);
+		List<IApproach> approaches = provider.getStorage().getApproaches(userId);
 		
 		List<IScore> score = new LinkedList<IScore>();
 		for(IApproach approach : approaches)
@@ -138,12 +139,22 @@ public class DataEvaluation implements IDataEvaluation {
 	public IStatistics getStatistics(String lectureId)
 			throws EntityNotFoundException {
 
-		ILecture lecture = dataStorage.getLecture(lectureId);
+		ILecture lecture = provider.getStorage().getLecture(lectureId);
 		if(lecture == null) {
 			throw new EntityNotFoundException(lectureId);
 		}
 		
 		return new Statistics(lecture, this);
+	}
+
+	@Override
+	public ILectureView getLecture(String lectureId) throws EntityNotFoundException {
+		ILectureView lecture = provider.getStorage().getLecture(lectureId);
+		if(lecture == null) {
+			throw new EntityNotFoundException(lectureId);
+		}
+		
+		return lecture;
 	}	
 	
 }

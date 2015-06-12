@@ -9,8 +9,8 @@ import at.uibk.los.model.storage.DataStorage;
 
 public class ServiceProvider implements IServiceProvider
 {
-	public DataManipulation manipulation = new DataManipulation(DataStorage.loadFromContext(ApplicationContextProvider.getContext()));
-	public DataEvaluation evaluation = new DataEvaluation(DataStorage.loadFromContext(ApplicationContextProvider.getContext()));
+	public DataManipulation manipulation = new DataManipulation(this);
+	public DataEvaluation evaluation = new DataEvaluation(this);
 	public PolicyManager policyManager = new PolicyManager();
 	
 	@Override

@@ -76,7 +76,7 @@ class Lecture implements ILecture {
 	@Override
 	public void registerUser(String userId)
 	{
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		
 		Registration registration = Registration.Repo.findByUserAndLecture(user, this);
 		
@@ -86,7 +86,7 @@ class Lecture implements ILecture {
 	}
 	
 	public boolean unregisterUser(String userId) {
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		
 		Registration registration = Registration.Repo.findByUserAndLecture(user, this);
 		
@@ -99,13 +99,13 @@ class Lecture implements ILecture {
 	
 	@Override
 	public void addAttendance(String userId) {
-		User user = User.Repo.findByMatId(userId);		
+		User user = User.Repo.findById(userId);		
 		Attendance.Repo.save(new Attendance(user, this));	
 	}
 
 	@Override
 	public boolean removeAttendance(String userId) {
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		Attendance attendee = Attendance.Repo.findByUserAndLecture(user, this);
 		Attendance.Repo.delete(attendee);
 		
@@ -124,13 +124,13 @@ class Lecture implements ILecture {
 
 	@Override
 	public void addAdmin(String userId) {
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		Administration.Repo.save(new Administration(user, this));
 	}
 
 	@Override
 	public boolean removeAdmin(String userId) {
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		Administration admin = Administration.Repo.findByUserAndLecture(user, this);
 		
 		if(admin != null) { 

@@ -5,9 +5,9 @@ import java.util.Map;
 
 import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
 import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
+import at.uibk.los.model.authorization.permissions.DefaultPermission;
 import at.uibk.los.model.authorization.permissions.ModifyAdminCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ModifyLectureCollectionPermission;
-import at.uibk.los.model.authorization.permissions.DefaultPermission;
 import at.uibk.los.model.authorization.permissions.ModifyQuizCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ViewFeedbackPermission;
 import at.uibk.los.model.authorization.permissions.ViewStatisticsPermission;

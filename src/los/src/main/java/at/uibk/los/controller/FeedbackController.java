@@ -1,6 +1,5 @@
 package at.uibk.los.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,21 +12,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.uibk.los.AppDomain;
-import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.IModel;
-import at.uibk.los.viewmodel.ErrorViewModel;
 import at.uibk.los.viewmodel.FeedbackViewModel;
+import at.uibk.los.viewmodel.StatusViewModel;
 
-/**
- * Responds with a ViewModel as JSON.
- */
 @Controller
 @RequestMapping("/lecture/{lectureId}/feedback")
 public class FeedbackController{
 
-	@RequestMapping(value="/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody Object getFeedback(@PathVariable String lectureId, HttpServletResponse response){
 
 		IModel model = AppDomain.get();
@@ -35,51 +31,39 @@ public class FeedbackController{
 		try 
 		{
 			List<IFeedback> feedback = model.getFeedback(lectureId);
-			List<FeedbackViewModel> feedbackVM = new LinkedList<FeedbackViewModel>();
-			
-			for(IFeedback fb : feedback) {
-				feedbackVM.add(new FeedbackViewModel(fb));
-			}
-			
-			return feedbackVM;
-			
-		} catch (LOSAccessDeniedException e) {
-			
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
-			
-		} catch (EntityNotFoundException e) {
-			
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onSuccess(response, FeedbackViewModel.get(feedback));
+		}
+		catch (LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
+		} 
+		catch (EntityNotFoundException e) {
+			return StatusViewModel.onException(e, response);
 		}
 	}
 	
-	@RequestMapping(value="/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody Object addFeedback(@PathVariable String lectureId,
 											@RequestParam("rating") int rating, 
 		  									@RequestParam("message") String message, 
-  											HttpServletResponse response){
+  											HttpServletResponse response) {
 
 		IModel model = AppDomain.get();
 
+		if(rating < 0 || rating > 100) {
+			return StatusViewModel.onParamInvalid(response, "Rating must be in range [0, 100]");
+		}
+				
 		try 
 		{
 			model.submitFeedback(lectureId, rating, message);
-			response.setStatus(HttpServletResponse.SC_CREATED);
-
-		} catch (LOSAccessDeniedException e) {
-			
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
-			
-		} catch (EntityNotFoundException e) {
-			
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onSuccessCreated(response, null);
 		}
-		
-		return null;
+		catch (LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
+		} 
+		catch (EntityNotFoundException e) {
+			return StatusViewModel.onException(e, response);
+		}
 	}
 	
 }

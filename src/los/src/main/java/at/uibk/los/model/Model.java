@@ -13,6 +13,10 @@ import at.uibk.los.model.authorization.permissions.VerifiedPermission;
 import at.uibk.los.model.authorization.permissions.ViewFeedbackPermission;
 import at.uibk.los.model.authorization.permissions.ViewStatisticsPermission;
 import at.uibk.los.model.authorization.permissions.ViewUserScoresPermission;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.InvalidVerificationKeyException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
+import at.uibk.los.model.exceptions.VerificationInactiveException;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IModel;
@@ -114,7 +118,7 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException
+	public void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException, QuizInactiveException
 	{
 		checkPermissions();
 		checkIsVerified(lectureId);
@@ -145,7 +149,7 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException
+	public void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException, VerificationInactiveException, InvalidVerificationKeyException
 	{
 		checkPermissions();
 		provider.getManipulation().confirmAttendance(getUser().getId(), lectureId, key);
@@ -247,5 +251,18 @@ public class Model implements IModel
 	public void unregisterFromLecture(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
 		checkPermissions();
 		provider.getManipulation().unregisterFromLecture(lectureId, getUser().getId());
+	}
+
+	@Override
+	public ILectureView getLecture(String lectureId) throws LOSAccessDeniedException,
+			EntityNotFoundException
+	{
+		checkPermissions();
+		return provider.getEvaluation().getLecture(lectureId);
+	}
+
+	@Override
+	public IServiceProvider getServiceProvider() {
+		return provider;
 	}
 }

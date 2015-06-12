@@ -4,30 +4,33 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.InvalidVerificationKeyException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
+import at.uibk.los.model.exceptions.VerificationInactiveException;
 import at.uibk.los.model.interfaces.IDataManipulation;
-import at.uibk.los.model.interfaces.IDataStorage;
 import at.uibk.los.model.interfaces.ILecture;
 import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuiz;
-import at.uibk.los.model.interfaces.IQuizView;
+import at.uibk.los.model.interfaces.IServiceProvider;
 
 public class DataManipulation implements IDataManipulation 
 {
-	private IDataStorage dataStorage;
+	private IServiceProvider provider;
 	
-	public DataManipulation(IDataStorage storage)
+	public DataManipulation(IServiceProvider provider)
 	{
-		dataStorage = storage;
+		this.provider = provider;
 	}
 
 	@Override
 	public ILecture addLecture(String title, String description) 
 	{
-		ILecture lecture = dataStorage.createLecture();
+		ILecture lecture = provider.getStorage().createLecture();
 		lecture.setTitle(title);
 		lecture.setDescription(description);
 		
-		dataStorage.addLecture(lecture);	
+		provider.getStorage().addLecture(lecture);	
 		
 		return lecture;
 	}
@@ -35,17 +38,17 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public void removeLecture(String lectureId) throws EntityNotFoundException 
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
-		dataStorage.removeLecture(lectureId);
+		provider.getStorage().removeLecture(lectureId);
 	}
 
 	@Override
 	public IQuiz addQuiz(String lectureId, String title) throws EntityNotFoundException
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -55,7 +58,7 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public void removeQuiz(String lectureId, String quizId) throws EntityNotFoundException
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -67,7 +70,7 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public void endAttendanceVerification(String lectureId)  throws EntityNotFoundException
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 
@@ -75,26 +78,26 @@ public class DataManipulation implements IDataManipulation
 	}
 
 	@Override
-	public void confirmAttendance(String userId, String lectureId, String key) throws EntityNotFoundException
+	public void confirmAttendance(String userId, String lectureId, String key) throws EntityNotFoundException, VerificationInactiveException, InvalidVerificationKeyException
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 
-		if(lec.getVerificationKey().isEmpty())
-			throw new IllegalArgumentException("Verification is not active");
+		if(lec.getVerificationKey() == null || lec.getVerificationKey().isEmpty())
+			throw new VerificationInactiveException();
 		
 		if(!lec.getVerificationKey().equals(key))
-			throw new IllegalArgumentException("Invalid verification key");
+			throw new InvalidVerificationKeyException();
 		
 		lec.registerUser(userId);
 		lec.addAttendance(userId);
 	}
 
 	@Override
-	public void submitAnswer(String userId, String lectureId, String quizId, String questionId,  List<String> answers)  throws EntityNotFoundException
+	public void submitAnswer(String userId, String lectureId, String quizId, String questionId,  List<String> answers)  throws EntityNotFoundException, QuizInactiveException
 	{
-		ILecture lecture = dataStorage.getLecture(lectureId);
+		ILecture lecture = provider.getStorage().getLecture(lectureId);
 		if(lecture == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -103,7 +106,7 @@ public class DataManipulation implements IDataManipulation
 			throw new EntityNotFoundException(quizId);
 		
 		if(!quiz.isActive())
-			throw new IllegalStateException(quizId);
+			throw new QuizInactiveException();
 			
 		IQuestion question = quiz.getQuestion(questionId);
 		if(question == null)
@@ -126,7 +129,7 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public String renewAttendanceVerification(String lectureId)  throws EntityNotFoundException
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -138,7 +141,7 @@ public class DataManipulation implements IDataManipulation
 	
 	@Override
 	public void endQuiz(String quizId) throws EntityNotFoundException {
-		IQuiz quiz = dataStorage.getQuiz(quizId);
+		IQuiz quiz = provider.getStorage().getQuiz(quizId);
 		if(quiz == null)
 			throw new EntityNotFoundException(quizId);
 		
@@ -148,7 +151,7 @@ public class DataManipulation implements IDataManipulation
 	
 	@Override
 	public void startQuiz(String quizId) throws EntityNotFoundException {
-		IQuiz quiz = dataStorage.getQuiz(quizId);
+		IQuiz quiz = provider.getStorage().getQuiz(quizId);
 		if(quiz == null)
 			throw new EntityNotFoundException(quizId);
 		
@@ -158,7 +161,7 @@ public class DataManipulation implements IDataManipulation
 	
 	@Override
 	public void submitFeedback(String lectureId, int rating, String text) throws EntityNotFoundException {
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -168,7 +171,7 @@ public class DataManipulation implements IDataManipulation
 	
 	@Override
 	public List<IQuiz> getActiveQuiz(String userId) {
-		List<ILecture> lectures = dataStorage.getLecturesForUser(userId);
+		List<ILecture> lectures = provider.getStorage().getLecturesForUser(userId);
 		
 		List<IQuiz> quiz = new LinkedList<IQuiz>();
 		if(lectures != null)
@@ -192,7 +195,7 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public void addAdmin(String lectureId, String userId) throws EntityNotFoundException 
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -202,7 +205,7 @@ public class DataManipulation implements IDataManipulation
 	@Override
 	public void removeAdmin(String lectureId, String userId) throws EntityNotFoundException 
 	{
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		
@@ -211,7 +214,7 @@ public class DataManipulation implements IDataManipulation
 
 	@Override
 	public void unregisterFromLecture(String lectureId, String userId) throws EntityNotFoundException {
-		ILecture lec = dataStorage.getLecture(lectureId);
+		ILecture lec = provider.getStorage().getLecture(lectureId);
 		if(lec == null)
 			throw new EntityNotFoundException(lectureId);
 		

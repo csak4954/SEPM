@@ -19,7 +19,14 @@ public class LoginProvider implements ILoginProvider {
 	
 	private boolean isNew = false;
 	
-	public void addUser(ExternalUser user) {
+	public void addUser(ExternalUser user)
+	{	
+		ExternalUser tmp = users.findById(user.getId());
+		if(tmp == null) {
+			tmp = new ExternalUser();
+		}
+	
+		tmp.copy(user);
 		users.save(user);
 	}
 	
@@ -30,8 +37,12 @@ public class LoginProvider implements ILoginProvider {
 	
 	public boolean login(String username, String password)
 	{
-		user = users.findByMatIdAndPassword(username, password);
+		user = users.findByIdAndPassword(username, password);
 		return (isNew = user != null);
+	}
+	
+	public void logout() {
+		user = null;
 	}
 	
 	@Override

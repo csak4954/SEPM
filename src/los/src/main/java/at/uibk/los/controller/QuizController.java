@@ -14,21 +14,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.uibk.los.AppDomain;
-import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
 import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IModel;
 import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuiz;
 import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.viewmodel.AnswerViewModel;
-import at.uibk.los.viewmodel.ErrorViewModel;
+import at.uibk.los.viewmodel.QuestionAttemptViewModel;
 import at.uibk.los.viewmodel.QuestionViewModel;
+import at.uibk.los.viewmodel.QuizAttemptViewModel;
 import at.uibk.los.viewmodel.QuizViewModel;
+import at.uibk.los.viewmodel.StatusViewModel;
 
 @Controller
 @RequestMapping("")
-public class QuizController{
+public class QuizController {
 	
 	@RequestMapping(value="/quiz/active", method = RequestMethod.GET)
 	public @ResponseBody Object getActiveQuiz(HttpServletResponse response) {
@@ -37,18 +40,12 @@ public class QuizController{
 		
 		try 
 		{
-			List<IQuizView> quizViews =  model.getActiveQuiz();
-			List<QuizViewModel> quiz = new LinkedList<QuizViewModel>();
+			List<IQuizView> quiz =  model.getActiveQuiz();
+			return StatusViewModel.onSuccess(response, QuizViewModel.get(quiz));
 			
-			for(IQuizView quizView : quizViews) {
-				quiz.add(new QuizViewModel(quizView));
-			}
-			
-			return quiz;
-			
-		} catch (LOSAccessDeniedException e) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+		} 
+		catch (LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
 		}
 	}
 	
@@ -60,22 +57,21 @@ public class QuizController{
 		try 
 		{
 			List<ILectureView> lectures = model.getAssociatedLectures();
-			List<QuizViewModel> quiz = new LinkedList<QuizViewModel>();
+			List<IQuizView> quiz = new LinkedList<IQuizView>();
 			
 			for(ILectureView lecture : lectures) {
 				
 				List<IQuizView> quizViews = lecture.getQuizView();
 				
 				for(IQuizView quizView : quizViews) {
-					quiz.add(new QuizViewModel(quizView));
+					quiz.add(quizView);
 				}
 			}
 			
-			return quiz;
-			
-		} catch (LOSAccessDeniedException e) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onSuccess(response, QuizViewModel.get(quiz));
+		} 
+		catch (LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
 		}
 	}
 	
@@ -88,46 +84,43 @@ public class QuizController{
 		
 		// verify quiz
 		if(quizVM == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new ErrorViewModel("Invalid data");
+			return StatusViewModel.onParamNull(response, "Quiz null");
 		}
 		
 		if(quizVM.getTitle() == null || quizVM.getTitle().isEmpty()) {
-			response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);
-			return new ErrorViewModel("title missing");
+			return StatusViewModel.onParamInvalid(response, "Title missing");
 		}
 		
 		if(quizVM.getQuestions() == null || quizVM.getQuestions().isEmpty()) {
-			response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);
-			return new ErrorViewModel("Questions missing");
+			return StatusViewModel.onParamInvalid(response, "Questions missing");
 		}
 
 		for(QuestionViewModel question : quizVM.getQuestions()) 
-		{
-			if(question.getAnswers() == null || question.getAnswers().isEmpty()) {
-				response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);	
-				return new ErrorViewModel("Answers missing");
+		{			
+			if(question == null) {
+				return StatusViewModel.onParamInvalid(response, "Invalid question");
 			}
 			
 			if(question.getText() == null || question.getText().isEmpty()) {
-				response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);	
-				return new ErrorViewModel("Question text missing");
+				return StatusViewModel.onParamInvalid(response, "Question text missing");
+			}
+			
+			if(question.getAnswers() == null || question.getAnswers().isEmpty()) {
+				return StatusViewModel.onParamInvalid(response, "\"" + question.getText() +  "\": Answers missing");
 			}
 			
 			boolean solution = false;
 			for(AnswerViewModel answer : question.getAnswers()) 
 			{
 				if(answer.getText() == null || answer.getText().isEmpty()) {
-					response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);	
-					return new ErrorViewModel("Answer text missing");
+					return StatusViewModel.onParamInvalid(response, "\"" + question.getText() +  "\": Answer text missing");
 				}
 				
 				if(answer.isSolution()) solution = true;
 			}
 			
 			if(!solution) {
-				response.setStatus(ErrorViewModel.SC_UNPROCESSABLE_ENTITY);	
-				return new ErrorViewModel("Question solution missing");
+				return StatusViewModel.onParamInvalid(response, "\"" + question.getText() +  "\": Solution missing");
 			}
 		}
 				
@@ -145,16 +138,13 @@ public class QuizController{
 				}
 			}
 			
-			response.setStatus(HttpServletResponse.SC_CREATED);
-			
-			return null;
-			
-		} catch (LOSAccessDeniedException e) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
-		} catch (EntityNotFoundException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onSuccessCreated(response, new QuizViewModel(quiz));
+		} 
+		catch (LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
+		} 
+		catch (EntityNotFoundException e) {
+			return StatusViewModel.onException(e, response);
 		}
 	}
 	
@@ -168,19 +158,16 @@ public class QuizController{
 		try
 		{
 			model.removeQuiz(lectureId, quizId);
+			return StatusViewModel.onSuccessNoContent(response);
 		}
 		catch (LOSAccessDeniedException e) 
 		{ 
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onException(e, response);
 		}
 		catch (EntityNotFoundException e)
 		{
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onException(e, response);
 		}
-		
-		return null;
 	}
 
 	@RequestMapping(value = "/lecture/{lectureId}/quiz/{quizId}", method = RequestMethod.POST)
@@ -191,7 +178,8 @@ public class QuizController{
 	{
 		IModel model = AppDomain.get();
 		
-		try {
+		try 
+		{
 			if(active) {
 				model.startQuiz(lectureId, quizId);
 			}
@@ -199,17 +187,69 @@ public class QuizController{
 				model.endQuiz(lectureId, quizId);
 			}
 			
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return StatusViewModel.onSuccessNoContent(response);
 		}
 		catch(LOSAccessDeniedException e) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onException(e, response);
 		}
 		catch(EntityNotFoundException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return new ErrorViewModel(e);
+			return StatusViewModel.onException(e, response);
+		}
+	}
+
+	@RequestMapping(value = "/lecture/{lectureId}/quiz/{quizId}/answer", method = RequestMethod.POST)
+	public @ResponseBody Object answerQuiz(@RequestBody QuizAttemptViewModel attempt,
+										   @PathVariable String lectureId, 
+										   @PathVariable String quizId,
+										   HttpServletResponse response)
+	{
+		IModel model = AppDomain.get();
+		
+		if(attempt == null) {
+			return StatusViewModel.onParamNull(response, "Attempt null");
 		}
 		
-		return null;
+		if(attempt.getQuestions() == null || attempt.getQuestions().isEmpty()) {
+			return StatusViewModel.onParamInvalid(response, "Questions missing");
+		}
+		
+		for(QuestionAttemptViewModel question : attempt.getQuestions()) {
+			
+			if(question == null) {
+				return StatusViewModel.onParamInvalid(response, "Invalid Question");
+			}
+			
+			if(question.getQuestionId() == null || question.getQuestionId().isEmpty()) {
+				return StatusViewModel.onParamInvalid(response, "Question id missing");
+			}
+			
+			if(question.getAnswers() == null || question.getAnswers().isEmpty()) {
+				return StatusViewModel.onParamInvalid(response, "\"" + question.getQuestionId() + "\": Answers missing");
+			}
+			
+			for(String answer : question.getAnswers()) {
+				if(answer == null || answer.isEmpty()) {
+					return StatusViewModel.onParamInvalid(response, "\"" + question.getQuestionId() + "\": invalid Answer");
+				}
+			}
+		}
+		
+		try {
+
+			for(QuestionAttemptViewModel question : attempt.getQuestions()) 
+			{
+				model.submitAnswer(lectureId, quizId, question.getQuestionId(), question.getAnswers());
+			}
+			
+			return StatusViewModel.onSuccessNoContent(response);
+		}
+		catch(LOSAccessDeniedException e) {
+			return StatusViewModel.onException(e, response);
+		}
+		catch(EntityNotFoundException e) {
+			return StatusViewModel.onException(e, response);
+		} catch (QuizInactiveException e) {
+			return StatusViewModel.onException(e, response);
+		}
 	}
 }

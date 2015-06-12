@@ -2,11 +2,17 @@ package at.uibk.los.model.interfaces;
 
 import java.util.List;
 
-import at.uibk.los.model.EntityNotFoundException;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.InvalidVerificationKeyException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
+import at.uibk.los.model.exceptions.VerificationInactiveException;
 
 public interface IModel
 {
+	// service provider
+	IServiceProvider getServiceProvider();
+	
 	// user-specific	
 	IUser getUser() throws LOSAccessDeniedException;
 	
@@ -18,6 +24,8 @@ public interface IModel
 	List<ILectureView> getAssociatedLectures() throws LOSAccessDeniedException;
 	
 	List<ILectureView> getAvailableLectures() throws LOSAccessDeniedException;
+	
+	ILectureView getLecture(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
 	ILectureView addLecture(String title, String description) throws LOSAccessDeniedException;
 	
@@ -32,7 +40,7 @@ public interface IModel
 	
 	void endAttendanceVerification(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
-	void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException;
+	void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException, VerificationInactiveException, InvalidVerificationKeyException;
 		
 	void unregisterFromLecture(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException; 
 	
@@ -46,7 +54,7 @@ public interface IModel
 	
 	void endQuiz(String lectureId, String quizId) throws LOSAccessDeniedException, EntityNotFoundException;
 
-	void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException;
+	void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException, QuizInactiveException;
 
 	List<IQuizView> getActiveQuiz() throws LOSAccessDeniedException;
 	

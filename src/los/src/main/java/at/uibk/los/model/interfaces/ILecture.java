@@ -14,8 +14,6 @@ public interface ILecture extends ILectureView
 	void registerUser(String userId);
 	boolean unregisterUser(String userId);
 	
-	List<IUser> getRegisteredUsers();
-	
 	void addAttendance(String userId);
 	boolean removeAttendance(String userId);
 	
