@@ -7,7 +7,7 @@ import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.model.interfaces.IScore;
 
-public class QuizResult implements IQuizResult {
+class QuizResult implements IQuizResult {
 
 	private List<IScore> scores;
 	

@@ -1,18 +1,22 @@
 package at.uibk.los.model;
 
-import java.util.Arrays;
 import java.util.List;
 
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
+import at.uibk.los.model.authorization.permissions.AdminPermission;
 import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
 import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
 import at.uibk.los.model.authorization.permissions.ModifyAdminCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ModifyLectureCollectionPermission;
-import at.uibk.los.model.authorization.permissions.DefaultPermission;
 import at.uibk.los.model.authorization.permissions.ModifyQuizCollectionPermission;
+import at.uibk.los.model.authorization.permissions.VerifiedPermission;
 import at.uibk.los.model.authorization.permissions.ViewFeedbackPermission;
 import at.uibk.los.model.authorization.permissions.ViewStatisticsPermission;
 import at.uibk.los.model.authorization.permissions.ViewUserScoresPermission;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
+import at.uibk.los.model.exceptions.InvalidVerificationKeyException;
+import at.uibk.los.model.exceptions.QuizInactiveException;
+import at.uibk.los.model.exceptions.VerificationInactiveException;
 import at.uibk.los.model.interfaces.IFeedback;
 import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IModel;
@@ -114,7 +118,7 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException
+	public void submitAnswer(String lectureId, String quizId, String questionId, List<String> answers) throws LOSAccessDeniedException, EntityNotFoundException, QuizInactiveException
 	{
 		checkPermissions();
 		checkIsVerified(lectureId);
@@ -145,7 +149,7 @@ public class Model implements IModel
 	}
 
 	@Override
-	public void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException
+	public void confirmAttendance(String lectureId, String key) throws LOSAccessDeniedException, EntityNotFoundException, VerificationInactiveException, InvalidVerificationKeyException
 	{
 		checkPermissions();
 		provider.getManipulation().confirmAttendance(getUser().getId(), lectureId, key);
@@ -160,10 +164,10 @@ public class Model implements IModel
 	}
 
 	@Override
-	public IQuiz createQuiz(String lectureId) throws EntityNotFoundException, LOSAccessDeniedException {
+	public IQuiz createQuiz(String lectureId, String title) throws EntityNotFoundException, LOSAccessDeniedException {
 		checkPermissions(ModifyQuizCollectionPermission.instance);
 		checkIsAdmin(lectureId);
-		return provider.getManipulation().addQuiz(lectureId);
+		return provider.getManipulation().addQuiz(lectureId, title);
 	}
 	
 	@Override
@@ -217,7 +221,7 @@ public class Model implements IModel
 
 	@Override
 	public List<IQuizResult> getQuizResults() throws LOSAccessDeniedException {
-		checkPermissions(DefaultPermission.instance);
+		checkPermissions();
 		return provider.getEvaluation().getQuizResults(getUser().getId());
 	}
 
@@ -228,20 +232,18 @@ public class Model implements IModel
 	}
 	
 	private void checkPermissions(IPermission...permissions) throws LOSAccessDeniedException {
-		IPermission[] tmp = Arrays.copyOf(permissions, permissions.length + 1);
-		tmp[tmp.length-1] = DefaultPermission.instance;
-		provider.getPolicyManager().verify(getUser(), tmp);
+		provider.getPolicyManager().verify(getUser(), permissions);
 	}
 
 	private void checkIsAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
 		if(!isUserAdmin(lectureId)) {
-			throw new LOSAccessDeniedException();
+			throw new LOSAccessDeniedException(AdminPermission.instance);
 		}
 	}
 	
 	private void checkIsVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
 		if(!isUserVerified(lectureId)) {
-			throw new LOSAccessDeniedException();
+			throw new LOSAccessDeniedException(VerifiedPermission.instance);
 		}
 	}
 
@@ -249,5 +251,18 @@ public class Model implements IModel
 	public void unregisterFromLecture(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
 		checkPermissions();
 		provider.getManipulation().unregisterFromLecture(lectureId, getUser().getId());
+	}
+
+	@Override
+	public ILectureView getLecture(String lectureId) throws LOSAccessDeniedException,
+			EntityNotFoundException
+	{
+		checkPermissions();
+		return provider.getEvaluation().getLecture(lectureId);
+	}
+
+	@Override
+	public IServiceProvider getServiceProvider() {
+		return provider;
 	}
 }

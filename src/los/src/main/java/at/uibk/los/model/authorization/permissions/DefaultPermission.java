@@ -5,7 +5,7 @@ import at.uibk.los.model.interfaces.IPermission;
 public class DefaultPermission implements IPermission {
 	
 	public static final int id = 0;
-	public static final String description = "Default Permission";
+	public static final String description = "being logged in";
 	public static final IPermission instance = new DefaultPermission();
 	
 	@Override

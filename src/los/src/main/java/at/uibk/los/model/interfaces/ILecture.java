@@ -9,18 +9,19 @@ public interface ILecture extends ILectureView
 	void setDescription(String description);
 	
 	void setVerificationKey(String key);
+	String getVerificationKey();
 	
 	void registerUser(String userId);
-	void unregisterUser(String userId);
+	boolean unregisterUser(String userId);
 	
 	void addAttendance(String userId);
-	void removeAttendance(String userId);
+	boolean removeAttendance(String userId);
 	
 	void addAdmin(String userId);
-	void removeAdmin(String userId);
+	boolean removeAdmin(String userId);
 	
-	IQuiz addQuiz();
-	void removeQuiz(String quizId);
+	IQuiz addQuiz(String title);
+	boolean removeQuiz(String quizId);
 	
 	IQuiz getQuiz(String quizId);
 	List<IQuiz> getQuiz();

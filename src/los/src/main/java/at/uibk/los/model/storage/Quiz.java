@@ -8,6 +8,7 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import at.uibk.los.model.interfaces.IAnswer;
+import at.uibk.los.model.interfaces.ILectureView;
 import at.uibk.los.model.interfaces.IQuestion;
 import at.uibk.los.model.interfaces.IQuestionView;
 import at.uibk.los.model.interfaces.IQuiz;
@@ -126,5 +127,10 @@ class Quiz implements IQuiz {
 	
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	@Override
+	public ILectureView getLectureView() {
+		return this.lecture;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 import at.uibk.los.model.interfaces.IDay;
 
-public class Day implements IDay {
+class Day implements IDay {
 
 	int dayOfYear;
 	int year;

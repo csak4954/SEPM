@@ -47,6 +47,11 @@ class Approach implements IApproach {
 	}
 	
 	@Override
+	public void setAnswers(List<String> answers) {
+		this.answers = answers;		
+	}
+	
+	@Override
 	public IQuestion getQuestion() {
 		return question;
 	}

@@ -1,4 +1,4 @@
-package at.uibk.los.model;
+package at.uibk.los.model.exceptions;
 
 public class NotImplementedException extends RuntimeException
 {

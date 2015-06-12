@@ -1,7 +1,6 @@
 package at.uibk.los.model.interfaces;
 
-public interface IFeedback {
-	String getId();
+public interface IFeedback extends IIdentifiable {
     int getRating();
     String getMessage();    
 }

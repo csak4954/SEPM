@@ -1,10 +1,8 @@
-package los;
+package at.uibk.los.test;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import los.config.TestAppConfig;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -19,6 +17,7 @@ import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
+import at.uibk.los.model.exceptions.QuizInactiveException;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IDay;
 import at.uibk.los.model.interfaces.IFeedback;
@@ -30,6 +29,7 @@ import at.uibk.los.model.interfaces.IQuizResult;
 import at.uibk.los.model.interfaces.IQuizView;
 import at.uibk.los.model.interfaces.IStatistics;
 import at.uibk.los.model.interfaces.IUser;
+import at.uibk.los.test.config.TestAppConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestAppConfig.class)
@@ -75,6 +75,7 @@ public class ModelTest
 		final String lectureId = "";
 		final String quizId = "";
 		final String userId = "";
+		final String quizTitle = "";
 		
 		IModel model = testAsStudent();
 		
@@ -94,7 +95,7 @@ public class ModelTest
 		
 		try 
 		{
-			model.createQuiz(lectureId);
+			model.createQuiz(lectureId, quizTitle);
 			Assert.fail();
 		} catch(LOSAccessDeniedException e) {	}
 	
@@ -206,8 +207,7 @@ public class ModelTest
 		final boolean answerBSolution = false;
 		
 		// create quiz
-		IQuiz quiz = model.createQuiz(lecture.getId());
-		quiz.setTitle(quizTitle);
+		IQuiz quiz = model.createQuiz(lecture.getId(), quizTitle);
 		quiz.addQuestion(questionText)
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);
@@ -276,8 +276,7 @@ public class ModelTest
 		final String answerB = "facebook";
 		final boolean answerBSolution = false;
 		
-		IQuiz quiz = model.createQuiz(lecture.getId());
-		quiz.setTitle(quizTitle);
+		IQuiz quiz = model.createQuiz(lecture.getId(), quizTitle);
 		quiz.addQuestion(questionText)
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);
@@ -337,8 +336,7 @@ public class ModelTest
 		final String answerB = "facebook";
 		final boolean answerBSolution = false;
 		
-		IQuiz quiz = model.createQuiz(lecture.getId());
-		quiz.setTitle(quizTitle);
+		IQuiz quiz = model.createQuiz(lecture.getId(), quizTitle);
 		quiz.addQuestion(questionText)
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);
@@ -378,7 +376,7 @@ public class ModelTest
 			model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
 			Assert.fail();
 		}
-		catch(IllegalStateException e)
+		catch(QuizInactiveException e)
 		{
 			
 		}
@@ -483,8 +481,7 @@ public class ModelTest
 		final String answerB = "facebook";
 		final boolean answerBSolution = false;
 		
-		IQuiz quiz = model.createQuiz(lecture.getId());
-		quiz.setTitle(quizTitle);
+		IQuiz quiz = model.createQuiz(lecture.getId(), quizTitle);
 		quiz.addQuestion(questionText)
 			.addAnswer(answerA, answerASolution)
 			.addAnswer(answerB, answerBSolution);

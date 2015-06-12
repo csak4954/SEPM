@@ -1,6 +1,7 @@
 package at.uibk.los.model.storage;
 
 import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 interface FeedbackRepository extends MongoRepository<Feedback, String> {

@@ -2,7 +2,7 @@ package at.uibk.los.model.interfaces;
 
 import java.util.List;
 
-import at.uibk.los.model.EntityNotFoundException;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 
 public interface IDataEvaluation
 {
@@ -17,4 +17,6 @@ public interface IDataEvaluation
 	List<IQuizResult> getQuizResults(String c);
 
 	IStatistics getStatistics(String lectureId) throws EntityNotFoundException;
+
+	ILectureView getLecture(String lectureId) throws EntityNotFoundException;
 }

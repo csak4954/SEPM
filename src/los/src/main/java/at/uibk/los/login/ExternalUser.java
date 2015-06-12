@@ -1,6 +1,5 @@
 package at.uibk.los.login;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import at.uibk.los.model.authorization.StaffGroupPolicy;
@@ -10,40 +9,30 @@ import at.uibk.los.model.interfaces.IUser;
 public class ExternalUser implements IUser {
 
 	@Id
-	private ObjectId id;
+	private String id;
 	
 	private String name;
 	private String surname;
-	private String matId;
 	private String email;
 	private String affilation;
-	
-	// only stored in db 
-	// pw check with query
-	@SuppressWarnings("unused")
 	private String password;
 	
 	public final String studentAffiliation = "student";
 	public final String staffAffiliation = "staff";
 	
-	public ExternalUser(String name, String surname, String matId, String password, String email, String affilation) {
+	public ExternalUser() {
+
+	}
+	
+	public ExternalUser(String name, String surname, String id, String password, String email, String affilation) {
 		this.name = name;
 		this.surname = surname;
-		this.matId = matId;
+		this.id = id;
 		this.email = email;
 		this.affilation = affilation;
 		this.password = password;
 	}
-	
-	public ExternalUser() {
-		this.name = "";
-		this.surname = "";
-		this.matId = "";
-		this.email = "";
-		this.affilation = "";
-		this.password = "";
-	}
-	
+
 	@Override
 	public int getGroupPolicy() 
 	{
@@ -75,7 +64,7 @@ public class ExternalUser implements IUser {
 
 	@Override
 	public String getId() {
-		return matId;
+		return id;
 	}
 
 	@Override
@@ -83,4 +72,12 @@ public class ExternalUser implements IUser {
 		return affilation;
 	}
 
+	public void copy(ExternalUser user) {
+		this.name = user.name;
+		this.surname = user.surname;
+		this.id = user.id;
+		this.email = user.email;
+		this.affilation = user.affilation;
+		this.password = user.password;
+	}
 }

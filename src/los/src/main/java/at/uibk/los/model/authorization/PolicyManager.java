@@ -5,9 +5,9 @@ import java.util.Map;
 
 import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
 import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
+import at.uibk.los.model.authorization.permissions.DefaultPermission;
 import at.uibk.los.model.authorization.permissions.ModifyAdminCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ModifyLectureCollectionPermission;
-import at.uibk.los.model.authorization.permissions.DefaultPermission;
 import at.uibk.los.model.authorization.permissions.ModifyQuizCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ViewFeedbackPermission;
 import at.uibk.los.model.authorization.permissions.ViewStatisticsPermission;
@@ -24,7 +24,6 @@ public class PolicyManager implements IPolicyManager {
 		groups = new HashMap<Integer, IGroupPolicy>();
 		
 		IGroupPolicy staff = new StaffGroupPolicy();
-		staff.grantPermission(DefaultPermission.instance);
 		staff.grantPermission(ModifyLectureCollectionPermission.instance);
 		staff.grantPermission(ModifyQuizCollectionPermission.instance);
 		staff.grantPermission(ModifyAdminCollectionPermission.instance);
@@ -37,7 +36,6 @@ public class PolicyManager implements IPolicyManager {
 		groups.put(staff.getId(), staff);
 		
 		IGroupPolicy students = new StudentGroupPolicy();
-		students.grantPermission(DefaultPermission.instance);
 		
 		groups.put(students.getId(), students);
 	}
@@ -46,20 +44,23 @@ public class PolicyManager implements IPolicyManager {
 	public void verify(IObject object, IPermission... permissions)
 			throws LOSAccessDeniedException {
 		
-		if( object == null || permissions == null) {
-			throw new LOSAccessDeniedException();
+		if(object == null) {
+			throw new LOSAccessDeniedException(DefaultPermission.instance);
 		}
 		
-		IGroupPolicy group = groups.get(object.getGroupPolicy());
+		if(permissions != null) {
 		
-		if( group == null ) {
-			throw new IllegalArgumentException();
-		}
-
-		for(IPermission permission : permissions) {
-			if (!group.checkPermission(permission)) {
-				throw new LOSAccessDeniedException(permission);
+			IGroupPolicy group = groups.get(object.getGroupPolicy());
+			
+			if( group == null ) {
+				throw new IllegalArgumentException();
 			}
+	
+			for(IPermission permission : permissions) {
+				if (!group.checkPermission(permission)) {
+					throw new LOSAccessDeniedException(permission);
+				}
+			}	
 		}
 	}
 

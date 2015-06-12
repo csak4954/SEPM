@@ -86,7 +86,7 @@ public class DataStorage implements IDataStorage {
 	@Override
 	public List<ILecture> getLecturesForUser(String userId) {
 		
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		
 		List<Registration> registrations = Registration.Repo.findByUser(user);
 
@@ -113,8 +113,14 @@ public class DataStorage implements IDataStorage {
 	}
 
 	@Override
-	public void saveUser(IUser user) {
-		User tmp = new User(user);
+	public void saveUser(IUser user)
+	{
+		User tmp = User.Repo.findById(user.getId());
+		if(tmp == null) {
+			tmp = new User();
+		}
+
+		tmp.copy(user);
 		User.Repo.save(tmp);
 	}
 	
@@ -132,7 +138,7 @@ public class DataStorage implements IDataStorage {
 	@SuppressWarnings("unchecked")
 	public List<IApproach> getApproaches(String userId) {
 		
-		User user = User.Repo.findByMatId(userId);
+		User user = User.Repo.findById(userId);
 		
 		List<IApproach> approaches = (List<IApproach>)(List<?>)Approach.Repo.findByUser(user);
 	

@@ -1,4 +1,4 @@
-package los.config;
+package at.uibk.los.test.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
