@@ -1,6 +1,8 @@
 # SEPM
 *java web-app with mvc and rest support using spring*
 
+[![Build Status](https://travis-ci.org/csak4954/SEPM.svg?branch=develop)](https://travis-ci.org/csak4954/SEPM) 
+
 ## Lecture-Operator-System
 As some Lecturers try to brighten up their courses,  
 they make use of extensions - which this app brings together:  
@@ -21,7 +23,5 @@ add/remove lectures participation
 view campus map with my current location  
 
 For now, feel free to have a look on /doc folder for more details. 
-
-CI status available here: https://travis-ci.org/csak4954/SEPM
 
 Burn-Down-Chart: http://radekstepan.com/burnchart/#csak4954/SEPM/
