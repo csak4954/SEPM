@@ -17,6 +17,7 @@ import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
+import at.uibk.los.model.exceptions.QuizInactiveException;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IDay;
 import at.uibk.los.model.interfaces.IFeedback;
@@ -375,7 +376,7 @@ public class ModelTest
 			model.submitAnswer(lecture.getId(), quiz.getId(), questionView.getId(), answers);
 			Assert.fail();
 		}
-		catch(IllegalStateException e)
+		catch(QuizInactiveException e)
 		{
 			
 		}
