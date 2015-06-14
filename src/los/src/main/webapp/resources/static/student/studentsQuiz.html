@@ -23,15 +23,17 @@
     	<md-subheader class="md-primary">No quiz available</md-subheader>
     </div>
     <div ng-hide="!hasQuiz">
-		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in questions">
+    
+    	<h1 class="md-title">{{quiz.title}}</h1>
+		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in quiz.questions">
 
 			<md-radio-group class="md-primary" ng-model="answers[qIndex]">
-			<h3 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;">{{qIndex+1}}.) {{item.question}}</h3>
+			<h3 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;">{{qIndex+1}}.) {{item.text}}</h3>
 			
 			<div style="margin-top: -10px; margin-left: 30px">
-			<md-radio-button ng-repeat="it in item.answers"
+			<md-radio-button  class="md-primary" ng-repeat="it in item.answers"
 	                       ng-value="it">
-	                       {{it}}
+	                       {{it.text}}
 	        </md-radio-button>
 			
 			</div>

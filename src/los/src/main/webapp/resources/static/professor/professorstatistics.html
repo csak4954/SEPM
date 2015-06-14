@@ -1,0 +1,36 @@
+<style>
+	.subheader
+	{
+		font-size:20px;
+	}
+</style>
+
+<div ng-controller="professorStatisticController">
+
+    <md-subheader class="md-primary subheader" >Students</md-subheader>
+	<md-select placeholder="Student" ng-model="selectedUser" style="margin-left:15px; margin-top:0px; width:300px">
+		<md-option ng-repeat="user in users" value="{{user.id}}">[{{user.id}}] {{user.surname}} {{user.name}}</md-option>
+	</md-select>
+	
+	<table style="width:50%; margin:15px" >	
+	<tr style="border-bottom: 1px solid black;"">
+	    <th style="text-align:left">Quiz</th>
+	    <th style="text-align:left">Score</th> 
+    </tr>
+	
+	<tr  ng-repeat="result in userResults">
+		<td style="text-align:left">{{result.quiz.title}}</td>
+		<td style="text-align:left">{{result.score}}%</td>
+	</tr>
+
+	</table>
+    <md-divider ng-if="!$last"></md-divider>
+
+    <md-subheader class="md-primary subheader">Lecture  (Registered users {{statistic.numberOfRegistrations}})</md-subheader>
+    <md-subheader class="md-primary">Attendances/Day:</md-subheader>
+    <div google-chart chart="attendanceChart" style="margin-top: -40px; margin-left:-30px; width:70%"></div>
+    
+    
+    <md-subheader class="md-primary">Average quiz results:</md-subheader>
+    <div google-chart chart="quizChart" style="margin-top: -40px; margin-left:-30px; width:70%"></div>
+</div>

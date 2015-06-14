@@ -15,37 +15,56 @@
     {
         margin-bottom: 10px;
     }
+    
+    	.subheader
+	{
+		font-size:20px;
+	}
 </style>
 
 
 <div ng-controller="professorQuizController">
-    <md-subheader class="md-primary">Question</md-subheader>
+
+    <md-subheader class="md-primary subheader">Quiz</md-subheader>
+
+	<div style="margin:15px; width: 300px; margin-top:-10px;">
+         <lx-text-field label="Title">
+             <input type="text" ng-model="title">
+         </lx-text-field>
+    </div>
+
     <textarea ng-model="question" ng-change="questionChanged(question)"></textarea>
     <button class="btn btn--s btn--blue btn--fab" lx-ripple ng-disabled="addQuestionDisabled" ng-click="addQuesition(question)"><i class="mdi mdi-plus"></i></button>
     <md-divider ng-if="!$last" style="margin-top: 15px"></md-divider>
     <md-list>
         <md-subheader class="md-primary">Questions</md-subheader>
-        <md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-top:28px; margin-bottom: 15px;" ng-click="verify()">Submit</md-button>   
+        <md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-bottom: 15px;" ng-click="submit()">Submit</md-button>   
         <md-list-item class="md-3-line" ng-repeat="(qIndex, item) in questions">
             <div class="md-list-item-text" style="margin-left: 30px">
 
                 <div layout="row">
                     <button class="btn btn--xs btn--red btn--fab" lx-ripple style="margin-top: 10px; margin-left: 10px" ng-click="removeQuestion(qIndex)"><i class="mdi mdi-minus"></i></button>
                     <div style="margin-top: 8px; margin-left: 3px">
-                        <a href="#" editable-textarea="item.question" e-rows="7" e-cols="42">
-                            <pre style="margin-top: -26px; margin-left: 10px"><h2>{{$qIndex + 1}}) {{ item.question }}</h2></pre>
+                        <a href="#" editable-textarea="item.text" e-rows="7" e-cols="42">
+                            <pre style="margin-top: -26px; margin-left: 10px"><h2>{{$qIndex + 1}}) {{ item.text }}</h2></pre>
                         </a>
                     </div>
                 </div>
 
 
+				
                 <md-list-item class="md-3-line" ng-repeat="(aIndex, answer) in item.answers">
                     <div class="md-list-item-text" layout="row" style="margin-left: 20px; margin-top: 10px">
+                    
                         <button class="btn btn--xs btn--red btn--fab" lx-ripple style="margin-top: -6px; margin-left: 10px" ng-click="removeAnswer(qIndex, aIndex)"><i class="mdi mdi-minus"></i></button>
-
+               			<button class="btn btn--xs btn--green btn--fab" lx-ripple style="margin-top: -6px; margin-left: 10px" ng-click="setSolution(qIndex, aIndex)"><i class="mdi mdi-check"></i></button>
+               	
                         <div>
-                            <a href="#" editable-textarea="answer" e-rows="7" e-cols="40">
-                                <pre style="margin-top: -25px; margin-left: 10px"><h3>{{ answer }}</h3></pre>
+                            <a href="#" editable-textarea="answer.text" e-rows="7" e-cols="40" ng-if="!answer.solution">
+                                <pre style="margin-top: -25px; margin-left: 10px"><h3>{{ answer.text }}</h3></pre>
+                            </a>
+                            <a href="#" editable-textarea="answer.text" e-rows="7" e-cols="40" style="color: green" ng-if="answer.solution">
+                                <pre style="margin-top: -25px; margin-left: 10px"><h3>{{ answer.text }}</h3></pre>
                             </a>
                         </div>
                     </div>

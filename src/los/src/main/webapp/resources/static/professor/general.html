@@ -1,7 +1,17 @@
+<style>
+	.subheader
+	{
+		font-size:20px;
+	}
+</style>
+
 <div ng-controller="professorGeneralController">
 
-    <md-subheader class="md-primary">Verification</md-subheader>
-    <md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-bottom: 15px;" ng-click="startVerification()">Start verification</md-button>
+    <md-subheader class="md-primary subheader">Verification</md-subheader>
+    <div layout="column">
+    	<md-button class="md-raised" style="margin: 5px; margin-left: 15px; margin-bottom: 15px; width:200px;" ng-click="startVerification()">Start verifications</md-button>  
+   	</div>
+   
     <md-divider ng-if="!$last"></md-divider>
 
     <lx-dialog class="dialog dialog--l" id="verificationDialog">
@@ -17,7 +27,7 @@
         </div>
 
         <div class="dialog__actions">
-            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close ng-click="cancleVerification()">Candel</button>
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close ng-click="cancleVerification()">Cancel</button>
         </div>
     </lx-dialog>
 

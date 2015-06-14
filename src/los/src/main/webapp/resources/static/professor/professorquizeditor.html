@@ -1,0 +1,26 @@
+<style>
+	.subheader
+	{
+		font-size:20px;
+	}
+</style>
+
+<div ng-controller="professorQuizEditorController">
+
+<md-subheader class="md-primary subheader">Select quiz</md-subheader>
+  <div layout="column" style="margin:15px; margin-top:-20px; width: 300px" class="md-padding">
+  
+  	  <div layout="row">
+	  	  <md-select placeholder="Quiz" ng-model="pageData.selectedQuiz" style="margin-left:20px">
+			<md-option ng-repeat="quiz in quizes" value="{{quiz.quizId}}">{{quiz.title}}</md-option>
+		  </md-select>
+	  	  <button class="btn btn--xs btn--red btn--fab" lx-ripple style="margin-top: 20px; margin-left: 10px" ng-click="remove()"><i class="mdi mdi-minus"></i></button>  
+		 
+  	  </div>
+
+	  
+	   <button class="btn btn--l btn--green btn--fab" lx-ripple style="margin-top: 10px; margin-left: 10px" ng-click="startQuiz()" ng-hide="pageData.quizActive"><i class="mdi mdi-play circle fill"></i></button>
+      <button class="btn btn--l btn--red btn--fab" lx-ripple style="margin-top: 10px; margin-left: 10px" ng-click="stopQuiz()" ng-hide="!pageData.quizActive"><i class="mdi mdi-stop"></i></button>
+      <span>{{pageData.timerVal}}</span>      
+  </div>
+</div>

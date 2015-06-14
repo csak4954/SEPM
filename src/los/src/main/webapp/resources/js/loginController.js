@@ -14,11 +14,19 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 
     $scope.onConnect = function(user, password)
     {
-    	$http.post('/los/authentication', { username: user, password: btoa(password) }).
+    	$http.post('/los/authentication/login', { username: user, password: password }).
     	  success(function(data, status, headers, config) 
     	  {
-    		  if(data.affiliation != null)
-    			  $scope.changeView(data.affiliation);
+    		  if(data == null)
+    		  {
+    			  LxNotificationService.error('Login failed');
+    			  $scope.password = "";
+    		  }
+    		  
+    		  if(data.affiliation == "staff")
+    			  $scope.changeView("professor");
+    		  else if(data.affiliation == "student")
+    			  $scope.changeView("student");
     		  else
     		  {
     			  LxNotificationService.error('Login failed');

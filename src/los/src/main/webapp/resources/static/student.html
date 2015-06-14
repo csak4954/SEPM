@@ -78,8 +78,8 @@
 
                     <lx-dropdown-menu>
                         <ul>
-                            <li><a class="dropdown-link">Log-out</a></li>
-                            <li><a class="dropdown-link">Switch user</a></li>
+                            <li><a class="dropdown-link" ng-click="logout()">Log-out</a></li>
+                            <li><a class="dropdown-link" ng-click="logout()">Switch user</a></li>
                         </ul>
                     </lx-dropdown-menu>
                 </lx-dropdown>
@@ -90,15 +90,15 @@
     <lx-tabs links-tc="light" links-bgc="indigo-500" indicator="indigo-300" no-divider="true" style="margin-top: -40px;" ng-hide="!pageData.validLecture">
         <div>
             <lx-tab heading="General" >
-                <ng-include src="'resources/static/student/studentGenerals.html'"></ng-include>
+                <ng-include src="'resources/static/student/studentGeneral.html'"></ng-include>
             </lx-tab>
 
             <lx-tab heading="Quiz">
-                <ng-include src="'resources/static/student/studentQuiz.html'"></ng-include>
+                <ng-include src="'resources/static/student/studentsQuiz.html'"></ng-include>
             </lx-tab>
 
             <lx-tab heading="Feedback">
-                <ng-include src="'resources/static/student/studentFeedbacks.html'"></ng-include>
+                <ng-include src="'resources/static/student/studentFeedback.html'"></ng-include>
             </lx-tab>
 
             <lx-tab heading="Statistic">

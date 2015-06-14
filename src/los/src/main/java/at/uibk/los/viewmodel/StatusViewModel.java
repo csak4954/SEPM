@@ -43,7 +43,7 @@ public class StatusViewModel {
 	}
 	
 	public static StatusViewModel onException(LOSAccessDeniedException e, HttpServletResponse response) {
-		if(e.getPermission().getId() == DefaultPermission.id) {
+		if(e.getPermission() == null || e.getPermission().getId() == DefaultPermission.id) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 		else {
