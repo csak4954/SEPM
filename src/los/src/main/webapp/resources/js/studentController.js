@@ -216,159 +216,31 @@ app.controller('studentFeedbackController', function($scope, LxNotificationServi
     }
 });
 
-app.controller('studentStatisticController', function($scope )
+app.controller('studentStatisticController', function($scope, LxNotificationService, $http, pageData )
 {
-    $scope.feedbackChart = {};
-
-    $scope.feedbackChart.data =
-    {
-    "cols":
-        [
-            {id: "t", label: "Topping", type: "string"},
-            {id: "s", label: "Stars", type: "number"}
-        ],
-
-    "rows": [
-        {c: [
-            {v: "5 stars"},
-            {v: 10}
-        ]},
-        {c: [
-            {v: "4 stars"},
-            {v: 0}
-        ]},
-        {c: [
-            {v: "3 stars"},
-            {v: 2}
-        ]},
-        {c: [
-            {v: "2 stars"},
-            {v: 1}
-        ]},
-        {c: [
-            {v: "1 stars"},
-            {v: 2}
-        ]},
-        {c: [
-            {v: "0 stars"},
-            {v: 10}
-        ]}
-    ]};
-
-    // $routeParams.chartType == BarChart or PieChart or ColumnChart...
-    $scope.feedbackChart.type = "BarChart";
-    $scope.feedbackChart.options = {
-        'title': '',
-         'width': 400,
-        'legend':'none',
-        'is3D': true,
-        colors: ['#7986CB']
-    }
-
-
-    $scope.attendanceChart = {};
-
-    $scope.attendanceChart.data =
-    {
-        "cols":
-            [
-                {id: "t", label: "Topping", type: "string"},
-                {id: "s", label: "Stars", type: "number"}
-            ],
-
-        "rows": [
-            {c: [
-                {v: "5 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "4 stars"},
-                {v: 0}
-            ]},
-            {c: [
-                {v: "3 stars"},
-                {v: 2}
-            ]},
-            {c: [
-                {v: "2 stars"},
-                {v: 1}
-            ]},
-            {c: [
-                {v: "1 stars"},
-                {v: 2}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]},
-            {c: [
-                {v: "0 stars"},
-                {v: 10}
-            ]}
-        ]};
-
-    // $routeParams.chartType == BarChart or PieChart or ColumnChart...
-    $scope.attendanceChart.type = "ColumnChart";
-    $scope.attendanceChart.options = {
-        'title': '',
-        'legend':'none',
-        'is3D': true,
-        colors: ['#7986CB']
-    }
+	$scope.quizResults = [];
+	$scope.currentQuiz = null;
+	
+	$http.get('/los/lecture/' + pageData.currentLecture + '/results/my').
+	  success(function(data, status, headers, config) 
+	  {
+		  $scope.quizResults = data;	  
+	  }).
+	  error(function(data, status, headers, config) 
+	  {  
+	  });   
+	
+	$scope.$watchCollection('selectedQuiz', function()
+		    { 
+				for(var i in $scope.quizResults)
+					{
+						console.log($scope.selectedQuiz + " " + $scope.quizResults[i].quiz.quizId);
+					 	if($scope.quizResults[i].quiz.quizId == $scope.selectedQuiz)
+						 {
+					 		$scope.currentQuiz = $scope.quizResults[i];	 		
+					 		return;
+						 }
+					
+					}
+		    });
 });

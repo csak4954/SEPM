@@ -1,0 +1,46 @@
+<style>
+	.subheader
+	{
+		font-size:20px;
+	}
+</style>
+
+<div ng-controller="studentStatisticController">
+
+
+	<md-subheader class="md-primary subheader" >Select quiz</md-subheader>
+	<md-select placeholder="Quiz" ng-model="selectedQuiz" style="margin-left:15px; margin-top:0px; width:300px">
+		<md-option ng-repeat="result in quizResults" value="{{result.quiz.quizId}}">{{result.quiz.title}}</md-option>
+	</md-select>
+
+    	
+	<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in currentQuiz.quiz.questions">
+			<h3 class="md-headline" style="margin-left: 15px; margin-top: 10px;  z-index: 999; position: relative;">{{qIndex+1}}.) {{item.text}}</h3>
+			
+			<div style="margin-top: -10px; margin-left: 30px">
+			<md-list-item ng-repeat="it in item.answers">
+				<h4 class="md-headline" style="margin-left: 15px; margin-top: 0px; color:green; z-index: 999; position: relative;" ng-if="it.solution">{{it.text}}</h4>
+				<h4 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;" ng-if="!it.solution">{{it.text}}</h4>
+	        </md-list-item>
+			</div>
+			<md-radio-group>		
+	</md-list-item>
+    
+
+
+
+
+	<md-subheader class="md-primary subheader" style="margin-top:50px;">All quiz results</md-subheader>
+	<table style="width:50%; margin:15px;" >	
+	<tr style="border-bottom: 1px solid black;"">
+	    <th style="text-align:left">Quiz</th>
+	    <th style="text-align:left">Score</th> 
+    </tr>
+	
+	<tr  ng-repeat="result in quizResults">
+		<td style="text-align:left">{{result.quiz.title}}</td>
+		<td style="text-align:left">{{result.score}}%</td>
+	</tr>
+	</table>
+
+</div>
