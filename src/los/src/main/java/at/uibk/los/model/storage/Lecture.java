@@ -98,9 +98,16 @@ class Lecture implements ILecture {
 	}
 	
 	@Override
-	public void addAttendance(String userId) {
+	public void addAttendance(String userId)
+	{
 		User user = User.Repo.findById(userId);		
-		Attendance.Repo.save(new Attendance(user, this));	
+		
+		Attendance attendance = Attendance.Repo.findByUserAndLecture(user, this);
+		if(attendance == null) {
+			attendance = new Attendance(user, this);
+		}
+		
+		Attendance.Repo.save(attendance);	
 	}
 
 	@Override

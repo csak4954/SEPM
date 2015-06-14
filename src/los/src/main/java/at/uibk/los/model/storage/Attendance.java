@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import at.uibk.los.model.interfaces.IAttendance;
+import at.uibk.los.model.interfaces.IDay;
 
 class Attendance implements IAttendance {
 
@@ -19,13 +20,13 @@ class Attendance implements IAttendance {
 	@DBRef
 	private Lecture lecture;
 	
-	private Date time;
+	private Day day;
 	
 	public Attendance(User user, Lecture lecture) {
 		this.id = ObjectId.get();
 		this.user = user;
-		this.lecture = lecture;
-		this.time = new Date();
+		this.lecture = lecture;		
+		this.day = new Day(new Date());
 	}
 	
 	public Lecture getLecture() {
@@ -55,7 +56,7 @@ class Attendance implements IAttendance {
 	static AttendanceRepository Repo;
 
 	@Override
-	public Date getTime() {
-		return time;
+	public IDay getDay() {
+		return day;
 	}
 }

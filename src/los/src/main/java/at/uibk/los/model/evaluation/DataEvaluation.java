@@ -1,5 +1,6 @@
 package at.uibk.los.model.evaluation;
 
+import java.util.Date;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -48,6 +49,7 @@ public class DataEvaluation implements IDataEvaluation {
 		List<IAttendance> attendances = lecture.getAttendance();
 		
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
 		
 		int currYear = calendar.get(Calendar.YEAR);
 		int currDay = calendar.get(Calendar.DAY_OF_YEAR);
@@ -58,7 +60,7 @@ public class DataEvaluation implements IDataEvaluation {
 			
 			if(attendance.getUser().getId().equals(userId))
 			{
-				calendar.setTime(attendance.getTime());
+				calendar.setTime(attendance.getDay().getDate());
 			
 				int year = calendar.get(Calendar.YEAR);
 				int day = calendar.get(Calendar.DAY_OF_YEAR);

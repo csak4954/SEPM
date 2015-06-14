@@ -1,4 +1,4 @@
-package at.uibk.los.model.evaluation;
+package at.uibk.los.model.storage;
 
 import java.util.Calendar;
 import java.util.Date;
