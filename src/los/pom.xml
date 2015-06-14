@@ -32,7 +32,17 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-				
+		<!-- for deployment 1 of 2 -->
+		<dependency>
+      		<groupId>org.springframework.cloud</groupId>
+      		<artifactId>spring-cloud-spring-service-connector</artifactId>
+    		<version>1.1.0.RELEASE</version>
+    	</dependency>
+    	<dependency>
+			<groupId>org.springframework.cloud</groupId>
+    		<artifactId>spring-cloud-cloudfoundry-connector</artifactId>
+    		<version>1.1.0.RELEASE</version>
+  		</dependency>
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -154,6 +164,34 @@
 	</dependencies>
     <build>
         <plugins>
+
+      <plugin>
+          <groupId>org.cloudfoundry</groupId>
+          <artifactId>cf-maven-plugin</artifactId>
+          <version>1.1.2</version>
+          <configuration>
+              <target>http://api.run.pivotal.io</target>
+              <org>SEPM</org>
+              <space>development</space>
+              <appname>los</appname>
+              <url>los.cfapps.io</url>
+              <memory>512</memory>
+              <instances>2</instances>
+              <env>
+                  <ENV-VAR-NAME>env-var-value</ENV-VAR-NAME>
+              </env>
+              <services>
+                  <service>
+                      <name>my-rabbitmq</name>
+                      <label>rabbitmq</label>
+                      <provider>rabbitmq</provider>
+                      <version>n/a</version>
+                      <plan>small_plan</plan>
+                  </service>
+              </services>
+          </configuration>
+      </plugin>
+
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.9</version>
@@ -219,4 +257,12 @@
          <url>http://nexus.qmino.com/content/repositories/miredot</url>
       </pluginRepository>
    </pluginRepositories>
+   <!-- for deployment 2 of 2 -->
+	<repositories>
+    	<repository>
+			<id>repository.springsource.milestone</id>
+			<name>SpringSource Milestone Repository</name>
+			<url>http://repo.springsource.org/milestone</url>
+		</repository>
+	</repositories>
 </project>
