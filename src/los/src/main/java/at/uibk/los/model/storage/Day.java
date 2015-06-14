@@ -3,13 +3,39 @@ package at.uibk.los.model.storage;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
+
 import at.uibk.los.model.interfaces.IDay;
 
 class Day implements IDay {
 
 	int dayOfYear;
 	int year;
+	
+	@Transient
 	Date date;
+	
+	@PersistenceConstructor
+	public Day(int dayOfYear, int year) {
+
+		this.dayOfYear = dayOfYear;
+		this.year = year;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.DAY_OF_YEAR, dayOfYear);
+		
+		this.date = cal.getTime();
+	}
+	
+	public Day() {
+		Date when = new Date();
+		Calendar.getInstance().setTime(when);
+		dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+		year = Calendar.getInstance().get(Calendar.YEAR);
+		date = when;
+	}
 	
 	public Day(Date when) {
 		Calendar.getInstance().setTime(when);

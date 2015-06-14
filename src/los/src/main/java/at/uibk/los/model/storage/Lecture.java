@@ -102,7 +102,7 @@ class Lecture implements ILecture {
 	{
 		User user = User.Repo.findById(userId);		
 		
-		Attendance attendance = Attendance.Repo.findByUserAndLecture(user, this);
+		Attendance attendance = Attendance.Repo.findByUserAndLectureAndDay(user, this, new Day());
 		if(attendance == null) {
 			attendance = new Attendance(user, this);
 		}
@@ -113,9 +113,8 @@ class Lecture implements ILecture {
 	@Override
 	public boolean removeAttendance(String userId) {
 		User user = User.Repo.findById(userId);
-		Attendance attendee = Attendance.Repo.findByUserAndLecture(user, this);
-		Attendance.Repo.delete(attendee);
-		
+		List<Attendance> attendee = Attendance.Repo.findByUserAndLecture(user, this);
+
 		if(attendee != null) { 
 			Attendance.Repo.delete(attendee);
 		}
