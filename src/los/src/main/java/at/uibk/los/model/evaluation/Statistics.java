@@ -34,7 +34,7 @@ class Statistics implements IStatistics {
 		
 		for(IAttendance att : attendances) {
 					
-			Day day = new Day(att.getTime());
+			IDay day = att.getDay();
 			
 			Double val = attendancesPerDay.get(day);
 			

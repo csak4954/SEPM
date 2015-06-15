@@ -9,5 +9,6 @@ interface AttendanceRepository extends MongoRepository<Attendance, String> {
     public List<Attendance> findAll();
     public List<Attendance> findByLecture(Lecture lecture);
     public List<Attendance> findByUser(User user);
-    public Attendance findByUserAndLecture(User user, Lecture lecture);
+    public List<Attendance> findByUserAndLecture(User user, Lecture lecture);
+    public Attendance findByUserAndLectureAndDay(User user, Lecture lecture, Day day);
 }

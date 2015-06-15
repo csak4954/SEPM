@@ -98,17 +98,23 @@ class Lecture implements ILecture {
 	}
 	
 	@Override
-	public void addAttendance(String userId) {
+	public void addAttendance(String userId)
+	{
 		User user = User.Repo.findById(userId);		
-		Attendance.Repo.save(new Attendance(user, this));	
+		
+		Attendance attendance = Attendance.Repo.findByUserAndLectureAndDay(user, this, new Day());
+		if(attendance == null) {
+			attendance = new Attendance(user, this);
+		}
+		
+		Attendance.Repo.save(attendance);	
 	}
 
 	@Override
 	public boolean removeAttendance(String userId) {
 		User user = User.Repo.findById(userId);
-		Attendance attendee = Attendance.Repo.findByUserAndLecture(user, this);
-		Attendance.Repo.delete(attendee);
-		
+		List<Attendance> attendee = Attendance.Repo.findByUserAndLecture(user, this);
+
 		if(attendee != null) { 
 			Attendance.Repo.delete(attendee);
 		}
