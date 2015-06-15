@@ -11,14 +11,28 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 
 
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	
     <meta charset="utf-8">
 
     <title>{{pageData.title()}}</title>
+    
+    <style>
+		
+		html, body {
+		
+		width: 100%;
+		margin: 0px;
+		padding: 0px;
+		}
+		
+	</style>
+    
 </head>
 
-<body style=" overflow: hidden">
-<div style="width: 100%; height: 100%;">
+<body>
+<div>
     <div class="page {{ pageClass }} viewContainer" ng-view></div>
 </div>
 

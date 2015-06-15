@@ -485,18 +485,31 @@ app.controller('professorStatisticController', function($scope, LxDialogService,
     
     
     $scope.attendanceChart.type = "ColumnChart";
+    $scope.quizChart.vAxis =  {
+            viewWindow: {
+                min: 0
+            }
+        };
     $scope.attendanceChart.options = {
         'title': '',
         'legend':  'none',
         'is3D': true,
-    }
+        'vAxis': { viewWindow: { min: 0} }
+    };
     
 
-    $scope.quizChart.type = "ColumnChart";
+    $scope.quizChart.type = "ColumnChart";   
     $scope.quizChart.options = {
         'title': '',
         'legend':  'none',
         'is3D': true,
+        'vAxis': {
+	        viewWindow: {
+	            min: 0,
+	            max: 100
+	        },
+	        ticks: [0, 25, 50, 75, 100] // display labels every 25
+	    }
     }
     
 	
@@ -514,35 +527,15 @@ app.controller('professorStatisticController', function($scope, LxDialogService,
 			                                             {v: value.value}
 			                                         ]});
 		  }
-		  if(true)
-		  {
-			  for(var i = 0; i < 10; i++)
-			  {
-				  $scope.attendanceChart.data.rows.push({c: [
-				                                             {v: "12.01.2013"},
-				                                             {v: i}
-				                                         ]});
-			  }
-		  }
 		  
 		  
 		  for(var i in $scope.statistic.quizAverageScore)
 		  {
 			  var value = $scope.statistic.quizAverageScore[i];
 			  $scope.quizChart.data.rows.push({c: [
-			                                             {v: value.key},
+			                                             {v: value.key.title},
 			                                             {v: value.value}
 			                                         ]});
-		  }
-		  if(true)
-		  {
-			  for(var i = 0; i < 20; i++)
-			  {
-				  $scope.quizChart.data.rows.push({c: [
-		                                             {v: "Quiz" + i},
-		                                             {v: (i%5)*20}
-		                                         ]});
-			  }
 		  }
 		  
 	  }).
