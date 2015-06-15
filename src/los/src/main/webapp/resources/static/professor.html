@@ -60,17 +60,19 @@
 
             <div class="toolbar__right" ng-hide="pageData.hideToolbarRight()">
 
-                <div flex-item>
-                    <lx-select ng-click="onSelectLecture()" ng-model="selected.data" placeholder="Lecture" choices="lectures" style="width: 250px; margin-top: 0px; margin-left: -260px; color:white">
-                        <lx-select-selected>
-                            {{ $selected.title }}
-                        </lx-select-selected>
-
-                        <lx-select-choices>
-                            {{ $choice.title }}
-                        </lx-select-choices>
-                    </lx-select>
-                </div>
+    			<md-autocomplete style="z-index:99; width: 250px; top:0px; background:rgba(250,250,250,0)"
+			          md-selected-item="selected.data"
+			          md-items="item in lectures"
+			          md-item-text="item.title"
+			          md-min-length="0"
+			          md-search-text-change="searchTextChange(searchText)"
+         			  md-search-text="searchText"
+         			  md-selected-item-change="selectedItemChange(item)"
+			          placeholder="Select lecture">
+			        <md-item-template>
+			          <span md-highlight-text="searchText" md-highlight-flags="^i" style="background:rgba(250,250,250,0)">{{item.title}}</span>
+			        </md-item-template>
+			      </md-autocomplete>
 
 
 
