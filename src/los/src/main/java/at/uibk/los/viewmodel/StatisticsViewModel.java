@@ -3,9 +3,7 @@ package at.uibk.los.viewmodel;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import at.uibk.los.model.interfaces.IDay;

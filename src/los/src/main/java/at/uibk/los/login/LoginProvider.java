@@ -30,6 +30,10 @@ public class LoginProvider implements ILoginProvider {
 		users.save(user);
 	}
 	
+	public boolean existsUser(String id) {
+		return users.findById(id) != null;
+	}
+	
 	@Override
 	public IUser getUser() {
 		return user;

@@ -31,11 +31,19 @@
 	    http://www.springframework.org/schema/data/mongo
 	    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 	
-	<mongo:mongo host="localhost" port="27017"/>
+	<mongo:mongo host="localhost" port="53310"/>
+	<!--  <mongo:mongo host="ds053310-a.mongolab.com" port="53310"/> -->
+ 
+     <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+        <constructor-arg value="los" />
+        <constructor-arg value="los" />
+    </bean>
  
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="mongo" />
-	   	<constructor-arg value="los"/>
+		<constructor-arg value="los"/>
+	   	<!-- <constructor-arg value="CloudFoundry_u9rvp37k_6h9u0039"/>  -->
+	   	<constructor-arg ref="mongoCredentials" />
 	</bean>
 
 	<mongo:repositories base-package="at.uibk.los.model.storage, at.uibk.los.login" />

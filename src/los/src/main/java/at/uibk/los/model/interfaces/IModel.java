@@ -14,7 +14,7 @@ public interface IModel
 	IServiceProvider getServiceProvider();
 	
 	// user-specific	
-	IUser getUser() throws LOSAccessDeniedException;
+	IUser getUser();
 	
 	boolean isUserVerified(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException;
 	
