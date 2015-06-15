@@ -21,7 +21,7 @@
     <style>
 		
 		html, body {
-		
+		overflow-y: scroll; 
 		width: 100%;
 		margin: 0px;
 		padding: 0px;
@@ -30,12 +30,9 @@
 	</style>
     
 </head>
-
 <body>
-<div>
-    <div class="page {{ pageClass }} viewContainer" ng-view></div>
-</div>
 
+<div class="page {{ pageClass }} viewContainer" ng-view></div>
 
 
 <!-- Angular Material Dependencies -->

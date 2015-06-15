@@ -62,6 +62,14 @@ app.controller('mainController', function($scope, pageData, $location) {
     $scope.changeView = function(view){
         $location.path(view); // path not hash
     }
+    
+    pageData.toggleDropdown = function()
+	{
+    	console.log("toggle");
+    	$mdSidenav('right').open()
+        .then(function () {
+        });
+	}
 });
 
 

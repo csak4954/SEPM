@@ -2,7 +2,7 @@
  * Created by Mathias Hölzl on 21.04.2015.
  */
 // contact page controller
-app.controller('professorController', function($scope, pageData, $http, LxNotificationService)
+app.controller('professorController', function($scope, pageData, $http, LxNotificationService, $mdSidenav)
 {
     $scope.pageClass = 'professor';
     $scope.showContent = true;
@@ -19,6 +19,14 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     
     $scope.lectures = [];
     $scope.selected = { data:""}
+    
+    $scope.toggleDropdown = function()
+	{
+    	console.log("toggle");
+    	$mdSidenav('right').open()
+        .then(function () {
+        });
+	}
     
 	$scope.openLecturForm = function()
 	{
@@ -431,9 +439,6 @@ app.controller('professorFeedbackController', function($scope, LxDialogService, 
 
     $scope.getEmptyArray = function(size)
     {
-    	if(size < 0)
-    		size = size*-1;
-    	
         return new Array(size);
     }
     
@@ -445,8 +450,14 @@ app.controller('professorFeedbackController', function($scope, LxDialogService, 
         	$http.get('/los/lecture/' + pageData.currentLecture + '/feedback').
     	  	  success(function(data, status, headers, config) 
     	  	  {
-    	  		$scope.feedback = data;
-    	  		console.log(data);
+    	  		$scope.feedback = [];
+    	  		  for(var i in data)
+	  			  {
+    	  			  if(data[i].rating > 5)
+    	  				data[i].rating = 5;
+    	  			  
+    	  			  $scope.feedback.push(data[i]);
+	  			  }
     	  	  }).
     	  	  error(function(data, status, headers, config) 
     	  	  {  
