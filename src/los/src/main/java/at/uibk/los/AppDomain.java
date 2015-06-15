@@ -19,7 +19,7 @@ public class AppDomain extends Model
 	}
 	
 	private static AppDomain instance = null;
-	public static AppDomain get()
+	public static synchronized AppDomain get()
 	{
 		if(instance == null) 
 		{	

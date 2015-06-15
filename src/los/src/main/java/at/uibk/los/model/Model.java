@@ -3,9 +3,9 @@ package at.uibk.los.model;
 import java.util.List;
 
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
-import at.uibk.los.model.authorization.permissions.AdminPermission;
 import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
 import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
+import at.uibk.los.model.authorization.permissions.LectureAdminPermission;
 import at.uibk.los.model.authorization.permissions.ModifyAdminCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ModifyLectureCollectionPermission;
 import at.uibk.los.model.authorization.permissions.ModifyQuizCollectionPermission;
@@ -139,7 +139,7 @@ public class Model implements IModel
 	}
 
 	@Override
-	public IUser getUser() throws LOSAccessDeniedException {
+	public IUser getUser() {
 		
 		if(provider.getLoginProvider().isNew()) {
 			provider.getStorage().saveUser(provider.getLoginProvider().getUser());
@@ -237,7 +237,7 @@ public class Model implements IModel
 
 	private void checkIsAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException{
 		if(!isUserAdmin(lectureId)) {
-			throw new LOSAccessDeniedException(AdminPermission.instance);
+			throw new LOSAccessDeniedException(LectureAdminPermission.instance);
 		}
 	}
 	

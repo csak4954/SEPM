@@ -23,6 +23,19 @@ public class PolicyManager implements IPolicyManager {
 		
 		groups = new HashMap<Integer, IGroupPolicy>();
 		
+		
+		IGroupPolicy admin = new StaffGroupPolicy();
+		admin.grantPermission(ModifyLectureCollectionPermission.instance);
+		admin.grantPermission(ModifyQuizCollectionPermission.instance);
+		admin.grantPermission(ModifyAdminCollectionPermission.instance);
+		admin.grantPermission(ControlQuizPermission.instance);
+		admin.grantPermission(AttendanceVerificationPermission.instance);
+		admin.grantPermission(ViewFeedbackPermission.instance);
+		admin.grantPermission(ViewStatisticsPermission.instance);
+		admin.grantPermission(ViewUserScoresPermission.instance);
+		
+		groups.put(admin.getId(), admin);
+		
 		IGroupPolicy staff = new StaffGroupPolicy();
 		staff.grantPermission(ModifyLectureCollectionPermission.instance);
 		staff.grantPermission(ModifyQuizCollectionPermission.instance);

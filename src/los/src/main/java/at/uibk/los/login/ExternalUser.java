@@ -2,6 +2,7 @@ package at.uibk.los.login;
 
 import org.springframework.data.annotation.Id;
 
+import at.uibk.los.model.authorization.AdminGroupPolicy;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
 import at.uibk.los.model.interfaces.IUser;
@@ -17,8 +18,9 @@ public class ExternalUser implements IUser {
 	private String affilation;
 	private String password;
 	
-	public final String studentAffiliation = "student";
-	public final String staffAffiliation = "staff";
+	public static final String studentAffiliation = "student";
+	public static final String staffAffiliation = "staff";
+	public static final String adminAffiliation = "admin";
 	
 	public ExternalUser() {
 
@@ -41,6 +43,9 @@ public class ExternalUser implements IUser {
 		}
 		else if(getAffilation().equals(staffAffiliation)) {
 			return StaffGroupPolicy.id;
+		}
+		else if(getAffilation().equals(adminAffiliation)) {
+			return AdminGroupPolicy.id;
 		}
 		else {
 			return -1;
