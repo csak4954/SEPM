@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import at.uibk.los.AppDomain;
 import at.uibk.los.login.ExternalUser;
 import at.uibk.los.login.LoginProvider;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.interfaces.IUser;
 import at.uibk.los.viewmodel.LoginViewModel;
 import at.uibk.los.viewmodel.RegisterViewModel;
@@ -121,7 +122,7 @@ public class AuthenticationController{
 			return StatusViewModel.onSuccess(response, new UserViewModel(provider.getUser()));
 		}
 		
-		return StatusViewModel.onSuccessNoContent(response);
+		return StatusViewModel.onLoginFailed(response);
 	}
 	
 	@RequestMapping(value = "/authentication/logout", method = RequestMethod.POST)

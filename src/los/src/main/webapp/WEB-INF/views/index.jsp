@@ -58,7 +58,6 @@
 <script src="<c:url value="resources/js/loginController.js" />"></script>
 <script src="<c:url value="resources/js/studentController.js" />"></script>
 <script src="<c:url value="resources/js/professorController.js" />"></script>
-
 </body>
 </html>
 

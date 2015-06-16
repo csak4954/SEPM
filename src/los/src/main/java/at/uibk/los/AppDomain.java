@@ -34,6 +34,9 @@ public class AppDomain extends Model
 			
 			loginProvider.addUser(new ExternalUser("Christian", "Sillaber", "12345", "secret", "christian.sillaber@uibk.ac.at", "staff"));
 			loginProvider.addUser(new ExternalUser("Philipp", "Kalb", "23456", "secret", "philipp.kalb@uibk.ac.at", "staff"));
+			
+			loginProvider.addUser(new ExternalUser("Admin", "Admin", "admin", "admin", "admin@uibk.ac.at", "admin"));
+			
 		}
 		
 		return instance;

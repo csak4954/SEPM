@@ -1,3 +1,31 @@
+<style>
+
+.animate-enter, 
+.animate-leave
+{ 
+    -webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+} 
+ 
+.animate-enter {
+    left: 100%;
+}
+.animate-enter.animate-enter-active {
+    left: 0;
+}
+ 
+.animate-leave {
+    left: 0;
+}
+.animate-leave.animate-leave-active{
+    left: -100%;
+}
+
+</style>
+
 
 <div class="card bgc-indigo-500 md-whiteframe-z2">
     <div class="toolbar">
@@ -16,7 +44,7 @@
 
 <div layout="row" layout-align="center center" layout-fill>
 	
-	<md-whiteframe class="md-whiteframe-z4" layout layout-align="center center" style="width: 350px; height: 400px; margin-top:-15%;">
+	<md-whiteframe ng-animate=" 'animate' " ng-hide="showRegistration" class="md-whiteframe-z4" layout layout-align="center center" style="position:absolut; padding:20px; padding-left:50px; padding-right:50px; margin-top:-10%;">
             <div layout="column">
 
                 <div>
@@ -31,14 +59,100 @@
 
                 <div style="margin-top:10px">
                     <lx-text-field label="Password">
-                        <input type="password" ng-model="password">
+                        <input type="password" ng-model="password" ng-keyup="onkey($event)">
                     </lx-text-field>
                 </div>
 
                 <div  layout="column"  style="margin-top:40px">
                     <md-button class="md-raised md-primary" ng-click="onConnect(username, password)">Connect</md-button>
+                    <md-button class="md-raised md-primary" ng-click="showRegistration = true" style="margin-top:10px">Register</md-button>
                 </div>
             </div>
         </md-whiteframe>
+        
+        <md-whiteframe ng-animate=" 'animate' "  ng-hide="!showRegistration" class="md-whiteframe-z4" layout layout-align="center center" style="position:absolut; padding:20px; padding-left:50px; padding-right:50px; margin-top:-5%;">
+            <div layout="column">
+                <div>
+                    <span style="font-size:26px">Register lecturer</span>
+                </div>
+
+				<div layout="row" style="margin-top:-10px">
+		            <div>
+	                    <lx-text-field label="Name">
+	                        <input type="text" ng-model="name">
+	                    </lx-text-field>
+	                </div>
+	                
+	                <div>
+	                    <lx-text-field label="Surename"  style="margin-left:10px">
+	                        <input type="text" ng-model="surename">
+	                    </lx-text-field>
+	                </div>			
+				</div>
+	
+                
+                <div style="width: 50%; margin-top:-10px">
+                    <lx-text-field label="Username">
+                        <input type="text" ng-model="username">
+                    </lx-text-field>
+                </div>
+                
+                
+                <div style="margin-top:-10px">
+                    <lx-text-field label="Email">
+                        <input type="text" ng-model="email">
+                    </lx-text-field>
+                </div>
+
+
+				<div layout="row" style="margin-top:-10px">
+                <div>
+                    <lx-text-field label="Password">
+                        <input type="password" ng-model="password">
+                    </lx-text-field>
+                </div>
+                <div>
+                    <lx-text-field label="Retype password"  style="margin-left:10px">
+                        <input type="password" ng-model="password2">
+                    </lx-text-field>
+                </div>
+                </div>
+                
+                
+                <md-checkbox style="margin-left:-2px" class="md-primary" ng-model="asProfesssor" label="Professor">As Professor
+        		</md-checkbox>
+
+                <div  layout="column"  style="margin-top:25px">
+                    <md-button class="md-raised md-primary" ng-click="onRegister(name, surename, email, username, password, password2)">Submit</md-button>
+                </div>
+            </div>
+        </md-whiteframe>
+        
+        
+        <lx-dialog class="dialog dialog--l" id="adminDialog">
+
+        <div class="dialog__header">
+            <div class="toolbar bgc-indigo-500 pl++">
+                <span class="toolbar__label tc-white fs-title">Login as Admin</span>
+            </div>
+        </div>
+
+        <div style="margin-top:10px">
+            <lx-text-field label="Username">
+                <input type="text" ng-model="usernameAdmin">
+            </lx-text-field>
+        </div>
+
+        <div style="margin-top:10px">
+            <lx-text-field label="Password">
+                <input type="password" ng-model="passwordAdmin" ng-keyup="onkeyAdmin($event)">
+            </lx-text-field>
+        </div>  
+
+        <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close ng-click="cancleAdminLogin()">Cancel</button>
+        	<button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginAdmin(usernameAdmin, passwordAdmin)">Login</button>
+        </div>
+    </lx-dialog>
 </div>
 </div>
