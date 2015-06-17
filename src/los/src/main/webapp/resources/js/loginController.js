@@ -39,7 +39,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
   		  
   		  if(data.affiliation == "admin")
   		  {
-  			$http.put('/los/authentication/register/professor', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: ""+CryptoJS.SHA512(password) }).
+  			$http.put('/los/authentication/register/professor', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: ""+CryptoJS.SHA512($scope.password) }).
 	      	  success(function(data, status, headers, config) 
 	      	  {
 	      		  if(data == null)
@@ -47,16 +47,20 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 	      			  LxNotificationService.error('Login failed');
 	      			  $scope.password = "";
 	      			  $scope.password2 = "";
+	      			  $scope.passwordAdmin = "";
 	      		  }
 	      		  
 	      		  LxNotificationService.success('Registration successfully');
 	      		  LxDialogService.close('adminDialog');
 	      		  $scope.showRegistration = false;
 	      		  $scope.password = "";
+	      		  $scope.password2 = "";
+	      		  $scope.passwordAdmin = "";
 	      	  }).
 	      	  error(function(data, status, headers, config) 
 	            {
-	  			  LxNotificationService.error('Login failed');
+	  			  LxNotificationService.error('Login failed:' + data);
+	  			  $scope.passwordAdmin = "";
 	  			  $scope.password = "";
 	  			  $scope.password2 = "";
 	  		  });		
@@ -64,9 +68,10 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
   	  }).
   	  error(function(data, status, headers, config) 
         {
-  		  console.log("asdasd");
-			  LxNotificationService.error('Login failed');
-			  $scope.passwordAdmin = "";
+			  LxNotificationService.error('Login failed:' + data);
+  			  $scope.password = "";
+  			  $scope.password2 = "";
+  			  $scope.passwordAdmin = "";
 		  });
     }
     

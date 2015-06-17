@@ -27,15 +27,8 @@ public class AppDomain extends Model
 			
 			// add users 
 			LoginProvider loginProvider = instance.getServiceProvider().getLoginProvider();
-			
-			loginProvider.addUser(new ExternalUser("Florian", "Tischler", "csaq5126", "secret", "csaq5126@uibk.ac.at", "student"));
-			loginProvider.addUser(new ExternalUser("Mathias", "Hoelzl", "csaq5244", "secret", "csaq5244@uibk.ac.at", "student"));
-			//loginProvider.addUser(new ExternalUser("Felix", "Putz", "345678", "234567", "example@test.com", "student"));
-			
-			loginProvider.addUser(new ExternalUser("Christian", "Sillaber", "12345", "secret", "christian.sillaber@uibk.ac.at", "staff"));
-			loginProvider.addUser(new ExternalUser("Philipp", "Kalb", "23456", "secret", "philipp.kalb@uibk.ac.at", "staff"));
-			
-			loginProvider.addUser(new ExternalUser("Admin", "Admin", "admin", "admin", "admin@uibk.ac.at", "admin"));
+
+			loginProvider.addUser(new ExternalUser("Admin", "Admin", "admin", "c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec", "admin@uibk.ac.at", "admin"));
 			
 		}
 		

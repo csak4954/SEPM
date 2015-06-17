@@ -59,7 +59,7 @@
             <div class="toolbar__right" ng-hide="pageData.hideToolbarRight()">
 
 
-     			<md-autocomplete style="z-index:99; width: 250px; top:0px; background:rgba(250,250,250,0); color:white"
+     			<md-autocomplete style="z-index:99; width: 250px; top:0px; background:rgba(250,250,250,0); color:white; margin-right: 15px"
 			          md-selected-item="selected.data"
 			          md-items="item in lectures"
 			          md-item-text="item.title"
@@ -73,15 +73,9 @@
 			        </md-item-template>
 			      </md-autocomplete>
 
-                <lx-dropdown position="right" from-top="true">
-                    <button class="btn btn--m btn--black btn--icon" lx-ripple lx-dropdown-toggle>
-                        <i class="mdi mdi-apps"></i>
-                    </button>
-
 			      <md-button class="md-icon-button" aria-label="Settings" ng-click="logout()" style="color:white">
 			        Logout
 			      </md-button>
-                </lx-dropdown>
             </div>
         </div>
     </div>
@@ -114,6 +108,13 @@
     </lx-tabs>
     
        <div ng-hide="pageData.validLecture">
-           Select lecture
+       <md-subheader class="md-primary subheader" ng-if="hasRegLec()">Registered lectures:</md-subheader>
+       <md-subheader class="md-primary subheader" ng-if="!hasRegLec()">Registered lectures: not registered for any lecture</md-subheader>
+       
+       <md-list-item class="md-3-line" ng-repeat="item in lecturesRegistered">
+	      <md-button class="md-icon-button" aria-label="Settings" ng-click="selectLecture(item.id)" style="color:white">
+	        {{item.title}} : {{item.description}}
+	      </md-button>
+       </md-list-item>
        </div>
 </div>

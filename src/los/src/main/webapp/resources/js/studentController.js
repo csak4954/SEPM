@@ -15,8 +15,22 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
     pageData.validLecture = false;
     
     $scope.lectures = [];
+    $scope.lecturesRegistered = null;
     $scope.selected = { data:""}
 
+    
+    $scope.selectLecture = function(id)
+    {
+    	selected.data = id;
+    }
+    
+    $scope.hasRegLec = function()
+    {
+    	if($scope.lecturesRegistered == null || $scope.lecturesRegistered.length == 0)
+    		return false;
+    	
+    	return true;
+    }
     
     
 	$scope.quizPoller = function()
@@ -72,6 +86,20 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
 	  }).
 	  error(function(data, status, headers, config) 
 	  {  
+		  if(status == 401)
+			  $scope.changeView("login");
+	  });
+    
+    $http.get('/los/lecture/my').
+	  success(function(data, status, headers, config) 
+	  {
+		  $scope.lecturesRegistered = data;
+	  }).
+	  error(function(data, status, headers, config) 
+	  {  
+		  $scope.lecturesRegistered = null;
+		  
+		  
 		  if(status == 401)
 			  $scope.changeView("login");
 	  });
