@@ -2,7 +2,7 @@
  * Created by Mathias Hölzl on 21.04.2015.
  */
 // contact page controller
-app.controller('professorController', function($scope, pageData, $http, LxNotificationService, $mdSidenav)
+app.controller('professorController', function($scope, pageData, $http, LxNotificationService,LxDialogService, $mdSidenav)
 {
     $scope.pageClass = 'professor';
     $scope.showContent = true;
@@ -20,17 +20,10 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     $scope.lectures = [];
     $scope.selected = { data:""}
     
-    $scope.toggleDropdown = function()
-	{
-    	console.log("toggle");
-    	$mdSidenav('right').open()
-        .then(function () {
-        });
-	}
     
 	$scope.openLecturForm = function()
 	{
-		pageData.showLectureForm = true;
+        LxDialogService.open('addLectureDialog');
 	}
 	
 
@@ -56,10 +49,25 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     
     $scope.addLecture = function(title, desc)
     {
+    	if(title == "")
+		{
+    		LxNotificationService.error('Title cannot be empty');
+    		return;
+		}
+    	
+    	if(desc == "")
+		{
+    		LxNotificationService.error('Description cannot be empty');
+    		return;
+		}
+    	
+    	
     	$http.put('/los/lecture?title=' + title + "&description=" + desc).
 	  	  success(function(data, status, headers, config) 
 	  	  {
 	  		LxNotificationService.success('Lecture added');
+	  		LxDialogService.close('addLectureDialog');
+	  		
 	  	  }).
 	  	  error(function(data, status, headers, config) 
 	  	  {  
@@ -69,8 +77,6 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
 	  			 return;
 			}
 	  			 
-	  			 
-	  		  
 	  		  LxNotificationService.error('Add lecture failed');
 	  	  });
     }

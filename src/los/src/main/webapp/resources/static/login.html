@@ -73,7 +73,7 @@
         <md-whiteframe ng-animate=" 'animate' "  ng-hide="!showRegistration" class="md-whiteframe-z4" layout layout-align="center center" style="position:absolut; padding:20px; padding-left:50px; padding-right:50px; margin-top:-5%;">
             <div layout="column">
                 <div>
-                    <span style="font-size:26px">Register lecturer</span>
+                    <span style="font-size:26px">Register</span>
                 </div>
 
 				<div layout="row" style="margin-top:-10px">
@@ -124,6 +124,7 @@
 
                 <div  layout="column"  style="margin-top:25px">
                     <md-button class="md-raised md-primary" ng-click="onRegister(name, surename, email, username, password, password2)">Submit</md-button>
+                    <md-button class="md-raised md-primary" ng-click="showRegistration = false" style="margin-top:10px">Login</md-button>
                 </div>
             </div>
         </md-whiteframe>

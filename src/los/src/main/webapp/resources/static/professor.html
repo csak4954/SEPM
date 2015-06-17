@@ -1,53 +1,5 @@
 <style>
-    .lx-select__selected--placeholder
-    {
-        color: white;
-        opacity: 0.25;
-    }
 
-    .lx-select__choices
-    {
-        margin-top: 8px;
-    }
-
-    .lx-select:before
-    {
-        border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .dropdown-menu
-    {
-        background-color: #3F51B5;
-    }
-
-    .dropdown-link
-    {
-        color: rgba(255, 255, 255, 0.87);
-    }
-
-    .search-filter__label .mdi
-    {
-        color: white;
-    }
-
-    .lx-select__floating-label
-    {
-        color: rgba(255, 255, 255, 0.26);
-    }
-
-    .search-filter--light-theme .search-filter__cancel, .search-filter--light-theme .search-filter__input, .search-filter--light-theme .search-filter__label
-    {
-        color: rgba(255, 255, 255, 0.87);
-    }
-
-    .lx-select__help
-    {
-        color: rgba(255,255,255,.26);
-    }
-
-	.dropdown-link
-    {
-        color: rgba(0,0,0,1);
-    }
     
 
 
@@ -56,22 +8,22 @@
 
 
 
+  
 
 
 <div style="width: 100%;" layout-fill>
-
-
     <div class="bgc-indigo-500" style="position: relative; z-index: 99">
         <div class="toolbar">
             <span class="toolbar__label fs-title tc-white-1 ml">{{pageData.header()}}</span>
 
             <div class="toolbar__right" ng-hide="pageData.hideToolbarRight()">
 
-    			<md-autocomplete style="z-index:99; width: 250px; top:0px; background:rgba(250,250,250,0); color:white"
+    			<md-autocomplete style="z-index:99; width: 250px; top:0px; background:rgba(250,250,250,0); color:white; margin-right:15px"
 			          md-selected-item="selected.data"
 			          md-items="item in lectures"
 			          md-item-text="item.title"
 			          md-min-length="0"
+			          md-no-cache="false"
 			          md-search-text-change="searchTextChange(searchText)"
          			  md-search-text="searchText"
          			  md-selected-item-change="selectedItemChange(item)"
@@ -81,31 +33,19 @@
 			        </md-item-template>
 			      </md-autocomplete>
 
+	          <md-button class="md-icon-button" aria-label="Settings" ng-click="openLecturForm()" style="color:white">
+		      	Add Lecture
+		      </md-button>
+		      
+		      <div style="background-color: black; width:2px; height:60%; z-index:99"></div>
 
-
-                <lx-dropdown position="right" from-top="true">
-                
-                   <md-button class="md-icon-button" aria-label="Settings">
-			        	<md-icon md-svg-icon="resources/img/menu.svg" ng-click="alert('asd')"></md-icon>
-			       </md-button>
-                
-                    <lx-dropdown-menu>
-                        <ul>
-                            <li><a class="dropdown-link" ng-click="logout()">Log-out</a></li>
-                            <li><a class="dropdown-link" ng-click="logout()">Switch user</a></li>
-                            <li><a class="dropdown-link" ng-click="openLecturForm()">Add Lecture</a></li>
-                        </ul>
-                    </lx-dropdown-menu>
-                </lx-dropdown>
+		      <md-button class="md-icon-button" aria-label="Settings" ng-click="logout()" style="color:white">
+		        Logout
+		      </md-button>
             </div>
         </div>
     </div>
     
-    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
-      <md-toolbar class="md-theme-light">
-        <h1 class="md-toolbar-tools">Sidenav Right</h1>
-      </md-toolbar>
-    </md-sidenav>
 
 
     <lx-tabs links-tc="light" links-bgc="indigo-500" indicator="indigo-300" no-divider="true" style="margin-top: -40px;" ng-hide="!pageData.validLecture">
@@ -140,38 +80,32 @@
 	</div>
 	
 	
-    <div ng-hide="!pageData.showLectureForm" style="position: absolute; width: 100%; margin-top:10px; z-index:99">
-	<div  style="position: absolute; left:50%;">
-    <div style="position: relative; left: -50%;" >
-        <md-whiteframe class="md-whiteframe-z4 center-div" layout layout-align="center center" style="width: 350px; height: 400px;  background-color: #DEDEDE">
-            <div layout="column">
-                <div>
-                    <span style="font-size:26px">Add Lecture</span>
-                </div>
+	<lx-dialog class="dialog dialog--l" id="addLectureDialog">
 
-                <div style="margin-top:10px">
-                    <lx-text-field label="Title">
-                        <input type="text" ng-model="title">
-                    </lx-text-field>
-                </div>
-
-                <div style="margin-top:10px">
-                    <lx-text-field label="Description">
-                        <input type="text" ng-model="desc">
-                    </lx-text-field>
-                </div>
-
-                <div  layout="column"  style="margin-top:40px">
-                    <md-button class="md-raised md-primary"  style="width: 200px" ng-click="addLecture(title, desc)">Add</md-button>
-                    <div style="margin-top:20px">
-                    	<md-button class="md-raised md-primary" ng-click="hideForm()" style="width: 200px">Cancle</md-button>
-                    </div>
-                </div>
+        <div class="dialog__header">
+            <div class="toolbar bgc-indigo-500 pl++">
+                <span class="toolbar__label tc-white fs-title">Add Lecture</span>
             </div>
-        </md-whiteframe>
-    </div> 
-    </div>
-	</div>
+        </div>
 	
+		<div layout="column" layout-align="center center">
 
+         <div style="margin-top:10px; width: 70%">
+             <lx-text-field label="Title">
+                 <input type="text" ng-model="title">
+             </lx-text-field>
+         </div>
+
+         <div style="margin-top:10px; width: 70%">
+             <lx-text-field label="Description">
+                 <input type="text" ng-model="desc">
+             </lx-text-field>
+         </div>
+         </div>
+
+        <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="addLecture(title, desc)">Add</button>
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+        </div>
+    </lx-dialog>
 </div>

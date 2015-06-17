@@ -28,7 +28,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 
     $scope.loginAdmin = function(usernameAdmin, passwordAdmin)
     {
-    	$http.post('/los/authentication/login', { username: usernameAdmin, password: passwordAdmin }).
+    	$http.post('/los/authentication/login', { username: usernameAdmin, password: ""+CryptoJS.SHA512(passwordAdmin) }).
   	  success(function(data, status, headers, config) 
   	  {
   		  if(data == null)
@@ -39,7 +39,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
   		  
   		  if(data.affiliation == "admin")
   		  {
-  			$http.put('/los/authentication/register/professor', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: $scope.password }).
+  			$http.put('/los/authentication/register/professor', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: ""+CryptoJS.SHA512(password) }).
 	      	  success(function(data, status, headers, config) 
 	      	  {
 	      		  if(data == null)
@@ -127,7 +127,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 		}
     	else
 		{
-        	$http.put('/los/authentication/register/student', { name: name, surename: surename, email: email, id: username, password: password }).
+        	$http.put('/los/authentication/register/student', { name: name, surename: surename, email: email, id: username, password: ""+CryptoJS.SHA512(password) }).
 	      	  success(function(data, status, headers, config) 
 	      	  {
 	      		  if(data == null)
@@ -187,7 +187,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
     		return;
 		}
     	
-    	$http.post('/los/authentication/login', { username: user, password: password }).
+    	$http.post('/los/authentication/login', { username: user, password: ""+CryptoJS.SHA512(password) }).
     	  success(function(data, status, headers, config) 
     	  {
     		  if(data == null)

@@ -58,6 +58,8 @@
 <script src="<c:url value="resources/js/loginController.js" />"></script>
 <script src="<c:url value="resources/js/studentController.js" />"></script>
 <script src="<c:url value="resources/js/professorController.js" />"></script>
+
+<script src="<c:url value="resources/js/sha512.js" />"></script>
 </body>
 </html>
 
