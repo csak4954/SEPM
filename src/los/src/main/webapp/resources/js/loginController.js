@@ -39,7 +39,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
   		  
   		  if(data.affiliation == "admin")
   		  {
-  			$http.put('/los/authentication/register/student', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: $scope.password }).
+  			$http.put('/los/authentication/register/professor', { name: $scope.name, surename: $scope.surename, email: $scope.email, id: $scope.username, password: $scope.password }).
 	      	  success(function(data, status, headers, config) 
 	      	  {
 	      		  if(data == null)
@@ -132,7 +132,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 	      	  {
 	      		  if(data == null)
 	      		  {
-	      			  LxNotificationService.error('Login failed');
+	      			  LxNotificationService.error('Registration failed');
 	      			  $scope.password = "";
 	      			  $scope.password2 = "";
 	      		  }
@@ -143,7 +143,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
 	      	  }).
 	      	  error(function(data, status, headers, config) 
 	            {
-	  			  LxNotificationService.error('Login failed');
+	  			  LxNotificationService.error('Registration failed: ' + data);
 	  			  $scope.password = "";
 	  			  $scope.password2 = "";
 	  		  });		
