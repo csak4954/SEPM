@@ -1,5 +1,8 @@
 package at.uibk.los.test;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +43,7 @@ public class ModelTest
 	private static IModel testAsStudent() throws Exception 
 	{	
 		final String username = "csaq5126";
-		final String password = "secret";	
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -50,7 +53,7 @@ public class ModelTest
 	private static IModel testAsAnotherStudent() throws Exception
 	{
 		final String username = "csaq5244";
-		final String password = "secret";	
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -60,7 +63,7 @@ public class ModelTest
 	private static IModel testAsStaff() throws Exception 
 	{		
 		final String username = "12345";
-		final String password = "secret";	
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -549,6 +552,20 @@ public class ModelTest
 		Assert.assertEquals(50, rate, 0.001);
 		
 		model.removeLecture(lecture.getId());
+	}
+	
+	public static String generateHash(String pwd) throws NoSuchAlgorithmException, UnsupportedEncodingException 
+	{
+	    MessageDigest md = null;
+	    byte[] hash = null;
+        md = MessageDigest.getInstance("SHA-512");
+        hash = md.digest(pwd.getBytes("UTF-8"));
+	     
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
 	}
 }
 
