@@ -18,33 +18,52 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
     $scope.lecturesRegistered = null;
     $scope.selected = { data:""}
     
+    $scope.getLectures = function()
+    {
+        $http.get('/los/lecture/all').
+  	  success(function(data, status, headers, config) 
+  	  {
+  		  $scope.lectures = data;
+  	  }).
+  	  error(function(data, status, headers, config) 
+  	  {  
+  		  if(status == 401)
+  			  $scope.changeView("login");
+  	  });
+        
+      return $scope.lectures;
+    }
     
+    $scope.getLectures();
     
     $scope.selectLecture = function(item)
     {
     	$scope.selected.data = item;
     }
     
-	$scope.quizPoller = function()
+    pageData.quizPoller = function()
 	{
-		$scope.quizTimer = $timeout($scope.quizPoller,1000);
+		pageData.quizTimer = $timeout(pageData.quizPoller,2000);
 		
-		if(pageData.activeQuiz || !pageData.currentLecture)
+		if(!pageData.currentLecture)
 			  return;
 		
 		$http.get('/los/quiz/active').
 		  success(function(data, status, headers, config) 
-		  {
-			  
+		  {  
 			  var found = false;
 			  for (var i in data)
 			  {
 				  if(data[i].lecture.id == pageData.currentLecture)
 				  {
-					  LxNotificationService.success('Quiz active');
-					  pageData.activeQuiz = data[i];
-					  pageData.hasQuiz = true;
-					  found = true;
+					  if(!pageData.hasQuiz)
+					  {
+						  LxNotificationService.info('Quiz active');
+						  pageData.activeQuiz = data[i];
+						  pageData.hasQuiz = true;
+						  found = true;
+					  }
+					  
 					  return;
 				  }
 			  }	  
@@ -53,7 +72,7 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
 			  {
 				  pageData.activeQuiz = null;
 				  pageData.hasQuiz = false;
-				  LxNotificationService.success('Quiz ended');
+				  LxNotificationService.info('Quiz ended');
 			  }	  
 			  
 		  }).
@@ -62,12 +81,12 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
 			  if(status == 401)
 			  {
 				  $scope.changeView("login");	  
-				  $timeout.cancel($scope.quizTimer);
+				  $timeout.cancel(pageData.quizTimer);
 			  }
 		  });
 	}
 	
-	$scope.quizPoller();
+    pageData.quizPoller();
     
     
     //debuonce mobile click
@@ -214,6 +233,8 @@ app.controller('studentGeneralController', function($scope, pageData, $http, LxN
 
 app.controller('studentQuizController', function($scope, pageData, $http, LxNotificationService, $timeout )
 {
+	$scope.quiz = pageData.activeQuiz;
+	
     //debuonce mobile click
     $scope.isValid = function(id)
     {

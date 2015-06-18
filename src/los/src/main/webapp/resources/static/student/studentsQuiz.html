@@ -24,8 +24,8 @@
     </div>
     <div ng-hide="!pageData.hasQuiz">
     
-    	<h1 class="md-title">{{quiz.title}}</h1>
-		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in quiz.questions">
+    	<h1 class="md-title">{{pageData.activeQuiz.title}}</h1>
+		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in pageData.activeQuiz.questions">
 
 			<md-radio-group class="md-primary" ng-model="answers[qIndex]">
 			<h3 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;">{{qIndex+1}}.) {{item.text}}</h3>
