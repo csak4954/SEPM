@@ -50,7 +50,7 @@ public class AppDomain extends Model
 				loginProvider.login("c.sillaber", generateHash("secret"));
 				String lectureId = instance.addLecture("Softwareentwicklung und Projektmanagement", "703035-0").getId();
 				instance.addAdmin(lectureId);
-				lectureId = instance.addLecture("Einführung in autonome und intelligente Systeme", "703030-0").getId();
+				lectureId = instance.addLecture("Einfuehrung in autonome und intelligente Systeme", "703030-0").getId();
 				instance.addAdmin(lectureId);
 				lectureId = instance.addLecture("Rechnernetze und Internettechnik", "703033-0").getId();
 				instance.addAdmin(lectureId);
