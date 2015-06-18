@@ -1,0 +1,35 @@
+<style>
+    textarea
+    {
+        width: 60%;
+        height: 200px;
+        vertical-align: middle;
+
+        max-width: 900px;
+        max-height: 300px;
+    }
+
+    .editable-wrap .editable-controls>input, .editable-wrap .editable-controls>select, .editable-wrap .editable-controls>textarea
+    {
+        margin-bottom: 10px;
+    }
+    
+    	.subheader
+	{
+		font-size:20px;
+	}
+</style>
+
+<div ng-controller="studentFeedbackController">
+
+<div style="margin-left: 15px" layout="column">
+	  <h3 class="md-primary">Rating:</h3>
+	  <md-slider flex class="md-primary" md-discrete ng-model="rating" step="1" min="0" max="5" aria-label="rating" style="width:30%; max-width: 400px;">
+      </md-slider>
+
+      <textarea ng-model="message" ng-change="questionChanged(question)"></textarea>
+      <md-button class="md-raised md-primary" style="width:150px; margin: 5px; margin-left: 100px; margin-top:28px; margin-bottom: 15px;" ng-click="submit()">Submit</md-button>   
+</div>
+    
+
+</div>

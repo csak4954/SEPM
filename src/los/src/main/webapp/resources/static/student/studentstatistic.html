@@ -5,12 +5,12 @@
 	}
 </style>
 
-<div ng-controller="studentStatisticController">
+<div ng-controller="studentStatisticController" layout-fill>
 
 
 	<md-subheader class="md-primary subheader" >Select quiz</md-subheader>
 	<md-select placeholder="Quiz" ng-model="selectedQuiz" style="margin-left:15px; margin-top:0px; width:300px">
-		<md-option ng-repeat="result in quizResults" value="{{result.quiz.quizId}}">{{result.quiz.title}}</md-option>
+		<md-option ng-repeat="result in quizResults" value="{{result.quiz.quizId}}">{{result.quiz.title}} (Solution)</md-option>
 	</md-select>
 
     	
@@ -20,7 +20,7 @@
 			<div style="margin-top: -10px; margin-left: 30px">
 			<md-list-item ng-repeat="it in item.answers">
 				<h4 class="md-headline" style="margin-left: 15px; margin-top: 0px; color:green; z-index: 999; position: relative;" ng-if="it.solution">{{it.text}}</h4>
-				<h4 class="md-headline" style="margin-left: 15px; margin-top: 0px;  z-index: 999; position: relative;" ng-if="!it.solution">{{it.text}}</h4>
+				<h4 class="md-headline" style="margin-left: 15px; margin-top: 0px; z-index: 999; position: relative;" ng-if="!it.solution">{{it.text}}</h4>
 	        </md-list-item>
 			</div>
 			<md-radio-group>		
@@ -39,7 +39,7 @@
 	
 	<tr  ng-repeat="result in quizResults">
 		<td style="text-align:left">{{result.quiz.title}}</td>
-		<td style="text-align:left">{{result.score}}%</td>
+		<td style="text-align:left">{{result.score | number:0}}%</td>
 	</tr>
 	</table>
 

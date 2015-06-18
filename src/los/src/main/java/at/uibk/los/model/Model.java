@@ -2,6 +2,7 @@ package at.uibk.los.model;
 
 import java.util.List;
 
+import at.uibk.los.model.authorization.AdminGroupPolicy;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.permissions.AttendanceVerificationPermission;
 import at.uibk.los.model.authorization.permissions.ControlQuizPermission;
@@ -210,7 +211,7 @@ public class Model implements IModel
 	@Override
 	public boolean isUserAdmin(String lectureId) throws LOSAccessDeniedException, EntityNotFoundException {
 		checkPermissions();
-		return provider.getEvaluation().isUserAdmin(getUser().getId(), lectureId);
+		return getUser().getGroupPolicy() == AdminGroupPolicy.id || provider.getEvaluation().isUserAdmin(getUser().getId(), lectureId);
 	}
 	
 	@Override

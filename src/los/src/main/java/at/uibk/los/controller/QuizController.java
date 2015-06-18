@@ -138,7 +138,7 @@ public class QuizController {
 				}
 			}
 			
-			return StatusViewModel.onSuccessCreated(response, new QuizViewModel(quiz));
+			return StatusViewModel.onSuccessNoContent(response);
 		} 
 		catch (LOSAccessDeniedException e) {
 			return StatusViewModel.onException(e, response);

@@ -29,7 +29,6 @@ app.config(function($routeProvider) {
 
     $routeProvider
 
-        // home page
         .when('/', {
             templateUrl: 'resources/static/login.html',
             controller: 'loginController'
@@ -40,18 +39,15 @@ app.config(function($routeProvider) {
             controller: 'loginController'
         })
 
-        // about page
         .when('/student', {
             templateUrl: 'resources/static/student.html',
             controller: 'studentController'
         })
 
-        // contact page
         .when('/professor', {
             templateUrl: 'resources/static/professor.html',
             controller: 'professorController'
-        });
-
+        })
 });
 
 
@@ -62,6 +58,14 @@ app.controller('mainController', function($scope, pageData, $location) {
     $scope.changeView = function(view){
         $location.path(view); // path not hash
     }
+    
+    pageData.toggleDropdown = function()
+	{
+    	console.log("toggle");
+    	$mdSidenav('right').open()
+        .then(function () {
+        });
+	}
 });
 
 

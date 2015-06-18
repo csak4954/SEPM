@@ -64,4 +64,9 @@ public class LoginProvider implements ILoginProvider {
 	public static LoginProvider LoadFromContext(ApplicationContext ctx) {
 		return ctx.getBean(LoginProvider.class);
 	}
+	
+	public void reset()
+	{
+		users.deleteAll();
+	}
 }

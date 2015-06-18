@@ -121,7 +121,7 @@ public class AuthenticationController{
 			return StatusViewModel.onSuccess(response, new UserViewModel(provider.getUser()));
 		}
 		
-		return StatusViewModel.onSuccessNoContent(response);
+		return StatusViewModel.onLoginFailed(response);
 	}
 	
 	@RequestMapping(value = "/authentication/logout", method = RequestMethod.POST)

@@ -1,10 +1,14 @@
 package at.uibk.los.test;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +21,7 @@ import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.exceptions.QuizInactiveException;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IDay;
@@ -37,10 +42,18 @@ import at.uibk.los.test.config.TestAppConfig;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTest
 {	
+	@Before
+	public void initialize() throws LOSAccessDeniedException, EntityNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		AppDomain.get().getServiceProvider().getLoginProvider().login("admin", AppDomain.generateHash("admin"));
+		for(ILectureView view : AppDomain.get().getAvailableLectures())
+			AppDomain.get().removeLecture(view.getId());
+	}
+	
+	
 	private static IModel testAsStudent() throws Exception 
 	{	
 		final String username = "csaq5126";
-		final String password = "secret";	
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -50,7 +63,7 @@ public class ModelTest
 	private static IModel testAsAnotherStudent() throws Exception
 	{
 		final String username = "csaq5244";
-		final String password = "secret";	
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -59,8 +72,8 @@ public class ModelTest
 	
 	private static IModel testAsStaff() throws Exception 
 	{		
-		final String username = "12345";
-		final String password = "secret";	
+		final String username = "c.sillaber";
+		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));
 
@@ -549,6 +562,20 @@ public class ModelTest
 		Assert.assertEquals(50, rate, 0.001);
 		
 		model.removeLecture(lecture.getId());
+	}
+	
+	public static String generateHash(String pwd) throws NoSuchAlgorithmException, UnsupportedEncodingException 
+	{
+	    MessageDigest md = null;
+	    byte[] hash = null;
+        md = MessageDigest.getInstance("SHA-512");
+        hash = md.digest(pwd.getBytes("UTF-8"));
+	     
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
 	}
 }
 
