@@ -17,6 +17,7 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
     $scope.showRegistration = false;
    
     $scope.prevID = "";
+ 
     
     //deobunce mobile click
     $scope.isValid = function(id)
@@ -36,12 +37,8 @@ app.controller('loginController', function($scope, pageData, $http, LxNotificati
     			return false;
 			}
 		}
-    	else
-		{
-    		return true;
-		}
+    	return true;
     }
-    
     
     $scope.onkey = function(event)
     {

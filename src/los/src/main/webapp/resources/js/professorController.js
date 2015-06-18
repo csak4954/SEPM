@@ -152,7 +152,7 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 {
     $scope.verificationCode = "0000";
 	$scope.verify = false;
-    
+	$scope.timer = null;
 	
 
 	
@@ -171,6 +171,8 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 			 }
 	  	  });
 		
+    	$timeout.cancle($scope.timer);
+    	
 		$scope.verify = false;
 	}
 	
@@ -191,7 +193,7 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 	  	  });
 
     	if($scope.verify)
-    		$timeout(updateVerificationCode, 10000);
+    		$scope.timer = $timeout(updateVerificationCode, 10000);
     }
     
     $scope.startVerification = function()
