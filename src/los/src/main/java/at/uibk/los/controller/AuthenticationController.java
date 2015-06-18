@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import at.uibk.los.AppDomain;
 import at.uibk.los.login.ExternalUser;
 import at.uibk.los.login.LoginProvider;
-import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.interfaces.IUser;
 import at.uibk.los.viewmodel.LoginViewModel;
 import at.uibk.los.viewmodel.RegisterViewModel;

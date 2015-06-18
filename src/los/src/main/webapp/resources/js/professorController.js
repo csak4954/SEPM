@@ -21,6 +21,42 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     $scope.selected = { data:""}
     
     
+    $http.get('/los/lecture/my').
+	  success(function(data, status, headers, config) 
+	  {
+		  $scope.lectures = data;
+		  
+		  if($scope.lectures.length == 0)
+			  pageData.showLectureForm = true;
+		  
+	  }).
+	  error(function(data, status, headers, config) 
+	  {  
+		  if(status == 401)
+			  $scope.changeView("login");	  
+	  });
+    
+    
+    $scope.getLectures = function()
+    {
+        $http.get('/los/lecture/my').
+  	  success(function(data, status, headers, config) 
+  	  {
+  		  $scope.lectures = data;
+  		  
+  		  if($scope.lectures.length == 0)
+  			  pageData.showLectureForm = true;
+  		  
+  	  }).
+  	  error(function(data, status, headers, config) 
+  	  {  
+  		  if(status == 401)
+  			  $scope.changeView("login");	  
+  	  });	
+    	
+    	return $scope.lectures;
+    }
+    
 	$scope.openLecturForm = function()
 	{
         LxDialogService.open('addLectureDialog');
@@ -72,30 +108,17 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
 	  	  error(function(data, status, headers, config) 
 	  	  {  
 	  		 if(status == 401)
-			{
+			 {
 	  			 $scope.changeView("login");
-	  			 return;
-			}
+	  		 	 return;
+			 }
 	  			 
 	  		  LxNotificationService.error('Add lecture failed');
 	  	  });
     }
     
 
-    $http.get('/los/lecture/all').
-	  success(function(data, status, headers, config) 
-	  {
-		  $scope.lectures = data;
-		  
-		  if($scope.lectures.length == 0)
-			  pageData.showLectureForm = true;
-		  
-	  }).
-	  error(function(data, status, headers, config) 
-	  {  
-		  if(status == 401)
-			  $scope.changeView("login");	  
-	  });
+
     
     $http.get('/los/authentication').
 	  success(function(data, status, headers, config) 
@@ -141,6 +164,11 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 	  	  }).
 	  	  error(function(data, status, headers, config) 
 	  	  {  
+	  		 if(status == 401)
+			 {
+	  			 $scope.changeView("login");
+	  		 	 return;
+			 }
 	  	  });
 		
 		$scope.verify = false;
@@ -155,10 +183,15 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 	  	  }).
 	  	  error(function(data, status, headers, config) 
 	  	  {  
+	  		 if(status == 401)
+			 {
+	  			 $scope.changeView("login");
+	  		 	 return;
+			 }
 	  	  });
 
     	if($scope.verify)
-    		$timeout(updateVerificationCode, 5000);
+    		$timeout(updateVerificationCode, 10000);
     }
     
     $scope.startVerification = function()

@@ -42,6 +42,46 @@
 </div>
 <div>
 
+<lx-dialog class="dialog dialog--l" id="notificationDialog">
+        <div class="dialog__header">
+            <div class="toolbar bgc-indigo-500 pl++">
+                <span class="toolbar__label tc-white fs-title">{{pageData.notificationMessage}}</span>
+            </div>
+        </div>  
+        
+        <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Close</button>
+        </div>        
+</lx-dialog>   
+
+<lx-dialog class="dialog dialog--l" id="adminDialog">
+
+        <div class="dialog__header">
+            <div class="toolbar bgc-indigo-500 pl++">
+                <span class="toolbar__label tc-white fs-title">Login as Admin</span>
+            </div>
+        </div>
+
+		<div style="margin-left: 10%; width: 60%">
+		   	<div style="margin-top:10px">
+	            <lx-text-field label="Username">
+	                <input type="text" ng-model="usernameAdmin">
+	            </lx-text-field>
+	        </div>
+	
+	        <div style="margin-top:10px">
+	            <lx-text-field label="Password">
+	                <input type="password" ng-model="passwordAdmin" ng-keyup="onkeyAdmin($event)">
+	            </lx-text-field>
+	        </div>  
+		</div>
+
+        <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close ng-click="cancleAdminLogin()">Cancel</button>
+        	<button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginAdmin(usernameAdmin, passwordAdmin)">Login</button>
+        </div>
+</lx-dialog>
+
 <div layout="row" layout-align="center center" layout-fill>
 	
 	<md-whiteframe ng-animate=" 'animate' " ng-hide="showRegistration" class="md-whiteframe-z4" layout layout-align="center center" style="position:absolut; padding:20px; padding-left:50px; padding-right:50px; margin-top:-10%;">
@@ -128,32 +168,6 @@
                 </div>
             </div>
         </md-whiteframe>
-        
-        
-        <lx-dialog class="dialog dialog--l" id="adminDialog">
 
-        <div class="dialog__header">
-            <div class="toolbar bgc-indigo-500 pl++">
-                <span class="toolbar__label tc-white fs-title">Login as Admin</span>
-            </div>
-        </div>
-
-        <div style="margin-top:10px">
-            <lx-text-field label="Username">
-                <input type="text" ng-model="usernameAdmin">
-            </lx-text-field>
-        </div>
-
-        <div style="margin-top:10px">
-            <lx-text-field label="Password">
-                <input type="password" ng-model="passwordAdmin" ng-keyup="onkeyAdmin($event)">
-            </lx-text-field>
-        </div>  
-
-        <div class="dialog__actions">
-            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close ng-click="cancleAdminLogin()">Cancel</button>
-        	<button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginAdmin(usernameAdmin, passwordAdmin)">Login</button>
-        </div>
-    </lx-dialog>
 </div>
 </div>
