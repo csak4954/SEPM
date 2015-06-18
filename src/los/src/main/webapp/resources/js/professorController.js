@@ -27,7 +27,7 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
 		  $scope.lectures = data;
 		  
 		  if($scope.lectures.length == 0)
-			  pageData.showLectureForm = true;
+			  	LxDialogService.open('addLectureDialog');
 		  
 	  }).
 	  error(function(data, status, headers, config) 
@@ -42,11 +42,7 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
         $http.get('/los/lecture/my').
   	  success(function(data, status, headers, config) 
   	  {
-  		  $scope.lectures = data;
-  		  
-  		  if($scope.lectures.length == 0)
-  			  pageData.showLectureForm = true;
-  		  
+  		  $scope.lectures = data; 		  
   	  }).
   	  error(function(data, status, headers, config) 
   	  {  
@@ -101,9 +97,13 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     	$http.put('/los/lecture?title=' + title + "&description=" + desc).
 	  	  success(function(data, status, headers, config) 
 	  	  {
-	  		LxNotificationService.success('Lecture added');
-	  		LxDialogService.close('addLectureDialog');
+				LxNotificationService.success('Lecture added');
+				LxDialogService.close('addLectureDialog');
 	  		
+				$scope.getLectures();
+				
+	    	 	pageData.validLecture = true;
+	    	 	pageData.currentLecture = data.id;
 	  	  }).
 	  	  error(function(data, status, headers, config) 
 	  	  {  
@@ -137,24 +137,53 @@ app.controller('professorController', function($scope, pageData, $http, LxNotifi
     
     $scope.$watchCollection('selected.data', function()
     { 
-    	$scope.lectures.map( function(item) 
+    	var found = false;
+    	
+    	if($scope.selected.data)
     	{
-    	     if(item.id == $scope.selected.data.id)
-    	    	 {
-    	    	 	pageData.validLecture = true;
-    	    	 	pageData.currentLecture = $scope.selected.data.id;
-    	    	 }
-    	})
+        	$scope.lectures.map( function(item) 
+        	    	{
+        	    	     if(item.id == $scope.selected.data.id)
+        		    	 {
+        		    	 	pageData.currentLecture = $scope.selected.data.id;
+        		    	 	found = true;
+        		    	 }
+        	    	});
+    	}
+    	
+    	pageData.validLecture = found;
     });
 });
 
-app.controller('professorGeneralController', function($scope, pageData, LxDialogService, $http, $timeout )
+app.controller('professorGeneralController', function($scope, pageData, LxDialogService, LxNotificationService,  $http, $timeout )
 {
     $scope.verificationCode = "0000";
 	$scope.verify = false;
 	$scope.timer = null;
 	
-
+	$scope.removeCurrentLecture = function()
+	{
+		$http.delete('/los/lecture/' + pageData.currentLecture).
+	  	  success(function(data, status, headers, config) 
+	  	  {
+		  		LxNotificationService.success('Remove lecture');
+		  		$scope.selected.data = null;
+		  		pageData.validLecture = false;
+		  		pageData.searchText = "";
+	  	  }).
+	  	  error(function(data, status, headers, config) 
+	  	  {  
+	  		 if(status == 401)
+			 {
+	  			 $scope.changeView("login");
+	  		 	 return;
+			 }
+	  		 else
+  			 {
+	  			LxNotificationService.error('Remove lecture failed: ' + data.message);	
+  			 }
+	  	  });
+	}
 	
 	$scope.cancleVerification = function()
 	{
@@ -171,7 +200,7 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 			 }
 	  	  });
 		
-    	$timeout.cancle($scope.timer);
+    	$timeout.cancel($scope.timer);
     	
 		$scope.verify = false;
 	}
@@ -193,7 +222,7 @@ app.controller('professorGeneralController', function($scope, pageData, LxDialog
 	  	  });
 
     	if($scope.verify)
-    		$scope.timer = $timeout(updateVerificationCode, 10000);
+    		$scope.timer = $timeout(updateVerificationCode, 15000);
     }
     
     $scope.startVerification = function()
@@ -364,8 +393,6 @@ app.controller('professorQuizController', function($scope, pageData, LxNotificat
                 answers: []
             });
 
-        
-        
         $scope.question = "";
         $scope.addQuestionDisabled = true;
     }
@@ -416,7 +443,7 @@ app.controller('professorQuizController', function($scope, pageData, LxNotificat
     }
     
     $scope.submit = function()
-    {
+    {   	
        	if($scope.questions.length == 0)
    		{
        		LxNotificationService.error('Submit quiz failed: no questions');
@@ -441,16 +468,16 @@ app.controller('professorQuizController', function($scope, pageData, LxNotificat
        		}
         }
        	
-    	data = 
+    	var putData = 
     	{
     		  "id": null,
        		  "lecture": null,   
        		  "active": false,
        		  "title": $scope.title,
-       		  "questions": $scope.questions
+       		  "questions": $scope.questions,
     	};
-    	
-    	$http.put('/los/lecture/' + pageData.currentLecture + '/quiz', data).
+
+    	$http.put('/los/lecture/' + pageData.currentLecture + '/quiz', putData).
 	  	  success(function(data, status, headers, config) 
 	  	  {
 		  	    $scope.questionsAnswerText = [];
@@ -468,7 +495,7 @@ app.controller('professorQuizController', function($scope, pageData, LxNotificat
 	  	  }).
 	  	  error(function(data, status, headers, config) 
 	  	  {  
-	  		  LxNotificationService.error('Submit quiz failed');
+	  		  LxNotificationService.error('Submit quiz failed: ' + data.message);
 	  	  });
     }
 });

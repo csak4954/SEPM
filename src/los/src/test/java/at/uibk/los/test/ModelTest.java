@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import at.uibk.los.AppDomain;
 import at.uibk.los.model.authorization.LOSAccessDeniedException;
 import at.uibk.los.model.authorization.StaffGroupPolicy;
 import at.uibk.los.model.authorization.StudentGroupPolicy;
+import at.uibk.los.model.exceptions.EntityNotFoundException;
 import at.uibk.los.model.exceptions.QuizInactiveException;
 import at.uibk.los.model.interfaces.IAnswerView;
 import at.uibk.los.model.interfaces.IDay;
@@ -40,6 +42,14 @@ import at.uibk.los.test.config.TestAppConfig;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTest
 {	
+	@Before
+	public void initialize() throws LOSAccessDeniedException, EntityNotFoundException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		AppDomain.get().getServiceProvider().getLoginProvider().login("admin", AppDomain.generateHash("admin"));
+		for(ILectureView view : AppDomain.get().getAvailableLectures())
+			AppDomain.get().removeLecture(view.getId());
+	}
+	
+	
 	private static IModel testAsStudent() throws Exception 
 	{	
 		final String username = "csaq5126";
@@ -62,7 +72,7 @@ public class ModelTest
 	
 	private static IModel testAsStaff() throws Exception 
 	{		
-		final String username = "12345";
+		final String username = "c.sillaber";
 		final String password = generateHash("secret");	
 		
 		Assert.assertTrue(AppDomain.get().getServiceProvider().getLoginProvider().login(username, password));

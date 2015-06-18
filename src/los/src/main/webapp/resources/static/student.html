@@ -44,6 +44,10 @@
         color: rgba(255,255,255,.26);
     }
 
+	.subheader
+	{
+		font-size:20px;
+	}
 
 </style>
 
@@ -89,7 +93,7 @@
     <lx-tabs links-tc="light" links-bgc="indigo-500" indicator="indigo-300" no-divider="true" style="margin-top: -40px;" ng-hide="!pageData.validLecture">
         <div>
             <lx-tab heading="General" >
-                <ng-include src="'resources/static/student/studentGeneral.html'"></ng-include>
+                <ng-include src="'resources/static/student/studentsGeneral.html'"></ng-include>
             </lx-tab>
 
             <lx-tab heading="Quiz">
@@ -100,21 +104,26 @@
                 <ng-include src="'resources/static/student/studentsFeedback.html'"></ng-include>
             </lx-tab>
 
-            <lx-tab heading="Statistic">
+            <lx-tab heading="Results">
                 <ng-include src="'resources/static/student/studentstatistic.html'"></ng-include>
             </lx-tab>
         </div>
 
     </lx-tabs>
     
-       <div ng-hide="pageData.validLecture">
-       <md-subheader class="md-primary subheader" ng-if="hasRegLec()">Registered lectures:</md-subheader>
-       <md-subheader class="md-primary subheader" ng-if="!hasRegLec()">Registered lectures: not registered for any lecture</md-subheader>
-       
-       <md-list-item class="md-3-line" ng-repeat="item in lecturesRegistered">
-	      <md-button class="md-icon-button" aria-label="Settings" ng-click="selectLecture(item.id)" style="color:white">
-	        {{item.title}} : {{item.description}}
-	      </md-button>
-       </md-list-item>
+       <div ng-hide="pageData.validLecture" layout-align="center center" layout-fill layout="column">
+	       <md-whiteframe class="md-whiteframe-z4" style="position:absolut; padding:20px; padding-left:50px; padding-right:50px; margin-top:-5%; text-align: center;">
+	       
+		       <h2 class="md-primary subheader" ng-if="lecturesRegistered">Select lecture</h2>
+		       <h2 class="md-primary subheader" ng-if="!lecturesRegistered">Select a lecture first</h2>
+		       
+		       <md-list-item class="md-3-line" ng-repeat="item in lecturesRegistered" layout="column" layout-aling="center center">
+			      <md-button class="md-raised md-primary" aria-label="Settings" ng-click="selectLecture(item)" style="margin-top:5px;">
+			        {{item.title}} : {{item.description}}
+			      </md-button>
+		       </md-list-item>
+		       
+		   </md-whiteframe>
+	       
        </div>
 </div>

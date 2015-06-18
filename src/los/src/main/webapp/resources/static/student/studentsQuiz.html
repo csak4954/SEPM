@@ -19,10 +19,10 @@
 
 
 <div ng-controller="studentQuizController">
-    <div ng-hide="hasQuiz">
+    <div ng-hide="pageData.hasQuiz">
     	<md-subheader class="md-primary">No quiz available</md-subheader>
     </div>
-    <div ng-hide="!hasQuiz">
+    <div ng-hide="!pageData.hasQuiz">
     
     	<h1 class="md-title">{{quiz.title}}</h1>
 		<md-list-item class="md-3-line" ng-repeat="(qIndex, item) in quiz.questions">

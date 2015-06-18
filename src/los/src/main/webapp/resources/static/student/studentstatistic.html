@@ -39,7 +39,7 @@
 	
 	<tr  ng-repeat="result in quizResults">
 		<td style="text-align:left">{{result.quiz.title}}</td>
-		<td style="text-align:left">{{result.score}}%</td>
+		<td style="text-align:left">{{result.score | number:0}}%</td>
 	</tr>
 	</table>
 

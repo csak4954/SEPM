@@ -20,23 +20,14 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
     
     
     
-    $scope.selectLecture = function(id)
+    $scope.selectLecture = function(item)
     {
-    	selected.data = id;
+    	$scope.selected.data = item;
     }
-    
-    $scope.hasRegLec = function()
-    {
-    	if($scope.lecturesRegistered == null || $scope.lecturesRegistered.length == 0)
-    		return false;
-    	
-    	return true;
-    }
-    
     
 	$scope.quizPoller = function()
 	{
-		pageData.timer = $timeout($scope.quizPoller,1000);
+		$scope.quizTimer = $timeout($scope.quizPoller,1000);
 		
 		if(pageData.activeQuiz || !pageData.currentLecture)
 			  return;
@@ -44,19 +35,35 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
 		$http.get('/los/quiz/active').
 		  success(function(data, status, headers, config) 
 		  {
+			  
+			  var found = false;
 			  for (var i in data)
 			  {
 				  if(data[i].lecture.id == pageData.currentLecture)
 				  {
 					  LxNotificationService.success('Quiz active');
 					  pageData.activeQuiz = data[i];
+					  pageData.hasQuiz = true;
+					  found = true;
 					  return;
 				  }
-			  
 			  }	  
+			  
+			  if(!found && pageData.activeQuiz)
+			  {
+				  pageData.activeQuiz = null;
+				  pageData.hasQuiz = false;
+				  LxNotificationService.success('Quiz ended');
+			  }	  
+			  
 		  }).
 		  error(function(data, status, headers, config) 
 		  {  
+			  if(status == 401)
+			  {
+				  $scope.changeView("login");	  
+				  $timeout.cancel($scope.quizTimer);
+			  }
 		  });
 	}
 	
@@ -147,12 +154,15 @@ app.controller('studentController', function($scope, pageData, $http, LxNotifica
     
     $scope.$watchCollection('selected.data', function()
     { 
+    	var found = false;
+    	
     	$scope.lectures.map( function(item) 
     	{
     	     if(item.id == $scope.selected.data.id)
     	    	 {
     	    	 	pageData.validLecture = true;
     	    	 	pageData.currentLecture = $scope.selected.data.id;
+    	    	 	found = true;
     	    	 }
     	})
     });
@@ -196,7 +206,7 @@ app.controller('studentGeneralController', function($scope, pageData, $http, LxN
   	  }).
   	  error(function(data, status, headers, config) 
   	  {  
-  		  LxNotificationService.error('Verification failed');
+  		  LxNotificationService.error('Verification failed: ' + data.message);
   	  });
     }
 });
@@ -227,22 +237,6 @@ app.controller('studentQuizController', function($scope, pageData, $http, LxNoti
 	
 	$scope.answers = []
 	
-	$scope.$watchCollection('pageData.activeQuiz', function()
-    { 
-		if(pageData.activeQuiz)
-		{
-			$scope.quiz = pageData.activeQuiz;
-			$scope.hasQuiz = true;
-		}
-		else
-		{
-			if($scope.hasQuiz)
-				LxNotificationService.info('Quiz ended');
-			
-			$scope.hasQuiz = false;
-		}
-    });
-
    $scope.submit = function()
    {
 	   	if(!$scope.isValid("submit"))
@@ -367,13 +361,13 @@ app.controller('studentStatisticController', function($scope, LxNotificationServ
 	  }).
 	  error(function(data, status, headers, config) 
 	  {  
+		  LxNotificationService.error("Query statistic failed: " + data.message);
 	  });   
 	
 	$scope.$watchCollection('selectedQuiz', function()
 		    { 
 				for(var i in $scope.quizResults)
 					{
-						console.log($scope.selectedQuiz + " " + $scope.quizResults[i].quiz.quizId);
 					 	if($scope.quizResults[i].quiz.quizId == $scope.selectedQuiz)
 						 {
 					 		$scope.currentQuiz = $scope.quizResults[i];	 		
